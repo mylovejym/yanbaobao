@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:Android="http://schemas.android.com/apk/res/android">
+
+    <!--<item Android:drawable="@drawable/choosebar_press_down" Android:state_pressed="true"/>-->
+    <!--<item Android:drawable="@drawable/choosebar_press_up" Android:state_checked="true"/>-->
+ <!--&lt;!&ndash; focused &ndash;&gt;-->
+    <!--<item Android:drawable="@drawable/choosebar_down"/>-->
+ <!-- default -->
+
+    <item Android:drawable="@drawable/icon_pull_down" Android:state_pressed="true"/>
+    <item Android:drawable="@drawable/icon_pull_down" Android:state_checked="true"/>
+    <!-- focused -->
+    <item Android:drawable="@drawable/icon_pull_down"/>
+
+</selector>

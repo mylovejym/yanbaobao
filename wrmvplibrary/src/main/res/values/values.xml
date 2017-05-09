@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="color|reference" name="themeColor"/>
+    <attr format="color|reference" name="widgetBackground"/>
+    <attr format="color|reference" name="widgetBackgroundDark"/>
+    <attr format="color|reference" name="widgetBackgroundTitle"/>
+    <color name="bg_gray">#f1f1f1</color>
+    <color name="bg_gray_pressed">#e8e8e8</color>
+    <color name="bg_position_bar_down">#1A8BC34A</color>
+    <color name="bg_position_bar_up">#0D8BC34A</color>
+    <color name="brown">#d54c1c</color>
+    <color name="check_bg">#f1f1f1</color>
+    <color name="colorPrimary">#ffeeeeee</color>
+    <color name="divider_gray">#cbcbcb</color>
+    <color name="drop_down_selected">#8BC34A</color>
+    <color name="drop_down_unselected">#808080</color>
+    <color name="gray">#cccccc</color>
+    <color name="list_divider_dark">#ff666666</color>
+    <color name="list_divider_light">#ffe0e0e0</color>
+    <color name="mask_color">#88888888</color>
+    <color name="md_amber_500">#ffc107</color>
+    <color name="md_amber_700">#ffa000</color>
+    <color name="md_blue_500">#5677fc</color>
+    <color name="md_blue_700">#455ede</color>
+    <color name="md_blue_grey_500">#607d8b</color>
+    <color name="md_blue_grey_700">#455a64</color>
+    <color name="md_brown_500">#795548</color>
+    <color name="md_brown_700">#5d4037</color>
+    <color name="md_cyan_500">#00bcd4</color>
+    <color name="md_cyan_700">#0097a7</color>
+    <color name="md_deep_orange_500">#ff5722</color>
+    <color name="md_deep_orange_700">#e64a19</color>
+    <color name="md_deep_purple_500">#673ab7</color>
+    <color name="md_deep_purple_700">#512da8</color>
+    <color name="md_green_500">#259b24</color>
+    <color name="md_green_700">#ff3c3c3c</color>
+    <color name="md_grey_500">#9e9e9e</color>
+    <color name="md_grey_700">#616161</color>
+    <color name="md_indigo_500">#3f51b5</color>
+    <color name="md_indigo_700">#303f9f</color>
+    <color name="md_light_blue_500">#03a9f4</color>
+    <color name="md_light_blue_700">#0288d1</color>
+    <color name="md_light_green_500">#8bc34a</color>
+    <color name="md_light_green_700">#689f38</color>
+    <color name="md_lime_500">#cddc39</color>
+    <color name="md_lime_700">#afb42b</color>
+    <color name="md_orange_500">#ff9800</color>
+    <color name="md_orange_700">#f57c00</color>
+    <color name="md_pink_500">#e91e63</color>
+    <color name="md_pink_700">#c2185b</color>
+    <color name="md_purple_500">#9c27b0</color>
+    <color name="md_purple_700">#7b1fa2</color>
+    <color name="md_red_500">#e51c23</color>
+    <color name="md_red_700">#d01716</color>
+    <color name="md_teal_500">#009688</color>
+    <color name="md_teal_700">#00796b</color>
+    <color name="md_white">#ffffff</color>
+    <color name="md_yellow_500">#ffeb3b</color>
+    <color name="md_yellow_700">#fbc02d</color>
+    <color name="province_line_border">#C7C7C7</color>
+    <color name="selectable_item_background_general_dark_accent">#ff666666</color>
+    <color name="selectable_item_background_general_dark_normal">#ff3c3c3c</color>
+    <color name="selectable_item_background_general_dark_pressed">#ff444444</color>
+    <color name="selectable_item_background_general_light_accent">#ffcccccc</color>
+    <color name="selectable_item_background_general_light_normal">@android:color/white</color>
+    <color name="selectable_item_background_general_light_pressed">#ffeeeeee</color>
+    <color name="text_color_dark">#de000000</color>
+    <color name="text_color_light">#b3ffffff</color>
+    <color name="theme_black_7f">#8f000000</color>
+    <color name="txt_black">#212121</color>
+    <color name="txt_gray">#808080</color>
+    <color name="txt_light_gray">#CCCCCC</color>
+    <color name="txt_link_blue">#1ea5ff</color>
+    <color name="un_press_color">#8BC34A</color>
+    <color name="white">#ffffff</color>
+    <color name="window_background_dark">#ff303030</color>
+    <color name="window_background_light">#ffeeeeee</color>
+    <declare-styleable name="RecyclerViewPager"><attr format="float" name="rvp_triggerOffset"/><attr format="float" name="rvp_flingFactor"/><attr format="boolean" name="rvp_singlePageFling"/></declare-styleable>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="avatarSize">50dp</dimen>
+    <dimen name="banner_height">136dp</dimen>
+    <dimen name="corner_radius">2dp</dimen>
+    <dimen name="def_height">50dp</dimen>
+    <dimen name="dp_066">0.66dp</dimen>
+    <dimen name="dp_10">10dp</dimen>
+    <dimen name="dp_14">14dp</dimen>
+    <dimen name="dp_22">22dp</dimen>
+    <dimen name="dp_36">36dp</dimen>
+    <dimen name="dp_4">4dp</dimen>
+    <dimen name="dp_40">40dp</dimen>
+    <dimen name="dp_60">60dp</dimen>
+    <dimen name="dp_72">72dp</dimen>
+    <dimen name="margin_huge">64dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_only_txt">48dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_tiny">4dp</dimen>
+    <dimen name="smallSpace">6dp</dimen>
+    <dimen name="sp_12">12sp</dimen>
+    <dimen name="sp_14">14sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+    <dimen name="txtsize_body">14sp</dimen>
+    <dimen name="txtsize_caption">12sp</dimen>
+    <dimen name="txtsize_display1">34sp</dimen>
+    <dimen name="txtsize_headline">24sp</dimen>
+    <dimen name="txtsize_subhead">16sp</dimen>
+    <dimen name="txtsize_title">20sp</dimen>
+    <item name="BaseQuickAdapter_databinding_support" type="id"/>
+    <item name="BaseQuickAdapter_dragging_support" type="id"/>
+    <item name="BaseQuickAdapter_swiping_support" type="id"/>
+    <item name="BaseQuickAdapter_viewholder_support" type="id"/>
+    <!--<string name="app_name">MVPFrame</string>-->
+    <string name="dialog_negative">取消</string>
+    <string name="dialog_positive">确定</string>
+    <string name="load_failed">加载失败，请点我重试</string>
+    <string name="loading">正在加载中...</string>
+    <style name="AppBaseTheme" parent="AppThemeLight">
+
+    </style>
+    <style name="AppThemeDark" parent="BaseAppThemeDark">
+        <item name="themeColor">@color/md_green_700</item>item
+    </style>
+    <style name="AppThemeDark.Amber">
+        <item name="themeColor">@color/md_amber_700</item>
+    </style>
+    <style name="AppThemeDark.Blue">
+        <item name="themeColor">@color/md_blue_700</item>
+    </style>
+    <style name="AppThemeDark.BlueGrey">
+        <item name="themeColor">@color/md_blue_grey_700</item>
+    </style>
+    <style name="AppThemeDark.Brown">
+        <item name="themeColor">@color/md_brown_700</item>
+    </style>
+    <style name="AppThemeDark.Cyan">
+        <item name="themeColor">@color/md_cyan_700</item>
+    </style>
+    <style name="AppThemeDark.DeepOrange">
+        <item name="themeColor">@color/md_deep_orange_700</item>
+    </style>
+    <style name="AppThemeDark.DeepPurple">
+        <item name="themeColor">@color/md_deep_purple_700</item>
+    </style>
+    <style name="AppThemeDark.FitsStatusBar"/>
+    <style name="AppThemeDark.Green">
+        <item name="themeColor">@color/md_green_700</item>
+    </style>
+    <style name="AppThemeDark.Grey">
+        <item name="themeColor">@color/md_grey_700</item>
+    </style>
+    <style name="AppThemeDark.Indigo">
+        <item name="themeColor">@color/md_indigo_700</item>
+    </style>
+    <style name="AppThemeDark.LightBlue">
+        <item name="themeColor">@color/md_light_blue_700</item>
+    </style>
+    <style name="AppThemeDark.LightGreen">
+        <item name="themeColor">@color/md_light_green_700</item>
+    </style>
+    <style name="AppThemeDark.Lime">
+        <item name="themeColor">@color/md_lime_700</item>
+    </style>
+    <style name="AppThemeDark.NoTranslucent" parent="BaseAppThemeDark">
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+    <style name="AppThemeDark.Orange">
+        <item name="themeColor">@color/md_orange_700</item>
+    </style>
+    <style name="AppThemeDark.Pink">
+        <item name="themeColor">@color/md_pink_700</item>
+    </style>
+    <style name="AppThemeDark.Purple">
+        <item name="themeColor">@color/md_purple_700</item>
+    </style>
+    <style name="AppThemeDark.Red">
+        <item name="themeColor">@color/md_red_700</item>
+    </style>
+    <style name="AppThemeDark.Teal">
+        <item name="themeColor">@color/md_teal_700</item>
+    </style>
+    <style name="AppThemeDark.Yellow">
+        <item name="themeColor">@color/md_yellow_700</item>
+    </style>
+    <style name="AppThemeLaunch" parent="BaseAppThemeLight">
+        <item name="android:windowBackground">?attr/colorPrimary</item>
+    </style>
+    <style name="AppThemeLight" parent="BaseAppThemeLight">
+        <item name="themeColor">@color/md_green_500</item>
+    </style>
+    <style name="AppThemeLight.Amber">
+        <item name="themeColor">@color/md_amber_500</item>
+    </style>
+    <style name="AppThemeLight.Blue">
+        <item name="themeColor">@color/md_blue_500</item>
+    </style>
+    <style name="AppThemeLight.BlueGrey">
+        <item name="themeColor">@color/md_blue_grey_500</item>
+    </style>
+    <style name="AppThemeLight.Brown">
+        <item name="themeColor">@color/md_brown_500</item>
+    </style>
+    <style name="AppThemeLight.Cyan">
+        <item name="themeColor">@color/md_cyan_500</item>
+    </style>
+    <style name="AppThemeLight.DeepOrange">
+        <item name="themeColor">@color/md_deep_orange_500</item>
+    </style>
+    <style name="AppThemeLight.DeepPurple">
+        <item name="themeColor">@color/md_deep_purple_500</item>
+    </style>
+    <style name="AppThemeLight.FitsStatusBar"/>
+    <style name="AppThemeLight.Green">
+        <item name="themeColor">@color/md_green_500</item>
+    </style>
+    <style name="AppThemeLight.Grey">
+        <item name="themeColor">@color/md_grey_500</item>
+    </style>
+    <style name="AppThemeLight.Indigo">
+        <item name="themeColor">@color/md_indigo_500</item>
+    </style>
+    <style name="AppThemeLight.LightBlue">
+        <item name="themeColor">@color/md_light_blue_500</item>
+    </style>
+    <style name="AppThemeLight.LightGreen">
+        <item name="themeColor">@color/md_light_green_500</item>
+    </style>
+    <style name="AppThemeLight.Lime">
+        <item name="themeColor">@color/md_lime_500</item>
+    </style>
+    <style name="AppThemeLight.NoTranslucent" parent="BaseAppThemeLight">
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+    <style name="AppThemeLight.Orange">
+        <item name="themeColor">@color/md_orange_500</item>
+    </style>
+    <style name="AppThemeLight.Pink">
+        <item name="themeColor">@color/md_pink_500</item>
+    </style>
+    <style name="AppThemeLight.Purple">
+        <item name="themeColor">@color/md_purple_500</item>
+    </style>
+    <style name="AppThemeLight.Red">
+        <item name="themeColor">@color/md_red_500</item>
+    </style>
+    <style name="AppThemeLight.Teal">
+        <item name="themeColor">@color/md_teal_500</item>
+    </style>
+    <style name="AppThemeLight.Yellow">
+        <item name="themeColor">@color/md_yellow_500</item>
+    </style>
+    <style name="AppWidget" parent="Theme.AppCompat.Light"/>
+    <style name="AppWidget.DeepLine">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+    <style name="AppWidget.DeepLine.Vertical">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+    <style name="BaseAppThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="colorPrimary">?attr/themeColor</item>
+        <item name="colorPrimaryDark">?attr/themeColor</item>
+        <item name="colorAccent">?attr/themeColor</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">@color/window_background_dark</item>
+        <item name="android:listDivider">@color/list_divider_dark</item>
+        <item name="widgetBackground">@color/selectable_item_background_general_dark_normal</item>
+        <item name="widgetBackgroundDark">@color/selectable_item_background_general_dark_pressed
+        </item>
+        <item name="widgetBackgroundTitle">?attr/colorPrimary</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <style name="BaseAppThemeLight" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="colorPrimary">?attr/themeColor</item>
+        <item name="colorPrimaryDark">?attr/themeColor</item>
+        <item name="colorAccent">?attr/themeColor</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">@color/window_background_light</item>
+        <item name="android:listDivider">@color/list_divider_light</item>
+        <item name="widgetBackground">@color/selectable_item_background_general_light_normal</item>
+        <item name="widgetBackgroundDark">@color/selectable_item_background_general_light_pressed
+        </item>
+        <item name="widgetBackgroundTitle">@android:color/white</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <style name="CoreAppTheme" parent="AppBaseTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+    <style name="TextViewSubhead" parent="TextAppearance.AppCompat.Subhead">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/txt_black</item>
+    </style>
+    <style name="TextViewTitle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/txt_black</item>
+    </style>
+</resources>
