@@ -19,8 +19,8 @@ import com.psylife.wrmvplibrary.data.net.RxService;
 import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
-import com.zhizhen.ybb.bean.PersonInfo;
-import com.zhizhen.ybb.my.contract.MyContract.GetPersonInfoView;
+import com.zhizhen.ybb.bean.PersonBean;
+import com.zhizhen.ybb.my.contract.MyContract;
 import com.zhizhen.ybb.my.model.MyModel;
 import com.zhizhen.ybb.my.presenter.MyPresenter;
 
@@ -34,7 +34,7 @@ import butterknife.BindView;
  * 邮箱：qw805880101@qq.com
  * 版本：v1.0
  */
-public class MyActivity extends YbBaseActivity<MyPresenter, MyModel> implements GetPersonInfoView, OnClickListener {
+public class MyActivity extends YbBaseActivity<MyPresenter, MyModel> implements MyContract.MyView, OnClickListener {
 
     @BindView(R.id.txt_name)
     TextView txtName;
@@ -86,7 +86,7 @@ public class MyActivity extends YbBaseActivity<MyPresenter, MyModel> implements 
         map.put("spid", "17621159290");
         map.put("Content-Type", "application/x-www-form-urlencoded");
         RxService.setHeaders(map);
-        mPresenter.getPersonInfo("s71h2krjydnlf");
+        mPresenter.getPersonInfo("zyiryljnj7jwm");
     }
 
     @Override
@@ -109,18 +109,22 @@ public class MyActivity extends YbBaseActivity<MyPresenter, MyModel> implements 
     }
 
     @Override
-    public void showPersonInfo(PersonInfo mPersonInfo) {
+    public void showPersonInfo(PersonBean mPersonInfo) {
         this.stopProgressDialog();
-        txtName.setText(mPersonInfo.getUsername());
-        Glide.with(this).load(mPersonInfo.getPhoto()).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
-            @Override
-            protected void setResource(Bitmap resource) {
-                RoundedBitmapDrawable circularBitmapDrawable =
-                        RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                circularBitmapDrawable.setCircular(true);
-                imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
-            }
-        });
+        if (mPersonInfo.getStatus().equals("0")){
+            txtName.setText(mPersonInfo.getData().getUsername());
+            Glide.with(this).load(mPersonInfo.getData().getPhoto()).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    RoundedBitmapDrawable circularBitmapDrawable =
+                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                    circularBitmapDrawable.setCircular(true);
+                    imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
+                }
+            });
+        } else {
+            Toast.makeText(this, mPersonInfo.getStatusInfo(), Toast.LENGTH_LONG).show();
+        }
 
     }
 }

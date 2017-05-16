@@ -16,7 +16,7 @@ import android.view.animation.LinearInterpolator;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.R2;
 import com.zhizhen.ybb.base.YbBaseActivity;
-import com.zhizhen.ybb.bean.PersonInfo;
+import com.zhizhen.ybb.bean.PersonBean;
 import com.zhizhen.ybb.my.contract.MyContract;
 import com.zhizhen.ybb.my.model.MyModel;
 import com.zhizhen.ybb.my.presenter.MyPresenter;
@@ -32,7 +32,7 @@ import butterknife.BindView;
  * 邮箱：qw805880101@qq.com
  * 版本：v1.0
  */
-public class BindingActivity extends YbBaseActivity<MyPresenter, MyModel> implements MyContract.GetPersonInfoView, View.OnClickListener {
+public class BindingActivity extends YbBaseActivity<MyPresenter, MyModel> implements MyContract.MyView, View.OnClickListener {
 
     private Handler mHandler = new Handler() {
         @Override
@@ -152,7 +152,7 @@ public class BindingActivity extends YbBaseActivity<MyPresenter, MyModel> implem
     }
 
     @Override
-    public void showPersonInfo(PersonInfo mPersonInfo) {
+    public void showPersonInfo(PersonBean mPersonInfo) {
 
     }
 }
