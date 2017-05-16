@@ -55,6 +55,7 @@ public interface YbbApi {
      * 添加视力信息
      * @return
      */
+    @FormUrlEncoded
     @POST("/Api/Hardware/addEyesightInfo")
     Observable<BaseBean> addEyesightInfo(@Field("token") String token, @Field("left_eye_degree")String left_eye_degree, @Field("right_eye_degree")String right_eye_degree, @Field("left_eye_astigmatism")String left_eye_astigmatism, @Field("right_eye_astigmatism")String right_eye_astigmatism, @Field("pupillary_distance")String pupillary_distance);
 

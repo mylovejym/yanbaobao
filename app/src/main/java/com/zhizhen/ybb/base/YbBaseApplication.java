@@ -9,6 +9,8 @@ import com.psylife.wrmvplibrary.WRCoreApp;
  */
 public class YbBaseApplication extends WRCoreApp {
 
+    public static String token = "3tylk7dfq5f0w";
+
     @Override
     public String setBaseUrl() {
         return "http://optometry.zonetime.net";

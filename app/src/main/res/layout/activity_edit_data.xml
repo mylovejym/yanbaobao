@@ -6,9 +6,10 @@
               android:orientation="vertical"
     >
 
-    <include layout="@layout/view_title_bar"/>
-
+    <!--<include layout="@layout/view_title_bar"/>-->
+／
     <LinearLayout
+        android:id="@+id/lin_head_photo"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginTop="7dp"
@@ -29,6 +30,7 @@
             />
 
         <ImageView
+            android:id="@+id/image_head_photo"
             android:layout_width="46.8dp"
             android:layout_height="46.8dp"
             android:src="@mipmap/con_portrait"
@@ -45,6 +47,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lin_name"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginTop="8dp"
@@ -65,6 +68,7 @@
             />
 
         <TextView
+            android:id="@+id/txt_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -85,6 +89,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lin_choice_sex"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginTop="0.5dp"
@@ -105,6 +110,7 @@
             />
 
         <TextView
+            android:id="@+id/txt_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -125,6 +131,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lin_set_age"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginTop="0.5dp"
@@ -145,6 +152,7 @@
             />
 
         <TextView
+            android:id="@+id/txt_age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

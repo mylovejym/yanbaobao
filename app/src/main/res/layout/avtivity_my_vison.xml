@@ -29,13 +29,14 @@
             />
 
         <EditText
-            android:id="@+id/txt_edit_left_eye_degree"
+            android:id="@+id/edt_edit_left_eye_degree"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:background="@null"
             android:hint="@string/eye_hint"
+            android:textColor="@color/white"
             android:inputType="number"
             android:textColorHint="@color/gray_80eeeeee"
             android:textSize="14sp"
@@ -63,12 +64,13 @@
             />
 
         <EditText
-            android:id="@+id/txt_edit_right_eye_degree"
+            android:id="@+id/edt_edit_right_eye_degree"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:background="@null"
+            android:textColor="@color/white"
             android:hint="@string/eye_hint"
             android:inputType="number"
             android:textColorHint="@color/gray_80eeeeee"
@@ -97,13 +99,14 @@
             />
 
         <EditText
-            android:id="@+id/txt_edit_left_eye_astigmatism"
+            android:id="@+id/edt_edit_left_eye_astigmatism"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:background="@null"
             android:hint="@string/eye_hint"
+            android:textColor="@color/white"
             android:inputType="number"
             android:textColorHint="@color/gray_80eeeeee"
             android:textSize="14sp"
@@ -131,12 +134,13 @@
             />
 
         <EditText
-            android:id="@+id/txt_edit_right_eye_astigmatism"
+            android:id="@+id/edt_edit_right_eye_astigmatism"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:background="@null"
+            android:textColor="@color/white"
             android:hint="@string/eye_hint"
             android:inputType="number"
             android:textColorHint="@color/gray_80eeeeee"
@@ -164,12 +168,13 @@
             />
 
         <EditText
-            android:id="@+id/txt_edit_eye_pupil"
+            android:id="@+id/edt_edit_eye_pupil"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:background="@null"
+            android:textColor="@color/white"
             android:hint="@string/eye_hint"
             android:inputType="number"
             android:textColorHint="@color/gray_80eeeeee"
@@ -184,7 +189,7 @@
         android:layout_marginLeft="12.5dp"
         android:layout_marginTop="16dp"
         android:background="@null"
-        android:text="@string/left_eye_degree"
+        android:text="@string/update_bill"
         android:textColor="@color/gray_999999"
         android:textSize="14sp"
         />

@@ -1,12 +1,14 @@
 package com.zhizhen.ybb.bean;
 
+import java.io.Serializable;
+
 /**
  * 个人信息
  * 作者：tc on 2017/5/15.
  * 邮箱：qw805880101@qq.com
  * 版本：v1.0
  */
-public class PersonBean {
+public class PersonBean implements Serializable{
     private String status;
     private String statusInfo;
     private PersonInfo data;

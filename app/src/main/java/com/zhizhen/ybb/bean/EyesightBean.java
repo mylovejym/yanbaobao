@@ -1,5 +1,7 @@
 package com.zhizhen.ybb.bean;
 
+import java.util.List;
+
 /**
  * Created by sandlovechao on 2017/5/15.
  */
@@ -8,13 +10,13 @@ public class EyesightBean {
 
     private String status;
     private String statusInfo;
-    private EyesightInfo data;
+    private List<EyesightInfo> data;
 
-    public EyesightInfo getData() {
+    public List<EyesightInfo> getData() {
         return data;
     }
 
-    public void setData(EyesightInfo data) {
+    public void setData(List<EyesightInfo> data) {
         this.data = data;
     }
 

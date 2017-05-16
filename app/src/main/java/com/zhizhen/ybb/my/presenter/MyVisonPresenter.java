@@ -26,10 +26,10 @@ public class MyVisonPresenter extends MyContract.MyVisonPresenter {
     @Override
     public void addEyesightInfo(String token, String left_eye_degree, String right_eye_degree, String left_eye_astigmatism, String right_eye_astigmatism, String pupillary_distance) {
         mRxManager.add(mModel
-                .getEyesightInfo(token)
+                .addEyesightInfo(token, left_eye_degree, right_eye_degree, left_eye_astigmatism, right_eye_astigmatism, pupillary_distance)
                 .subscribe(
                         data -> {
-                            mView.showEyesightInfo(data);
+                            mView.showAddEyesightInfo(data);
                         }, e -> mView.showError(e)
                 ));
     }

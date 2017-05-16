@@ -23,6 +23,10 @@
 
         <activity android:name=".my.MyVison"/>
 
+        <activity android:name=".my.ChoiceSexActivity"/>
+
+        <activity android:name=".my.EditDataActivity"/>
+
     </application>
 
 </manifest>
