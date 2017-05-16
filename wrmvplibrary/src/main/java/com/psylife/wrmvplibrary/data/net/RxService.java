@@ -6,7 +6,6 @@ import com.psylife.wrmvplibrary.utils.LogUtil;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -38,6 +37,18 @@ public class RxService {
             //设置Cache
             .addNetworkInterceptor(cacheInterceptor)//缓存方面需要加入这个拦截器
             .addInterceptor(cacheInterceptor)
+//            .addNetworkInterceptor(chain -> {
+//                Request original = chain.request();
+//                Request request = original.newBuilder()
+//                .addHeader("dcreatedate", "201705151633")
+//                .addHeader("spid", "17621159290")
+//                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+//                .build();
+//                LogUtil.d("request:" + request.toString());
+//                LogUtil.d("request headers:" + request.headers().toString());
+//                return chain.proceed(request);
+//            })
+
             .cache(HttpCache.getCache())
             //time out
             .connectTimeout(TIMEOUT_CONNECTION, TimeUnit.SECONDS)
@@ -76,12 +87,12 @@ public class RxService {
 
         @Override
         public Response intercept(Chain chain) throws IOException {
-            Request request = chain.request();
-            Request.Builder builder = request.newBuilder();
-            for (Entry<String, String> entry : map.entrySet()) {
-                builder.addHeader(entry.getKey(), entry.getValue());
+            Request original = chain.request();
+            Request.Builder mBuild = original.newBuilder();
+            for (Map.Entry<String, String> entry: map.entrySet()) {
+                mBuild.addHeader(entry.getKey(), entry.getValue());
             }
-            builder.build();
+            Request request = mBuild.build();
             LogUtil.d("request:" + request.toString());
             LogUtil.d("request headers:" + request.headers().toString());
             return chain.proceed(request);
@@ -90,7 +101,7 @@ public class RxService {
 
     public static void setHeaders(Map<String, String> map) {
         RequestInterceptor requestInterceptor = new RequestInterceptor(map);
-        okHttpClient = builder.addInterceptor(requestInterceptor).build();
+        okHttpClient = builder.addNetworkInterceptor(requestInterceptor).build();
     }
 }
 
