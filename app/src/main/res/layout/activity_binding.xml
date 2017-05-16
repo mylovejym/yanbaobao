@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:custom="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background_color"
+              android:orientation="vertical"
+    >
+
+    <com.zhizhen.ybb.view.WaveView
+        android:id="@+id/costom_round"
+        android:layout_width="282dp"
+        android:layout_height="282dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="83.5dp"
+        custom:progress_text_color="@color/blue_00aded"
+        custom:progress_text_size="38.5sp"
+        custom:round_length="262dp"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="61dp"
+        android:text="@string/binding_hint_1"
+        android:textColor="@color/blue_998889a2"
+        android:textSize="18sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16.5dp"
+        android:text="@string/binding_hint_2"
+        android:textColor="@color/blue_998889a2"
+        android:textSize="18sp"
+        />
+
+
+</LinearLayout>

@@ -1,3 +1,107 @@
 <resources>
     <string name="app_name">ybb</string>
+
+    <string name="my">我的</string>
+
+    <string name="name">xxxxx</string>
+
+    <string name="age">年龄：</string>
+
+    <string name="my_vison">我的视力</string>
+
+    <string name="my_device">我的设备</string>
+
+    <string name="follow">关注眼专家</string>
+
+    <string name="exit">退出当前账户</string>
+
+    <string name="being_bound">正在绑定...</string>
+
+    <string name="being_success">绑定成功</string>
+
+    <string name="being_fail">绑定失败</string>
+
+    <string name="binding_hint_1">绑定过程请打开手机蓝牙</string>
+
+    <string name="binding_hint_2">保持手机与智能硬件小于1米</string>
+
+    <string name="device_list">设备列表</string>
+
+    <string name="binding_hint_3">绑定后，下次默认连接该设备。</string>
+
+    <string name="binding_state_no">未绑定</string>
+
+    <string name="binding_state_yes">已绑定</string>
+
+    <string name="binding_device">绑定设备</string>
+
+    <string name="auto_conn">自动连接设备</string>
+
+    <string name="edit_data">编辑资料</string>
+
+    <string name="user_name">用户名</string>
+
+    <string name="left_eye_degree">左眼度数</string>
+
+    <string name="right_eye_degree">右眼度数</string>
+
+    <string name="left_eye_astigmatism">左眼散光</string>
+
+    <string name="right_eye_astigmatism">右眼散光</string>
+
+    <string name="eye_pupil">两眼瞳距</string>
+
+    <string name="update_bill">不知道？上传验光单</string>
+
+    <string name="photo_bill">照片/验光单</string>
+
+    <string name="eye_hint">请输入度数</string>
+
+    <string name="man">男</string>
+
+    <string name="girl">女</string>
+
+    <string name="head">头像</string>
+
+    <string name="nick_name">昵称</string>
+
+    <string name="sex">性别</string>
+
+    <string name="age_1">年龄</string>
+
+    <string name="no_set">未设置</string>
+
+    <string name="second_1">1s</string>
+    <string name="second_2">2s</string>
+    <string name="second_3">3s</string>
+    <string name="second_4">4s</string>
+    <string name="second_5">5s</string>
+    <string name="second_6">6s</string>
+    <string name="second_7">7s</string>
+    <string name="second_8">8s</string>
+    <string name="second_9">9s</string>
+    <string name="second_10">10s</string>
+
+    <string name="sampling">采样频率</string>
+
+
+    <!--<string name="photo_bill">照片/验光单</string>-->
+
+    <!--<string name="photo_bill">照片/验光单</string>-->
+
+    <!--<string name="photo_bill">照片/验光单</string>-->
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="border">Border</string>
+    <string name="shape">Shape</string>
+    <string name="circle">Circle</string>
+    <string name="square">Square</string>
+    <string name="color">Color</string>
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="blue">Blue</string>
+    <string name="defaultColor">Default</string>
+
+
 </resources>

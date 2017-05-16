@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="progress_text" format="string" />
+    <attr name="progress_text_color" format="color" />
+    <attr name="progress_text_size" format="dimension" />
+    <attr name="round_length" format="dimension" />
+
+
+    <declare-styleable name="CustomRoundView">
+        <attr name="progress_text" />
+        <attr name="progress_text_color" />
+        <attr name="progress_text_size" />
+        <attr name="round_length" />
+    </declare-styleable>
+
+</resources>

@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.jakewharton.butterknife'
+//apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'android-apt'
+//apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 25
@@ -68,7 +68,10 @@ dependencies {
     compile ('com.hwangjr.rxbus:rxbus:1.0.3') {
         exclude group: 'com.hwangjr.utils', module: 'timber'
     }
-    compile 'com.jakewharton:butterknife:8.4.0'
+
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+//    compile 'com.jakewharton:butterknife:8.4.0'
 //    apt 'com.jakewharton:butterknife-compiler:8.4.0'
 //    apt 'com.jakewharton:butterknife-compiler:8.2.1'
     //    annotationProcessor 'com.jakewharton:butterknife-compiler:8.2.1'

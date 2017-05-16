@@ -1,13 +1,19 @@
 package com.psylife.wrmvplibrary.data.net;
 
 
-
-
 import com.psylife.wrmvplibrary.WRCoreApp;
+import com.psylife.wrmvplibrary.utils.LogUtil;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.OkHttpClient.Builder;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -22,7 +28,8 @@ public class RxService {
     private static final int TIMEOUT_CONNECTION = 10;
     private static final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     private static CacheInterceptor cacheInterceptor = new CacheInterceptor();
-    private static OkHttpClient okHttpClient = new OkHttpClient.Builder()
+    private static Builder builder = new OkHttpClient().newBuilder();
+    private static OkHttpClient okHttpClient = builder
             //SSL证书
             .sslSocketFactory(TrustManager.getUnsafeOkHttpClient())
             .hostnameVerifier(org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER)
@@ -40,6 +47,7 @@ public class RxService {
             .retryOnConnectionFailure(true)
             .build();
 
+
     public static <T> T createApi(Class<T> clazz) {
         return createApi(clazz, WRCoreApp.getInstance().setBaseUrl());
     }
@@ -53,6 +61,36 @@ public class RxService {
                 .build();
 
         return retrofit.create(clazz);
+    }
+
+    /**
+     * 请求拦截器，修改请求header
+     */
+    public static class RequestInterceptor implements Interceptor {
+
+        Map<String, String> map;
+
+        public RequestInterceptor(Map<String, String> map) {
+            this.map = map;
+        }
+
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request request = chain.request();
+            Request.Builder builder = request.newBuilder();
+            for (Entry<String, String> entry : map.entrySet()) {
+                builder.addHeader(entry.getKey(), entry.getValue());
+            }
+            builder.build();
+            LogUtil.d("request:" + request.toString());
+            LogUtil.d("request headers:" + request.headers().toString());
+            return chain.proceed(request);
+        }
+    }
+
+    public static void setHeaders(Map<String, String> map) {
+        RequestInterceptor requestInterceptor = new RequestInterceptor(map);
+        okHttpClient = builder.addInterceptor(requestInterceptor).build();
     }
 }
 

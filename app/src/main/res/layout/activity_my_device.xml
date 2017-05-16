@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background_color"
+              android:orientation="vertical"
+    >
+
+    <include layout="@layout/view_title_bar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="1dp"
+        android:background="@color/blue_303048"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_conn"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            />
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="21.5dp"
+            android:layout_marginRight="11dp"
+            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/icon_more"
+            />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/device_list"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="14.5dp"
+        android:layout_marginLeft="14dp"
+        android:textColor="@color/gray_999999"
+        android:textSize="14sp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical"
+        android:background="@color/blue_303048"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TRWOMOPD-EYE-11"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="已绑定"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:textColor="@color/blue_00aded"
+            android:textSize="14sp"
+            />
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="22dp"
+            android:layout_marginRight="11dp"
+            android:text="@string/binding_device"
+            android:textSize="12sp"
+            android:background="@drawable/button_block"
+            android:textColor="@color/blue_00aded"
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/binding_hint_3"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="11.5dp"
+        android:layout_marginLeft="14dp"
+        android:textColor="@color/gray_999999"
+        android:textSize="14sp"
+        />
+
+</LinearLayout>
