@@ -17,7 +17,6 @@
          android:textSize="10sp"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:textColor="@color/tab_tv_selector"
          />
 
 </LinearLayout>
