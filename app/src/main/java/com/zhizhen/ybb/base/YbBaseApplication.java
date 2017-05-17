@@ -12,10 +12,10 @@ import com.zhizhen.ybb.util.SpUtils;
  */
 public class YbBaseApplication extends WRCoreApp {
     private String token;
+    private String phone;
+    private String date;
     public static Context context;
     public static YbBaseApplication instance;
-
-    public static String token = "3tylk7dfq5f0w";
 
     @Override
     public void onCreate() {
@@ -39,5 +39,21 @@ public class YbBaseApplication extends WRCoreApp {
     public void setToken(String token){
         this.token =token;
         SpUtils.putString(context, "token", token);
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

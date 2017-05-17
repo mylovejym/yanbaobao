@@ -6,134 +6,161 @@ import java.util.Date;
 
 public class DateUtil {
 
-	/**
-	 * 获取当前完整时间-yyyyMMddHHmmss
-	 *
-	 * @return
-	 */
-	public static String getCompleteTime() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-		Calendar rightNow = Calendar.getInstance();
-		String time = sdf.format(rightNow.getTime());
-		return time;
-	}
+    //由出生日期获得年龄
+    public static int getAge(String strDate) throws Exception {
+        strDate = strDate.replace("-", "");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Date birthDay = sdf.parse(strDate);
+        Calendar cal = Calendar.getInstance();
 
-	/**
-	 * 获取距离当前前后多少年
-	 *
-	 * @return
-	 */
-	public static String getCompleteYear(int year) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-		Calendar rightNow = Calendar.getInstance();
-		rightNow.set(Calendar.YEAR, year);
-		String time = sdf.format(rightNow.getTime());
-		return time;
-	}
+        if (cal.before(birthDay)) {
+            throw new IllegalArgumentException(
+                    "The birthDay is before Now.It's unbelievable!");
+        }
+        int yearNow = cal.get(Calendar.YEAR);
+        int monthNow = cal.get(Calendar.MONTH);
+        int dayOfMonthNow = cal.get(Calendar.DAY_OF_MONTH);
+        cal.setTime(birthDay);
 
-	/**
-	 * 获取距离当前前后多少小时的完整时间
-	 *
-	 * @return
-	 */
-	public static String getCompleteTime(int hour) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-		Calendar rightNow = Calendar.getInstance();
-		rightNow.set(Calendar.HOUR, Calendar.HOUR + hour);
-		String time = sdf.format(rightNow.getTime());
-		return time;
-	}
+        int yearBirth = cal.get(Calendar.YEAR);
+        int monthBirth = cal.get(Calendar.MONTH);
+        int dayOfMonthBirth = cal.get(Calendar.DAY_OF_MONTH);
 
-	/**
-	 * 获取距离当前前后多少分钟的完整时间
-	 *
-	 * @return
-	 */
-	public static String getCompleteTimeByMin(int minute) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-		Calendar rightNow = Calendar.getInstance();
-		rightNow.add(Calendar.MINUTE, minute);
-		String time = sdf.format(rightNow.getTime());
-		return time;
-	}
+        int age = yearNow - yearBirth;
 
-	/**
-	 * 获取当前时间-HHmmss
-	 *
-	 * @return
-	 */
-	public static String getTime() {
-		SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
-		Calendar rightNow = Calendar.getInstance();
-		String time = sdf.format(rightNow.getTime());
-		return time;
-	}
+        if (monthNow <= monthBirth) {
+            if (monthNow == monthBirth) {
+                if (dayOfMonthNow < dayOfMonthBirth) age--;
+            } else {
+                age--;
+            }
+        }
+        return age;
+    }
 
-	/**
-	 * 获取当前日期-yyyyMMdd
-	 *
-	 * @return
-	 */
-	public static String getDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-		Calendar rightNow = Calendar.getInstance();
-		String time = sdf.format(rightNow.getTime());
-		return time;
-	}
+    /**
+     * 获取当前完整时间-yyyyMMddHHmmss
+     *
+     * @return
+     */
+    public static String getCompleteTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        Calendar rightNow = Calendar.getInstance();
+        String time = sdf.format(rightNow.getTime());
+        return time;
+    }
 
-	/**
-	 *
-	 * @param date
-	 *            距当前第几天
-	 * @param format
-	 *            日期格式
-	 * @return
-	 */
-	public static String getOtherDate(int date, String format) {
-		Calendar c = Calendar.getInstance();
-		c.add(Calendar.DAY_OF_MONTH, date);
-		SimpleDateFormat formatter = new SimpleDateFormat(format);
-		return formatter.format(c.getTime());
-	}
+    /**
+     * 获取距离当前前后多少年
+     *
+     * @return
+     */
+    public static String getCompleteYear(int year) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        Calendar rightNow = Calendar.getInstance();
+        rightNow.set(Calendar.YEAR, year);
+        String time = sdf.format(rightNow.getTime());
+        return time;
+    }
 
-	public static String getOtherDate(String format) {
-		Calendar c = Calendar.getInstance();
-		SimpleDateFormat formatter = new SimpleDateFormat(format);
-		return formatter.format(c.getTime());
-	}
+    /**
+     * 获取距离当前前后多少小时的完整时间
+     *
+     * @return
+     */
+    public static String getCompleteTime(int hour) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        Calendar rightNow = Calendar.getInstance();
+        rightNow.set(Calendar.HOUR, Calendar.HOUR + hour);
+        String time = sdf.format(rightNow.getTime());
+        return time;
+    }
 
-	/**
-	 * 格式化日期
-	 *
-	 * @param date
-	 *            日期时间
-	 * @param formart1
-	 *            原格式
-	 * @param formart2
-	 *            转换后格式
-	 * @return
-	 * @throws Exception
-	 */
-	public static String formartDate(String date, String formart1, String formart2) throws Exception {
-		SimpleDateFormat sdf1 = new SimpleDateFormat(formart1);
-		SimpleDateFormat sdf2 = new SimpleDateFormat(formart2);
-		Date time = sdf1.parse(date);
-		return sdf2.format(time);
-	}
+    /**
+     * 获取距离当前前后多少分钟的完整时间
+     *
+     * @return
+     */
+    public static String getCompleteTimeByMin(int minute) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        Calendar rightNow = Calendar.getInstance();
+        rightNow.add(Calendar.MINUTE, minute);
+        String time = sdf.format(rightNow.getTime());
+        return time;
+    }
 
-	/**
-	 * 验证时间格式 yyyyMMddHHmmss
-	 * @return
-	 */
-	public static boolean isValidDate(String str) {
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-			Date date = sdf.parse(str);
-			return str.equals(sdf.format(date));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
+    /**
+     * 获取当前时间-HHmmss
+     *
+     * @return
+     */
+    public static String getTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
+        Calendar rightNow = Calendar.getInstance();
+        String time = sdf.format(rightNow.getTime());
+        return time;
+    }
+
+    /**
+     * 获取当前日期-yyyyMMdd
+     *
+     * @return
+     */
+    public static String getDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar rightNow = Calendar.getInstance();
+        String time = sdf.format(rightNow.getTime());
+        return time;
+    }
+
+    /**
+     * @param date   距当前第几天
+     * @param format 日期格式
+     * @return
+     */
+    public static String getOtherDate(int date, String format) {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DAY_OF_MONTH, date);
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        return formatter.format(c.getTime());
+    }
+
+    public static String getOtherDate(String format) {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        return formatter.format(c.getTime());
+    }
+
+    /**
+     * 格式化日期
+     *
+     * @param date     日期时间
+     * @param formart1 原格式
+     * @param formart2 转换后格式
+     * @return
+     * @throws Exception
+     */
+    public static String formartDate(String date, String formart1, String formart2) throws Exception {
+        SimpleDateFormat sdf1 = new SimpleDateFormat(formart1);
+        SimpleDateFormat sdf2 = new SimpleDateFormat(formart2);
+        Date time = sdf1.parse(date);
+        return sdf2.format(time);
+    }
+
+    /**
+     * 验证时间格式 yyyyMMddHHmmss
+     *
+     * @return
+     */
+    public static boolean isValidDate(String str) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            Date date = sdf.parse(str);
+            return str.equals(sdf.format(date));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }

@@ -19,6 +19,7 @@ import com.zhizhen.ybb.loginpass.contract.LoginContract;
 import com.zhizhen.ybb.loginpass.model.LoginModel;
 import com.zhizhen.ybb.loginpass.presenter.LoginPresenter;
 import com.zhizhen.ybb.my.MyActivity;
+import com.zhizhen.ybb.util.DateUtil;
 import com.zhizhen.ybb.util.SpUtils;
 
 /**
@@ -54,32 +55,23 @@ public class LoginActivity extends YbBaseActivity<LoginPresenter, LoginModel> im
         txt_new_user = (TextView) findViewById(R.id.txt_new_user);
     }
     private void onClick(){
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    if(TextUtil.isEmpty(edit_phone.getText().toString().trim())){
-                        Toast.makeText(LoginActivity.this,"手机号不能为空",Toast.LENGTH_SHORT).show();
-                    }else if(TextUtil.isEmpty(edit_pass.getText().toString().trim())){
-                        Toast.makeText(LoginActivity.this,"密码不能为空",Toast.LENGTH_SHORT).show();
-                    }else if(!TextUtil.isEmpty(edit_phone.getText().toString().trim()) && !TextUtil.isEmpty(edit_pass.getText().toString().trim())){
-                        Toast.makeText(LoginActivity.this,"啊啊啊啊啊啊啊啊啊啊啊啊",Toast.LENGTH_SHORT).show();
-//                        mPresenter.login(edit_phone.getText().toString().trim(),edit_pass.getText().toString().trim());
-                    }
-            }
+        btn_login.setOnClickListener(v -> {
+                if(TextUtil.isEmpty(edit_phone.getText().toString().trim())){
+                    Toast.makeText(LoginActivity.this,"手机号不能为空",Toast.LENGTH_SHORT).show();
+                }else if(TextUtil.isEmpty(edit_pass.getText().toString().trim())){
+                    Toast.makeText(LoginActivity.this,"密码不能为空",Toast.LENGTH_SHORT).show();
+                }else if(!TextUtil.isEmpty(edit_phone.getText().toString().trim()) && !TextUtil.isEmpty(edit_pass.getText().toString().trim())){
+//                        Toast.makeText(LoginActivity.this,"啊啊啊啊啊啊啊啊啊啊啊啊",Toast.LENGTH_SHORT).show();
+                    mPresenter.login(edit_phone.getText().toString().trim(),edit_pass.getText().toString().trim());
+                }
         });
-        txt_new_user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent.setClass(LoginActivity.this,RegisterActivity.class);
-                startActivity(intent);
-            }
+        txt_new_user.setOnClickListener(v -> {
+            intent.setClass(LoginActivity.this,RegisterActivity.class);
+            startActivity(intent);
         });
-        txt_forget_pass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent.setClass(LoginActivity.this,ForgatPasswordActivity.class);
-                startActivity(intent);
-            }
+        txt_forget_pass.setOnClickListener(v -> {
+            intent.setClass(LoginActivity.this,ForgatPasswordActivity.class);
+            startActivity(intent);
         });
     }
     @Override
@@ -107,6 +99,8 @@ public class LoginActivity extends YbBaseActivity<LoginPresenter, LoginModel> im
             SpUtils.putBoolean(this,"firstLogin",false);
             SpUtils.setUser(this,bean.getData());
             YbBaseApplication.instance.setToken(bean.getData().getToken());
+            YbBaseApplication.instance.setPhone(bean.getData().getPhoto());
+            YbBaseApplication.instance.setDate(DateUtil.getDate());
             intent.setClass(this, MyActivity.class);
             startActivity(intent);
         }

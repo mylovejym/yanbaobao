@@ -8,7 +8,10 @@ import java.io.Serializable;
  * 邮箱：qw805880101@qq.com
  * 版本：v1.0
  */
-public class PersonBean implements Serializable{
+public class PersonBean implements Serializable {
+
+    private static final long serialVersionUID = 12321;////xxxx看自己喜欢
+
     private String status;
     private String statusInfo;
     private PersonInfo data;

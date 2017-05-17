@@ -2,6 +2,7 @@ package com.zhizhen.ybb.api;
 
 import com.zhizhen.ybb.bean.BaseBean;
 import com.zhizhen.ybb.bean.EyesightBean;
+import com.zhizhen.ybb.bean.LoginBean;
 import com.zhizhen.ybb.bean.PersonBean;
 
 import retrofit2.http.Field;
@@ -36,6 +37,7 @@ public interface YbbApi {
      * 登录
      * @return
      */
+    @FormUrlEncoded
     @POST("/Api/Hardware/login")
     Observable<LoginBean> login(@Field("phone") String phone,@Field("pass") String pass);
 

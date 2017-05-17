@@ -69,7 +69,7 @@ public class MyVison extends YbBaseActivity<MyVisonPresenter, MyVisonModel> impl
                 .setRightText(getString(R.string.complete))
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
-                .setRightOnClickListener(v -> mPresenter.addEyesightInfo(YbBaseApplication.token, leftDegree, rightDegree, leftAstigmatism, rightAstigmatism, pupil))
+                .setRightOnClickListener(v -> mPresenter.addEyesightInfo(YbBaseApplication.getInstance().getToken(), leftDegree, rightDegree, leftAstigmatism, rightAstigmatism, pupil))
                 .build();
     }
 
@@ -84,7 +84,7 @@ public class MyVison extends YbBaseActivity<MyVisonPresenter, MyVisonModel> impl
 
     @Override
     public void initdata() {
-        mPresenter.getEyesightInfo(YbBaseApplication.token);
+        mPresenter.getEyesightInfo(YbBaseApplication.getInstance().getToken());
     }
 
     @Override

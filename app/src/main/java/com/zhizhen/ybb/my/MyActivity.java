@@ -26,6 +26,7 @@ import com.zhizhen.ybb.bean.PersonBean;
 import com.zhizhen.ybb.my.contract.MyContract;
 import com.zhizhen.ybb.my.model.MyModel;
 import com.zhizhen.ybb.my.presenter.MyPresenter;
+import com.zhizhen.ybb.util.DateUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,20 +96,20 @@ public class MyActivity extends YbBaseActivity<MyPresenter, MyModel> implements 
         linEditData.setOnClickListener(this);
         btExit.setOnClickListener(this);
         Map map = new HashMap();
-        map.put("dcreatedate", "201705151633");
-        map.put("spid", "17621159290");
         map.put("Content-Type", "application/x-www-form-urlencoded");
+        map.put("dcreatedate", YbBaseApplication.instance.getDate());
+        map.put("spid", YbBaseApplication.instance.getPhone());
         RxService.setHeaders(map);
-        mPresenter.getPersonInfo(YbBaseApplication.token);
+        mPresenter.getPersonInfo(YbBaseApplication.instance.getToken());
     }
 
     @Override
     public void onClick(View v) {
         if (v == rlVison) {
             startActivity(MyVison.class);
-        } else if (v == rlFollow){
+        } else if (v == rlFollow) {
             startActivity(ChoiceSexActivity.class);
-        } else if (v == linEditData){
+        } else if (v == linEditData) {
             Bundle bundle = new Bundle();
             bundle.putSerializable("personInfo", mPersonInfo);
             startActivity(EditDataActivity.class, bundle);
@@ -131,8 +132,18 @@ public class MyActivity extends YbBaseActivity<MyPresenter, MyModel> implements 
     public void showPersonInfo(PersonBean mPersonInfo) {
         this.mPersonInfo = mPersonInfo;
         this.stopProgressDialog();
-        if (mPersonInfo.getStatus().equals("0")){
+        if (mPersonInfo.getStatus().equals("0")) {
             txtName.setText(mPersonInfo.getData().getUsername());
+            if (mPersonInfo.getData().getSex().equals("")) {
+                imageSex.setImageDrawable(this.getResources().getDrawable(R.mipmap.icon_man));
+            } else {
+                imageSex.setImageDrawable(this.getResources().getDrawable(R.mipmap.icon_girl));
+            }
+            try {
+                txtAge.setText(DateUtil.getAge(mPersonInfo.getData().getBorn()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             Glide.with(this).load(mPersonInfo.getData().getPhoto()).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
                 @Override
                 protected void setResource(Bitmap resource) {
