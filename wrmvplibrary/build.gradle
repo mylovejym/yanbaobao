@@ -82,7 +82,7 @@ dependencies {
     compile 'com.github.Aspsine:SwipeToLoadLayout:1.0.3'
     compile 'com.github.lsjwzh.RecyclerViewPager:lib:v1.1.2'
     compile 'me.rawnhwang.library:app:1.2.5'
-    compile 'org.springframework.social:spring-social-core:1.0.3.RELEASE'
+//    compile 'org.springframework.social:spring-social-core:1.0.3.RELEASE'
 
 //    compile'com.github.hss01248.PhotoPicker:glide:1.0.7'
 //    compile'com.github.hss01248.PhotoPicker:fresco:1.0.7'

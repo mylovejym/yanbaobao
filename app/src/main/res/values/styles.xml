@@ -9,6 +9,7 @@
     </style>
 
 
+
     <style name="ActionSheetDialogStyle" parent="@android:style/Theme.Dialog">
         <!-- 背景透明 -->
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -30,6 +31,33 @@
     <style name="ActionSheetDialogAnimation" parent="@android:style/Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/actionsheet_dialog_in</item>
         <item name="android:windowExitAnimation">@anim/actionsheet_dialog_out</item>
+    </style>
+
+
+
+    <style name="devide_horizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/color_line</item>
+    </style>
+    <style name="devide_horizontal_10dp">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:background">@color/color_line</item>
+    </style>
+    <style name="devide_horizontal_margin" parent="devide_horizontal">
+        <item name="android:layout_marginLeft">@dimen/back_gauge</item>
+        <item name="android:layout_marginRight">@dimen/back_gauge</item>
+    </style>
+    <style name="devide_horizontal_marginleft" parent="devide_horizontal">
+        <item name="android:layout_marginLeft">@dimen/back_gauge</item>
+    </style>
+
+    <!-- 垂直分隔线 -->
+    <style name="devide_vertical">
+        <item name="android:layout_width">1px</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/color_line</item>
     </style>
 
 </resources>
