@@ -62,6 +62,7 @@ public abstract class WRBaseFragment<T extends WRBasePresenter, E extends WRBase
             if(title !=null) {
                 View view = getLayoutView();
                 LinearLayout rootlayout = new LinearLayout(mContext);
+                rootlayout.removeAllViews();
                 rootlayout.setOrientation(LinearLayout.VERTICAL);
                 rootlayout.addView(title);
                 rootlayout.addView(view,params);
@@ -73,6 +74,7 @@ public abstract class WRBaseFragment<T extends WRBasePresenter, E extends WRBase
             if(title !=null) {
                 View view = inflater.inflate(getLayoutId(), null);
                 LinearLayout rootlayout = new LinearLayout(mContext);
+                rootlayout.removeAllViews();
                 rootlayout.setOrientation(LinearLayout.VERTICAL);
                 rootlayout.addView(title);
                 rootlayout.addView(view,params);

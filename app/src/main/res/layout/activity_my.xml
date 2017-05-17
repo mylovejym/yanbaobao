@@ -76,6 +76,7 @@
                     >
 
                     <ImageView
+                        android:id="@+id/image_sex"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:src="@mipmap/icon_girl"
@@ -96,7 +97,6 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/image_sex"
                 android:layout_width="12dp"
                 android:layout_height="21.5dp"
                 android:layout_marginRight="11dp"

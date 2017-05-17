@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseFragment;
 
 
@@ -24,7 +25,7 @@ public class HomePageFragment extends YbBaseFragment {
 
     @Override
     public int getLayoutId() {
-        return 0;
+        return R.layout.activity_sampling;
     }
 
 

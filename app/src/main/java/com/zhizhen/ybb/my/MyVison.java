@@ -1,12 +1,10 @@
 package com.zhizhen.ybb.my;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.psylife.wrmvplibrary.utils.LogUtil;
@@ -16,8 +14,8 @@ import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.bean.BaseBean;
-import com.zhizhen.ybb.bean.EyesightBean;
-import com.zhizhen.ybb.bean.PersonBean;
+import com.zhizhen.ybb.bean.BaseClassBean;
+import com.zhizhen.ybb.bean.EyesightInfo;
 import com.zhizhen.ybb.my.contract.MyContract;
 import com.zhizhen.ybb.my.model.MyVisonModel;
 import com.zhizhen.ybb.my.presenter.MyVisonPresenter;
@@ -25,8 +23,7 @@ import com.zhizhen.ybb.my.presenter.MyVisonPresenter;
 import butterknife.BindView;
 
 /**
- *
- * Created by sandlovechao on 2017/5/15.
+ * Created by tc on 2017/5/15.
  */
 
 public class MyVison extends YbBaseActivity<MyVisonPresenter, MyVisonModel> implements MyContract.MyVisonView {
@@ -69,17 +66,21 @@ public class MyVison extends YbBaseActivity<MyVisonPresenter, MyVisonModel> impl
                 .setRightText(getString(R.string.complete))
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
-                .setRightOnClickListener(v -> mPresenter.addEyesightInfo(YbBaseApplication.getInstance().getToken(), leftDegree, rightDegree, leftAstigmatism, rightAstigmatism, pupil))
+                .setRightOnClickListener(v -> {
+                    leftDegree = edtLeftDegree.getText().toString().trim();
+                    rightDegree = edtRightDegree.getText().toString().trim();
+                    leftAstigmatism = edtLeftAstigmatism.getText().toString().trim();
+                    rightAstigmatism = edtRightAstigmatism.getText().toString().trim();
+                    pupil = edtPupil.getText().toString().trim();
+                    mPresenter.addEyesightInfo(YbBaseApplication.getInstance().getToken(), leftDegree, rightDegree, leftAstigmatism, rightAstigmatism, pupil);
+                })
+
                 .build();
     }
 
     @Override
     public void initView(Bundle savedInstanceState) {
-        leftDegree = edtLeftDegree.getText().toString().trim();
-        rightDegree = edtRightDegree.getText().toString().trim();
-        leftAstigmatism = edtLeftAstigmatism.getText().toString().trim();
-        rightAstigmatism = edtRightAstigmatism.getText().toString().trim();
-        pupil = edtPupil.getText().toString().trim();
+
     }
 
     @Override
@@ -99,13 +100,13 @@ public class MyVison extends YbBaseActivity<MyVisonPresenter, MyVisonModel> impl
     }
 
     @Override
-    public void showEyesightInfo(EyesightBean mEyesightInfo) {
+    public void showEyesightInfo(BaseClassBean<EyesightInfo> mEyesightInfo) {
         if (mEyesightInfo.getStatus().equals("0")) {
-            edtLeftDegree.setText(mEyesightInfo.getData().get(0).getLeft_eye_degree());
-            edtRightDegree.setText(mEyesightInfo.getData().get(0).getRight_eye_degree());
-            edtLeftAstigmatism.setText(mEyesightInfo.getData().get(0).getLeft_eye_astigmatism());
-            edtRightAstigmatism.setText(mEyesightInfo.getData().get(0).getRight_eye_astigmatism());
-            edtPupil.setText(mEyesightInfo.getData().get(0).getPupillary_distance());
+            edtLeftDegree.setText(mEyesightInfo.getData().getLeft_eye_degree());
+            edtRightDegree.setText(mEyesightInfo.getData().getRight_eye_degree());
+            edtLeftAstigmatism.setText(mEyesightInfo.getData().getLeft_eye_astigmatism());
+            edtRightAstigmatism.setText(mEyesightInfo.getData().getRight_eye_astigmatism());
+            edtPupil.setText(mEyesightInfo.getData().getPupillary_distance());
         } else {
             Toast.makeText(this, mEyesightInfo.getStatusInfo(), Toast.LENGTH_LONG).show();
         }

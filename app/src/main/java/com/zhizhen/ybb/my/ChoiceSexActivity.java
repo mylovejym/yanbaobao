@@ -1,32 +1,21 @@
 package com.zhizhen.ybb.my;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
-import com.zhizhen.ybb.base.YbBaseApplication;
-import com.zhizhen.ybb.bean.BaseBean;
-import com.zhizhen.ybb.bean.EyesightBean;
-import com.zhizhen.ybb.my.contract.MyContract;
-import com.zhizhen.ybb.my.model.MyVisonModel;
-import com.zhizhen.ybb.my.presenter.MyVisonPresenter;
 
 import butterknife.BindView;
 
 /**
  * 选择性别界面
- * Created by sandlovechao on 2017/5/15.
+ * Created by tc on 2017/5/15.
  */
 
 public class ChoiceSexActivity extends YbBaseActivity implements View.OnClickListener {

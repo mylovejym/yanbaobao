@@ -3,7 +3,8 @@ package com.zhizhen.ybb.my.model;
 import com.psylife.wrmvplibrary.data.net.RxService;
 import com.psylife.wrmvplibrary.utils.helper.RxUtil;
 import com.zhizhen.ybb.api.YbbApi;
-import com.zhizhen.ybb.bean.PersonBean;
+import com.zhizhen.ybb.bean.BaseClassBean;
+import com.zhizhen.ybb.bean.PersonInfo;
 import com.zhizhen.ybb.my.contract.MyContract;
 
 import rx.Observable;
@@ -15,7 +16,7 @@ import rx.Observable;
  */
 public class MyModel implements MyContract.MyModel {
     @Override
-    public Observable<PersonBean> getPersonInfo(String token) {
+    public Observable<BaseClassBean<PersonInfo>> getPersonInfo(String token) {
 
 
         return RxService.createApi(YbbApi.class).getPersonInfo(token).compose(RxUtil.rxSchedulerHelper());

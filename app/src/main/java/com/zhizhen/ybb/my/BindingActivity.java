@@ -16,7 +16,8 @@ import android.view.animation.LinearInterpolator;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.R2;
 import com.zhizhen.ybb.base.YbBaseActivity;
-import com.zhizhen.ybb.bean.PersonBean;
+import com.zhizhen.ybb.bean.BaseClassBean;
+import com.zhizhen.ybb.bean.PersonInfo;
 import com.zhizhen.ybb.my.contract.MyContract;
 import com.zhizhen.ybb.my.model.MyModel;
 import com.zhizhen.ybb.my.presenter.MyPresenter;
@@ -152,7 +153,7 @@ public class BindingActivity extends YbBaseActivity<MyPresenter, MyModel> implem
     }
 
     @Override
-    public void showPersonInfo(PersonBean mPersonInfo) {
+    public void showPersonInfo(BaseClassBean<PersonInfo> mPersonInfo) {
 
     }
 }

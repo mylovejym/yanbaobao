@@ -15,10 +15,10 @@ import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.bean.LoginBean;
+import com.zhizhen.ybb.home.HomeActivity;
 import com.zhizhen.ybb.loginpass.contract.LoginContract;
 import com.zhizhen.ybb.loginpass.model.LoginModel;
 import com.zhizhen.ybb.loginpass.presenter.LoginPresenter;
-import com.zhizhen.ybb.my.MyActivity;
 import com.zhizhen.ybb.util.DateUtil;
 import com.zhizhen.ybb.util.SpUtils;
 
@@ -99,9 +99,9 @@ public class LoginActivity extends YbBaseActivity<LoginPresenter, LoginModel> im
             SpUtils.putBoolean(this,"firstLogin",false);
             SpUtils.setUser(this,bean.getData());
             YbBaseApplication.instance.setToken(bean.getData().getToken());
-            YbBaseApplication.instance.setPhone(bean.getData().getPhoto());
-            YbBaseApplication.instance.setDate(DateUtil.getDate());
-            intent.setClass(this, MyActivity.class);
+            YbBaseApplication.instance.setPhone(edit_phone.getText().toString().trim());
+            YbBaseApplication.instance.setDate(DateUtil.getCompleteTime());
+            intent.setClass(this, HomeActivity.class);
             startActivity(intent);
         }
     }

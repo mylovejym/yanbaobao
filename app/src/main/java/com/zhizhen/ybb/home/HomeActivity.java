@@ -17,8 +17,11 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.psylife.wrmvplibrary.base.WRBaseFragment;
+import com.psylife.wrmvplibrary.data.net.RxService;
+import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.helper.FragmentAdapter;
 import com.zhizhen.ybb.R;
+import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.base.YbBaseFragmentActivity;
 import com.zhizhen.ybb.home.contract.HomeContract;
 import com.zhizhen.ybb.home.fragment.HomePageFragment;
@@ -27,7 +30,9 @@ import com.zhizhen.ybb.home.model.HomeTabModel;
 import com.zhizhen.ybb.home.presenter.HomeTabPresenter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -35,7 +40,7 @@ import butterknife.BindView;
  * Created by psylife00 on 2016/12/19.
  */
 
-public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeTabModel> implements HomeContract.HomeTabView, TabHost.OnTabChangeListener,WRBaseFragment.OnBackToFirstListener, ViewPager.OnPageChangeListener {
+public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeTabModel> implements HomeContract.HomeTabView, TabHost.OnTabChangeListener, WRBaseFragment.OnBackToFirstListener, ViewPager.OnPageChangeListener {
     //    @BindView(R.id.maincontent)
 //    FrameLayout maincontent;
 
@@ -50,6 +55,10 @@ public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeT
 
     private Class fragmentArray[] = {HomePageFragment.class, MineFragment.class};
     private LayoutInflater layoutInflater;
+
+    public void setStatusBarColor() {
+        StatusBarUtil.setColor(this, this.getResources().getColor(R.color.blue_313245));
+    }
 
     @Override
     public View getTitleView() {
@@ -78,6 +87,12 @@ public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeT
     @Override
     public void initdata() {
         initPage();
+        //添加报文头
+        Map map = new HashMap();
+        map.put("Content-Type", "application/x-www-form-urlencoded");
+        map.put("dcreatedate", YbBaseApplication.instance.getDate());
+        map.put("spid", YbBaseApplication.instance.getPhone());
+        RxService.setHeaders(map);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
@@ -112,7 +127,6 @@ public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeT
     private void initPage() {
         HomePageFragment fragment1 = new HomePageFragment();
         MineFragment fragment2 = new MineFragment();
-
 
         fragments.add(fragment1);
         fragments.add(fragment2);
