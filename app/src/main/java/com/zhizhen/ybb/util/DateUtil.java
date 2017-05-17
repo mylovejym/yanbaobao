@@ -19,6 +19,19 @@ public class DateUtil {
 	}
 
 	/**
+	 * 获取距离当前前后多少年
+	 *
+	 * @return
+	 */
+	public static String getCompleteYear(int year) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		Calendar rightNow = Calendar.getInstance();
+		rightNow.set(Calendar.YEAR, year);
+		String time = sdf.format(rightNow.getTime());
+		return time;
+	}
+
+	/**
 	 * 获取距离当前前后多少小时的完整时间
 	 *
 	 * @return

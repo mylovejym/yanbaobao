@@ -2,18 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_titlebar"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="43dp"
     android:background="@android:color/white"
     android:orientation="horizontal">
     <!--android:background="@drawable/bg_primary2dark_sel"-->
     <ImageView
         android:id="@+id/titlebar_iv_left"
-        android:layout_width="48dp"
+        android:layout_width="43dp"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
 
         android:padding="13dp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/titlebar_tv_left"
@@ -21,7 +21,7 @@
         android:layout_height="match_parent"
 
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/margin_medium"
+        android:layout_toRightOf="@id/titlebar_iv_left"
         android:paddingRight="@dimen/margin_medium"
         android:textColor="@android:color/white"
         android:visibility="gone" />

@@ -15,6 +15,8 @@ public class YbBaseApplication extends WRCoreApp {
     public static Context context;
     public static YbBaseApplication instance;
 
+    public static String token = "3tylk7dfq5f0w";
+
     @Override
     public void onCreate() {
         super.onCreate();

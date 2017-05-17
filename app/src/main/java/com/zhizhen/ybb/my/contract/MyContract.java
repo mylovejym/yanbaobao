@@ -3,10 +3,9 @@ package com.zhizhen.ybb.my.contract;
 import com.psylife.wrmvplibrary.base.WRBaseModel;
 import com.psylife.wrmvplibrary.base.WRBaseView;
 import com.zhizhen.ybb.base.YbBasePresenter;
-import com.zhizhen.ybb.bean.BaseClassBean;
-import com.zhizhen.ybb.bean.EyesightInfo;
-import com.zhizhen.ybb.bean.LoginBean;
-import com.zhizhen.ybb.bean.PersonInfo;
+import com.zhizhen.ybb.bean.BaseBean;
+import com.zhizhen.ybb.bean.EyesightBean;
+import com.zhizhen.ybb.bean.PersonBean;
 
 import rx.Observable;
 
@@ -17,27 +16,49 @@ import rx.Observable;
  */
 public interface MyContract {
 
-    //修改个人信息
-    public abstract class GetPersonInfoPresenter extends YbBasePresenter<GetPersonInfoModel, GetPersonInfoView> {
+    //My界面获取个人信息
+    abstract class MyPresenter extends YbBasePresenter<MyModel, MyView> {
         public abstract void getPersonInfo(String token);
 
     }
-    interface GetPersonInfoModel extends WRBaseModel {
-        Observable<BaseClassBean<PersonInfo>> getPersonInfo(String token);
-    }
-    interface GetPersonInfoView extends WRBaseView {
-        void showPersonInfo(PersonInfo mPersonInfo);
+
+    interface MyModel extends WRBaseModel {
+        Observable<PersonBean> getPersonInfo(String token);
     }
 
-    abstract class GetEyesightInfoPresenter extends YbBasePresenter<GetEyesightInfoModel, GetEyesightInfoView>{
+    interface MyView extends WRBaseView {
+        void showPersonInfo(PersonBean mPersonInfo);
+    }
+
+    //我的视力
+    abstract class MyVisonPresenter extends YbBasePresenter<MyVisonModel, MyVisonView> {
+        /**
+         * 获取视力信息
+         * @param token
+         */
         public abstract void getEyesightInfo(String token);
+
+        /**
+         * 添加视力信息
+         * @param token
+         * @param left_eye_degree
+         * @param right_eye_degree
+         * @param left_eye_astigmatism
+         * @param right_eye_astigmatism
+         * @param pupillary_distance
+         */
+        public abstract void addEyesightInfo(String token, String left_eye_degree, String right_eye_degree, String left_eye_astigmatism, String right_eye_astigmatism, String pupillary_distance);
+
     }
 
-    interface GetEyesightInfoModel extends WRBaseModel {
-        Observable<BaseClassBean<EyesightInfo>> getEyesightInfo(String token);
+    interface MyVisonModel extends WRBaseModel {
+        Observable<EyesightBean> getEyesightInfo(String token);
+        Observable<BaseBean> addEyesightInfo(String token, String left_eye_degree, String right_eye_degree, String left_eye_astigmatism, String right_eye_astigmatism, String pupillary_distance);
     }
-    interface GetEyesightInfoView extends WRBaseView {
-        void showEyesightInfo(EyesightInfo mPersonInfo);
+
+    interface MyVisonView extends WRBaseView {
+        void showEyesightInfo(EyesightBean mPersonInfo);
+        void showAddEyesightInfo(BaseBean baseBean);
     }
 
 
