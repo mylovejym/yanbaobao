@@ -9,7 +9,7 @@ public class LoginBean {
 
     private String status;
     private String statusInfo;
-    private LoginData data;
+    private UserBean data;
 
     public String getStatus() {
         return status;
@@ -27,11 +27,11 @@ public class LoginBean {
         this.statusInfo = statusInfo;
     }
 
-    public LoginData getData() {
+    public UserBean getData() {
         return data;
     }
 
-    public void setData(LoginData data) {
+    public void setData(UserBean data) {
         this.data = data;
     }
 

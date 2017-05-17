@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".my.MyActivity">
+        <activity android:name=".loginpass.WelcomActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +23,26 @@
         </activity>
 
         <activity android:name=".my.MyVison"/>
-
+        <activity
+            android:name="com.zhizhen.ybb.loginpass.ForgatPasswordActivity"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+        <activity
+            android:name="com.zhizhen.ybb.loginpass.LoginActivity"
+            android:screenOrientation="portrait"
+          >
+        </activity>
+        <activity
+            android:name="com.zhizhen.ybb.loginpass.RegisterActivity"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+        <activity
+            android:name="com.zhizhen.ybb.my.MyActivity"
+            android:screenOrientation="portrait"
+            >
+        </activity>
     </application>
 
 </manifest>

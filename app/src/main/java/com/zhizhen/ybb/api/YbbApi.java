@@ -21,22 +21,24 @@ public interface YbbApi {
      * 发送验证码
      * @return
      */
+    @FormUrlEncoded
     @POST("/Api/Hardware/getPhoneCode")
-    Observable<Object> getPhoneCode();
+    Observable<LoginBean> getPhoneCode(@Field("phone") String phone);
 
     /**
      * 注册
      * @return
      */
+    @FormUrlEncoded
     @POST("/Api/Hardware/register")
-    Observable<Object> register();
+    Observable<LoginBean> getPhoneSuccess(@Field("phone") String phone,@Field("code") String code,@Field("pass") String pass);
 
     /**
      * 登录
      * @return
      */
     @POST("/Api/Hardware/login")
-    Observable<Object> login(Object obj);
+    Observable<LoginBean> login(@Field("phone") String phone,@Field("pass") String pass);
 
     /**
      * 忘记密码

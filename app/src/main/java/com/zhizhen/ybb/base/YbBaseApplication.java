@@ -1,6 +1,9 @@
 package com.zhizhen.ybb.base;
 
+import android.content.Context;
+
 import com.psylife.wrmvplibrary.WRCoreApp;
+import com.zhizhen.ybb.util.SpUtils;
 
 /**
  * 作者：tc on 2017/5/11.
@@ -8,9 +11,31 @@ import com.psylife.wrmvplibrary.WRCoreApp;
  * 版本：v1.0
  */
 public class YbBaseApplication extends WRCoreApp {
+    private String token;
+    public static Context context;
+    public static YbBaseApplication instance;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        instance = this;
+        context = getApplicationContext();
+    }
+    public static YbBaseApplication getInstance() {
+        return instance;
+    }
     @Override
     public String setBaseUrl() {
         return "http://optometry.zonetime.net";
+    }
+    public String getToken(){
+        if(token == null){
+            token = SpUtils.getString(context, "token", null);
+        }
+        return token;
+    }
+    public void setToken(String token){
+        this.token =token;
+        SpUtils.putString(context, "token", token);
     }
 }
