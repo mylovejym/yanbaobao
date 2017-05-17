@@ -197,20 +197,21 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
                         path = picturePath;
                     }
                     System.out.println("path = " + path);
-                    Glide.with(this).load("http://tx.haiqq.com/uploads/allimg/150319/1612522R8-4.jpg").asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                            circularBitmapDrawable.setCircular(true);
-                            imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
-                        }
-                    });
-
                     break;
                 default:
                     break;
+
             }
+            Glide.with(this).load(new File(path)).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    RoundedBitmapDrawable circularBitmapDrawable =
+                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                    circularBitmapDrawable.setCircular(true);
+                    imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
+                }
+            });
+
         }
     }
 }
