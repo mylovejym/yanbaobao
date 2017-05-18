@@ -96,7 +96,7 @@ public class LoginActivity extends YbBaseActivity<LoginPresenter, LoginModel> im
         this.stopProgressDialog();
         if(bean.getStatus().equals("0")){
             Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
-            SpUtils.putBoolean(this,"firstLogin",false);
+            SpUtils.putBoolean(this,"firstLogin",true);
             SpUtils.setUser(this,bean.getData());
             YbBaseApplication.instance.setToken(bean.getData().getToken());
             YbBaseApplication.instance.setPhone(edit_phone.getText().toString().trim());

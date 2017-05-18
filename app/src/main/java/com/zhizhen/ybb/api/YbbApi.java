@@ -43,14 +43,15 @@ public interface YbbApi {
      */
     @FormUrlEncoded
     @POST("/Api/Hardware/login")
-    Observable<LoginBean> login(@Field("phone") String phone,@Field("pass") String pass);
+    Observable<LoginBean> login(@Field("phone") String phone, @Field("pass") String pass);
 
     /**
      * 忘记密码
      * @return
      */
+    @FormUrlEncoded
     @POST("/Api/Hardware/forgetPass")
-    Observable<Object> forgetPass();
+    Observable<LoginBean> forgetPass(@Field("phone") String phone,@Field("code") String code,@Field("pass") String pass);
 
     /**
      * 修改个人信息

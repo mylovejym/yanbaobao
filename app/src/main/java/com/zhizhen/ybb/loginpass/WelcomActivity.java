@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.zhizhen.ybb.R;
+import com.zhizhen.ybb.home.HomeActivity;
 import com.zhizhen.ybb.util.SpUtils;
 
 public class WelcomActivity extends Activity {
@@ -21,19 +22,19 @@ public class WelcomActivity extends Activity {
 			@Override
 			public boolean handleMessage(Message arg0) {
 				boolean isFirstLogin = SpUtils.getBoolean(WelcomActivity.this,"firstLogin");
-//				if (isFirstLogin) {
-					Intent intent = new Intent();
-					intent.setClass(WelcomActivity.this,
-							LoginActivity.class);
-					startActivity(intent);
-					finish();
-//				} else {
-//					Intent intent = new Intent();
-//					intent.setClass(WelcomActivity.this,
-//							MyActivity.class);
-//					startActivity(intent);
-//					finish();
-//				}
+				if (isFirstLogin) {
+                    Intent intent = new Intent();
+                    intent.setClass(WelcomActivity.this,
+                            HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+				} else {
+                    Intent intent = new Intent();
+                    intent.setClass(WelcomActivity.this,
+                            LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+				}
 				return false;
 			}
 		}).sendEmptyMessageDelayed(0, 3000); // 表示延时三秒进行任务的执行
