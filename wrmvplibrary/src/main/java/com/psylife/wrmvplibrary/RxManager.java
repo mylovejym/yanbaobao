@@ -1,9 +1,5 @@
 package com.psylife.wrmvplibrary;
 
-import com.psylife.wrmvplibrary.utils.LogUtil;
-
-import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
-
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -22,7 +18,7 @@ public class RxManager {
 //    public RxBus mRxBus = RxBus.getInstance();
 //    private Map<String, Observable<?>> mObservables = new HashMap<>();// 管理观察源
     private CompositeSubscription mCompositeSubscription = new CompositeSubscription();// 管理订阅者者
-    private static final LocalVariableTableParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
+//    private static final LocalVariableTableParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
 
 
 //    public void on(String eventName, Action1<Object> action1) {
@@ -61,19 +57,19 @@ public class RxManager {
             }
 //            method = clazz.getDeclaredMethod(method_names);
             //获取方法的所有参数
-            String[] parameterNames = getParameterNames(method);
-            StringBuilder sb = new StringBuilder();
-            sb.append("方法："+method.getName() + " ");
-            if (parameterNames == null || parameterNames.length <1) {
-                sb.append("无参");
-            } else {
-                for (int i = 0; i < parameterNames.length ; i++) {
-                    sb.append(parameterNames[i]);
-                    sb.append(",");
-                }
-                sb.append("]");
-            }
-            LogUtil.i(sb.toString());
+//            String[] parameterNames = getParameterNames(method);
+//            StringBuilder sb = new StringBuilder();
+//            sb.append("方法："+method.getName() + " ");
+//            if (parameterNames == null || parameterNames.length <1) {
+//                sb.append("无参");
+//            } else {
+//                for (int i = 0; i < parameterNames.length ; i++) {
+//                    sb.append(parameterNames[i]);
+//                    sb.append(",");
+//                }
+//                sb.append("]");
+//            }
+//            LogUtil.i(sb.toString());
 //        } catch (NoSuchMethodException e) {
 //            e.printStackTrace();
 //        }
@@ -85,9 +81,9 @@ public class RxManager {
      * @param method
      * @return
      */
-    public static String[] getParameterNames(Method method) {
-        return parameterNameDiscoverer.getParameterNames(method);
-    }
+//    public static String[] getParameterNames(Method method) {
+//        return parameterNameDiscoverer.getParameterNames(method);
+//    }
 
 
 

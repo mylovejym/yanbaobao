@@ -13,8 +13,8 @@
        >
        <ImageView 
         android:id="@+id/img_back"
-	    android:layout_width="14dp"
-	    android:layout_height="24dp"
+	    android:layout_width="15dp"
+	    android:layout_height="21.5dp"
 	    android:layout_centerVertical="true"
 	    android:src="@mipmap/tab_back"
 	    />
