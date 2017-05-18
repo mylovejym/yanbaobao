@@ -46,7 +46,9 @@
         <activity
             android:name="com.zhizhen.ybb.my.EditDataActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name="com.zhizhen.ybb.my.EditNameActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.zhizhen.ybb.home.HomeActivity"
             android:screenOrientation="portrait" />

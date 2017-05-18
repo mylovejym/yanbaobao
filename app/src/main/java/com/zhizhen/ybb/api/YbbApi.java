@@ -6,6 +6,8 @@ import com.zhizhen.ybb.bean.EyesightInfo;
 import com.zhizhen.ybb.bean.LoginBean;
 import com.zhizhen.ybb.bean.PersonInfo;
 
+import java.io.File;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Field;
@@ -63,9 +65,15 @@ public interface YbbApi {
      *
      * @return
      */
-    @Multipart
+//    @Multipart
+//    @POST("/Api/Hardware/editPersonalInfo")
+//    Observable<BaseBean> editPersonalInfo(@Part("token") RequestBody token, @Part("username") RequestBody username, @Part("sex") RequestBody sex, @Part("born") RequestBody born,  @Part MultipartBody.Part file);
+
+    @FormUrlEncoded
     @POST("/Api/Hardware/editPersonalInfo")
-    Observable<BaseBean> editPersonalInfo(@Part("token") String token, @Part("username") String username, @Part("sex") String sex, @Part("born") String born, @Part("photo") RequestBody file);
+    Observable<BaseBean> editPersonalInfo(@Field("token") String token, @Field("username") String username, @Field("sex") String sex, @Field("born") String born, @Field("photo") File file);
+
+
 
     /**
      * 添加视力信息

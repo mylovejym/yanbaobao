@@ -6,7 +6,7 @@
               android:orientation="vertical"
     >
 
-    <include layout="@layout/view_title_bar"/>
+    <!--<include layout="@layout/view_title_bar"/>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,6 +24,7 @@
             android:layout_marginLeft="13dp"
             android:background="@null"
             android:hint="@string/user_name"
+            android:textColor="@color/gray_80eeeeee"
             android:textColorHint="@color/gray_80eeeeee"
             android:textSize="14sp"
             />

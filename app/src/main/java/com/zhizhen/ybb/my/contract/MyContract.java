@@ -8,6 +8,8 @@ import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.EyesightInfo;
 import com.zhizhen.ybb.bean.PersonInfo;
 
+import java.io.File;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import rx.Observable;
@@ -80,11 +82,11 @@ public interface MyContract {
          * @param born
          * @param photo
          */
-        public abstract void editPersonalInfo(String token, String username, String sex, String born, RequestBody photo);
+        public abstract void editPersonalInfo(String token, String username, String sex, String born, File photo);
     }
 
     interface EditDataModel extends WRBaseModel {
-        Observable<BaseBean> editPersonalInfo(String token, String username, String sex, String born, RequestBody photo);
+        Observable<BaseBean> editPersonalInfo(String token, String username, String sex, String born, File photo);
     }
 
     interface EditDataView extends WRBaseView {

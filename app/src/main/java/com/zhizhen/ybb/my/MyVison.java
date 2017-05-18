@@ -1,12 +1,23 @@
 package com.zhizhen.ybb.my;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
@@ -19,6 +30,10 @@ import com.zhizhen.ybb.bean.EyesightInfo;
 import com.zhizhen.ybb.my.contract.MyContract;
 import com.zhizhen.ybb.my.model.MyVisonModel;
 import com.zhizhen.ybb.my.presenter.MyVisonPresenter;
+import com.zhizhen.ybb.util.DialogUtils;
+import com.zhizhen.ybb.util.TakePhotosDispose;
+
+import java.io.File;
 
 import butterknife.BindView;
 
@@ -47,8 +62,12 @@ public class MyVison extends YbBaseActivity<MyVisonPresenter, MyVisonModel> impl
     @BindView(R.id.lin_take_photo)
     LinearLayout linTakPhoto;
 
+    @BindView(R.id.image_bill)
+    ImageView imageBill;
+
     private String leftDegree, rightDegree, leftAstigmatism, rightAstigmatism, pupil;
 
+    private String path;
 
     @Override
     public int getLayoutId() {
@@ -80,7 +99,9 @@ public class MyVison extends YbBaseActivity<MyVisonPresenter, MyVisonModel> impl
 
     @Override
     public void initView(Bundle savedInstanceState) {
-
+        linTakPhoto.setOnClickListener(v -> {
+            DialogUtils.showTakePhotoDialog(this);
+        });
     }
 
     @Override
@@ -114,11 +135,47 @@ public class MyVison extends YbBaseActivity<MyVisonPresenter, MyVisonModel> impl
 
     @Override
     public void showAddEyesightInfo(BaseBean baseBean) {
-
         if (baseBean.getStatus().equals("0")) {
             this.finish();
         } else {
             Toast.makeText(this, baseBean.getStatusInfo(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case TakePhotosDispose.CROPIMAGE:
+                case TakePhotosDispose.TAKEPHOTO:
+                    path = DialogUtils.currentFileName.getAbsolutePath();
+                    break;
+                case TakePhotosDispose.PICKPHOTO:
+                    // 相册选图
+                    Uri selectedImage = data.getData();
+                    if (!selectedImage.toString().substring(0, 7).equals("content")) {
+                        // 如果路径错误
+                        String picturePath = selectedImage.getPath();
+                        path = picturePath;
+                    } else {
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                        Cursor cursor = getContentResolver().query(selectedImage,
+                                filePathColumn, null, null, null);
+                        cursor.moveToFirst();
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String picturePath = cursor.getString(columnIndex);
+                        cursor.close();
+                        path = picturePath;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            System.out.println("path = " + path);
+            imageBill.setVisibility(View.VISIBLE);
+            linTakPhoto.setVisibility(View.GONE);
+            Glide.with(this).load(new File(path)).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageBill));
         }
     }
 }

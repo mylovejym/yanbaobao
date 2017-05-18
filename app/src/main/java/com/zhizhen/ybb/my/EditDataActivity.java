@@ -1,29 +1,24 @@
 package com.zhizhen.ybb.my;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bigkoo.pickerview.TimePickerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.psylife.wrmvplibrary.data.net.RxService;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
@@ -40,8 +35,9 @@ import com.zhizhen.ybb.util.SpUtils;
 import com.zhizhen.ybb.util.TakePhotosDispose;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import okhttp3.MediaType;
@@ -54,6 +50,9 @@ import okhttp3.RequestBody;
  */
 
 public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditDataModel> implements MyContract.EditDataView, View.OnClickListener {
+
+    public static final int NAME = 10086;
+    public static final int SEX = 10010;
 
     @BindView(R.id.lin_head_photo)
     LinearLayout linHeadPhoto;
@@ -85,6 +84,8 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
 
     private String path;
 
+    private String both;
+
     public void setStatusBarColor() {
         StatusBarUtil.setColor(this, this.getResources().getColor(R.color.blue_313245));
     }
@@ -99,13 +100,31 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
                 .setRightOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (path != null) {
+                            File file = new File(path);
+                            RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
+                            MultipartBody.Part part = MultipartBody.Part.createFormData("photo", file.getName());
+//                            mPresenter.editPersonalInfo(
+//                                    YbBaseApplication.instance.getToken()),
+//                                    txtName.getText().toString().trim()),
+//                                    txtSex.getText().toString().equals("男") ? "1" : "2"),
+//                                    txtAge.getText().toString()),
+//                                    part);
+                            mPresenter.editPersonalInfo(
+                                    YbBaseApplication.instance.getToken(),
+                                    txtName.getText().toString().trim(),
+                                    txtSex.getText().toString().equals("男") ? "1" : "2",
+                                    both,
+                                    file);
 
-                        File file = new File(path);
-
-                        mPresenter.editPersonalInfo(YbBaseApplication.instance.getToken(),
-                                txtName.getText().toString().trim(),
-                                txtSex.getText().toString().equals("男") ? "1" : "2",
-                                txtAge.getText().toString(), RequestBody.create(MediaType.parse("file"), file));
+                        } else {
+                            mPresenter.editPersonalInfo(
+                                    YbBaseApplication.instance.getToken(),
+                                    txtName.getText().toString().trim(),
+                                    txtSex.getText().toString().equals("男") ? "1" : "2",
+                                    both,
+                                    null);
+                        }
                     }
                 })
                 .build();
@@ -124,11 +143,11 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
         linChoiceSex.setOnClickListener(this);
         linSetAge.setOnClickListener(this);
 
-        Map map = new HashMap();
-        map.put("Content-Type", "multipart/form-data");
-        map.put("dcreatedate", YbBaseApplication.instance.getDate());
-        map.put("spid", YbBaseApplication.instance.getPhone());
-        RxService.setHeaders(map);
+//        Map map = new HashMap();
+//        map.put("Content-Type", "multipart/form-data");
+//        map.put("dcreatedate", YbBaseApplication.instance.getDate());
+//        map.put("spid", YbBaseApplication.instance.getPhone());
+//        RxService.setHeaders(map);
     }
 
     @Override
@@ -139,7 +158,8 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
         txtName.setText(mPersonInfo.getUsername());
         txtSex.setText(mPersonInfo.getSex().equals("1") ? "男" : "女");
         try {
-            txtAge.setText(DateUtil.getAge(mPersonInfo.getBorn()));
+            both = mPersonInfo.getBorn();
+            txtAge.setText("" + DateUtil.getAge(mPersonInfo.getBorn()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -159,11 +179,31 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
         if (v == linHeadPhoto) {
             DialogUtils.showTakePhotoDialog(this);
         } else if (v == linChoiceSex) {
-
+            Intent intent = new Intent(this, ChoiceSexActivity.class);
+            intent.putExtra("sex", mPersonInfo.getSex());
+            startActivityForResult(intent, SEX);
         } else if (v == linName) {
-
+            Intent intent = new Intent(this, EditNameActivity.class);
+            intent.putExtra("name", mPersonInfo.getUsername());
+            startActivityForResult(intent, NAME);
         } else if (v == linSetAge) {
-
+            //时间选择器
+            TimePickerView pvTime = new TimePickerView.Builder(this, (date, v1) -> {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                both = sdf.format(date);
+                try {
+                    txtAge.setText("" + DateUtil.getAge(both));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            })
+                    .setType(new boolean[]{true, true, true, false, false, false})
+                    .setTextColorCenter(R.color.blue_b3007aff)
+                    .setTitleSize(R.dimen.txt_size)
+                    .isCenterLabel(true)
+                    .build();
+            pvTime.setDate(Calendar.getInstance());//注：根据需求来决定是否使用该方法（一般是精确到秒的情况），此项可以在弹出选择器的时候重新设置当前时间，避免在初始化之后由于时间已经设定，导致选中时间与当前时间不匹配的问题。
+            pvTime.show();
         }
     }
 
@@ -179,12 +219,16 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
 
     @Override
     public void showEditDataInfo(BaseBean baseBean) {
-        Toast.makeText(this, baseBean.getStatusInfo(), Toast.LENGTH_SHORT).show();
-        Map map = new HashMap();
-        map.put("Content-Type", "application/x-www-form-urlencoded");
-        map.put("dcreatedate", YbBaseApplication.instance.getDate());
-        map.put("spid", YbBaseApplication.instance.getPhone());
-        RxService.setHeaders(map);
+        if (baseBean.getStatus().equals("0")) {
+            Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
+            this.finish();
+        } else
+            Toast.makeText(this, baseBean.getStatusInfo(), Toast.LENGTH_SHORT).show();
+//        Map map = new HashMap();
+//        map.put("Content-Type", "application/x-www-form-urlencoded");
+//        map.put("dcreatedate", YbBaseApplication.instance.getDate());
+//        map.put("spid", YbBaseApplication.instance.getPhone());
+//        RxService.setHeaders(map);
     }
 
     @Override
@@ -227,7 +271,12 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
                     imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
                 }
             });
-
+        } else if (resultCode == SEX) {
+            txtSex.setText(data.getStringExtra("sex").equals("1") ? "男" : "女");
+            mPersonInfo.setSex(data.getStringExtra("sex"));
+        } else if (resultCode == NAME) {
+            txtName.setText(data.getStringExtra("name"));
+            mPersonInfo.setSex(data.getStringExtra("name"));
         }
     }
 }

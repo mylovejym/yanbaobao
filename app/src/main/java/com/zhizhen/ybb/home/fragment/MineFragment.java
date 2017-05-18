@@ -96,6 +96,12 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
 
     @Override
     public void initData() {
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         mPresenter.getPersonInfo(YbBaseApplication.instance.getToken());
     }
 
@@ -127,7 +133,12 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
         this.mPersonInfo = mPersonInfo.getData();
         if (mPersonInfo.getStatus().equals("0")) {
             txtName.setText(mPersonInfo.getData().getUsername());
-            if (mPersonInfo.getData().getSex().equals("")) {
+            try {
+                txtAge.setText("年龄："+DateUtil.getAge(mPersonInfo.getData().getBorn()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (mPersonInfo.getData().getSex().equals("1")) {
                 imageSex.setImageDrawable(this.getResources().getDrawable(R.mipmap.icon_man));
             } else {
                 imageSex.setImageDrawable(this.getResources().getDrawable(R.mipmap.icon_girl));
@@ -154,5 +165,12 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
     @Override
     protected void initLazyView() {
 
+    }
+
+    @Override
+    protected void onFragmentVisibleChange(boolean isVisible) {
+        if (isVisible){
+            mPresenter.getPersonInfo(YbBaseApplication.instance.getToken());
+        }
     }
 }

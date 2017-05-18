@@ -228,6 +228,14 @@
                 />
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/image_bill"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="13dp"
+            android:visibility="gone"
+            android:src="@mipmap/ic_launcher"
+            android:layout_gravity="center"/>
 
     </LinearLayout>
 

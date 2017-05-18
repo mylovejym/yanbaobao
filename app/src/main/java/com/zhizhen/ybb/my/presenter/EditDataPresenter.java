@@ -2,6 +2,8 @@ package com.zhizhen.ybb.my.presenter;
 
 import com.zhizhen.ybb.my.contract.MyContract;
 
+import java.io.File;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
@@ -16,7 +18,7 @@ public class EditDataPresenter extends MyContract.EditDataPresenter {
     }
 
     @Override
-    public void editPersonalInfo(String token, String username, String sex, String born, RequestBody photo) {
+    public void editPersonalInfo(String token, String username, String sex, String born, File photo) {
         mRxManager.add(mModel
                 .editPersonalInfo(token, username, sex, born, photo)
                 .subscribe(
