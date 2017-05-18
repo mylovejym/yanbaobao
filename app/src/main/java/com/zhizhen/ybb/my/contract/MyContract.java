@@ -8,6 +8,7 @@ import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.EyesightInfo;
 import com.zhizhen.ybb.bean.PersonInfo;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import rx.Observable;
 

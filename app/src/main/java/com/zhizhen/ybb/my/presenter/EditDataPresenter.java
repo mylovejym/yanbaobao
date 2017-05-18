@@ -2,6 +2,7 @@ package com.zhizhen.ybb.my.presenter;
 
 import com.zhizhen.ybb.my.contract.MyContract;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 /**

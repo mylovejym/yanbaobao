@@ -25,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RxService {
     private static final int TIMEOUT_READ = 20;
     private static final int TIMEOUT_CONNECTION = 10;
+    private static Map<String, String> map;
     private static final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     private static CacheInterceptor cacheInterceptor = new CacheInterceptor();
     private static Builder builder = new OkHttpClient().newBuilder();
@@ -37,18 +38,7 @@ public class RxService {
             //设置Cache
             .addNetworkInterceptor(cacheInterceptor)//缓存方面需要加入这个拦截器
             .addInterceptor(cacheInterceptor)
-//            .addNetworkInterceptor(chain -> {
-//                Request original = chain.request();
-//                Request request = original.newBuilder()
-//                .addHeader("dcreatedate", "201705151633")
-//                .addHeader("spid", "17621159290")
-//                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-//                .build();
-//                LogUtil.d("request:" + request.toString());
-//                LogUtil.d("request headers:" + request.headers().toString());
-//                return chain.proceed(request);
-//            })
-
+            .addNetworkInterceptor(new RequestInterceptor())
             .cache(HttpCache.getCache())
             //time out
             .connectTimeout(TIMEOUT_CONNECTION, TimeUnit.SECONDS)
@@ -57,7 +47,6 @@ public class RxService {
             //失败重连
             .retryOnConnectionFailure(true)
             .build();
-
 
     public static <T> T createApi(Class<T> clazz) {
         return createApi(clazz, WRCoreApp.getInstance().setBaseUrl());
@@ -79,18 +68,18 @@ public class RxService {
      */
     public static class RequestInterceptor implements Interceptor {
 
-        Map<String, String> map;
+        public RequestInterceptor() {
 
-        public RequestInterceptor(Map<String, String> map) {
-            this.map = map;
         }
 
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request original = chain.request();
             Request.Builder mBuild = original.newBuilder();
-            for (Map.Entry<String, String> entry: map.entrySet()) {
-                mBuild.addHeader(entry.getKey(), entry.getValue());
+            if (map != null) {
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    mBuild.header(entry.getKey(), entry.getValue());
+                }
             }
             Request request = mBuild.build();
             LogUtil.d("request:" + request.toString());
@@ -99,9 +88,8 @@ public class RxService {
         }
     }
 
-    public static void setHeaders(Map<String, String> map) {
-        RequestInterceptor requestInterceptor = new RequestInterceptor(map);
-        okHttpClient = builder.addNetworkInterceptor(requestInterceptor).build();
+    public static void setHeaders(Map<String, String> headMap) {
+        map = headMap;
     }
 }
 

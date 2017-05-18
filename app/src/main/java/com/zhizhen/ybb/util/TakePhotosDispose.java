@@ -13,6 +13,8 @@ import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * 
@@ -92,11 +94,10 @@ public class TakePhotosDispose {
 	 * 
 	 */
 	public static String getPhotoFileName() {
-//		Date date = new Date(System.currentTimeMillis());
-		// 注意命名:'IMG'_yyyyMMdd_HHmmss,
-//		SimpleDateFormat dateFormat = new SimpleDateFormat("'YBY'_yyyyMMdd_HHmmss");
-//		return dateFormat.format(date) + ".jpg";
-		return "YBY.jpg";
+		Date date = new Date(System.currentTimeMillis());
+//		 注意命名:'IMG'_yyyyMMdd_HHmmss,
+		SimpleDateFormat dateFormat = new SimpleDateFormat("'YBY'_yyyyMMdd_HHmmss");
+		return dateFormat.format(date) + ".jpg";
 	}
 
 	/**

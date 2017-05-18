@@ -28,6 +28,8 @@ import com.zhizhen.ybb.home.fragment.HomePageFragment;
 import com.zhizhen.ybb.home.fragment.MineFragment;
 import com.zhizhen.ybb.home.model.HomeTabModel;
 import com.zhizhen.ybb.home.presenter.HomeTabPresenter;
+import com.zhizhen.ybb.loginpass.WelcomActivity;
+import com.zhizhen.ybb.util.SpUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,6 +89,9 @@ public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeT
     @Override
     public void initdata() {
         initPage();
+        YbBaseApplication.instance.setToken(SpUtils.getUser(this).getToken());
+        YbBaseApplication.instance.setPhone(SpUtils.getString(this, "phone"));
+        YbBaseApplication.instance.setDate(SpUtils.getString(this, "date"));
         //添加报文头
         Map map = new HashMap();
         map.put("Content-Type", "application/x-www-form-urlencoded");

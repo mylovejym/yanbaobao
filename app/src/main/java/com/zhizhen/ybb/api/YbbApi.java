@@ -6,6 +6,7 @@ import com.zhizhen.ybb.bean.EyesightInfo;
 import com.zhizhen.ybb.bean.LoginBean;
 import com.zhizhen.ybb.bean.PersonInfo;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -23,6 +24,7 @@ public interface YbbApi {
 
     /**
      * 发送验证码
+     *
      * @return
      */
     @FormUrlEncoded
@@ -31,14 +33,16 @@ public interface YbbApi {
 
     /**
      * 注册
+     *
      * @return
      */
     @FormUrlEncoded
     @POST("/Api/Hardware/register")
-    Observable<LoginBean> getPhoneSuccess(@Field("phone") String phone,@Field("code") String code,@Field("pass") String pass);
+    Observable<LoginBean> getPhoneSuccess(@Field("phone") String phone, @Field("code") String code, @Field("pass") String pass);
 
     /**
      * 登录
+     *
      * @return
      */
     @FormUrlEncoded
@@ -47,6 +51,7 @@ public interface YbbApi {
 
     /**
      * 忘记密码
+     *
      * @return
      */
     @FormUrlEncoded
@@ -55,22 +60,25 @@ public interface YbbApi {
 
     /**
      * 修改个人信息
+     *
      * @return
      */
     @Multipart
     @POST("/Api/Hardware/editPersonalInfo")
-    Observable<BaseBean> editPersonalInfo(@Field("token")String token, @Field("username")String username, @Field("sex")String sex, @Field("born")String born, @Part("file\"; filename=\"photo.png\"") RequestBody photo);
+    Observable<BaseBean> editPersonalInfo(@Part("token") String token, @Part("username") String username, @Part("sex") String sex, @Part("born") String born, @Part("photo") RequestBody file);
 
     /**
      * 添加视力信息
+     *
      * @return
      */
     @FormUrlEncoded
     @POST("/Api/Hardware/addEyesightInfo")
-    Observable<BaseBean> addEyesightInfo(@Field("token") String token, @Field("left_eye_degree")String left_eye_degree, @Field("right_eye_degree")String right_eye_degree, @Field("left_eye_astigmatism")String left_eye_astigmatism, @Field("right_eye_astigmatism")String right_eye_astigmatism, @Field("pupillary_distance")String pupillary_distance);
+    Observable<BaseBean> addEyesightInfo(@Field("token") String token, @Field("left_eye_degree") String left_eye_degree, @Field("right_eye_degree") String right_eye_degree, @Field("left_eye_astigmatism") String left_eye_astigmatism, @Field("right_eye_astigmatism") String right_eye_astigmatism, @Field("pupillary_distance") String pupillary_distance);
 
     /**
      * 返回视力信息
+     *
      * @return
      */
     @FormUrlEncoded
@@ -79,6 +87,7 @@ public interface YbbApi {
 
     /**
      * 返回个人信息
+     *
      * @return
      */
     @FormUrlEncoded
@@ -87,6 +96,7 @@ public interface YbbApi {
 
     /**
      * 关注眼专家
+     *
      * @return
      */
     @POST("/Api/Hardware/focusMe")
@@ -94,6 +104,7 @@ public interface YbbApi {
 
     /**
      * APP写入数据
+     *
      * @return
      */
     @POST("/Api/Hardware/addHardwareData")
@@ -101,6 +112,7 @@ public interface YbbApi {
 
     /**
      * 统计数据接口
+     *
      * @return
      */
     @POST("/Api/Hardware/static_data")

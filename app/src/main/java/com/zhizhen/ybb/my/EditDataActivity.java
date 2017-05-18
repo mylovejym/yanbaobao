@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.psylife.wrmvplibrary.data.net.RxService;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
@@ -35,12 +36,16 @@ import com.zhizhen.ybb.my.model.EditDataModel;
 import com.zhizhen.ybb.my.presenter.EditDataPresenter;
 import com.zhizhen.ybb.util.DateUtil;
 import com.zhizhen.ybb.util.DialogUtils;
+import com.zhizhen.ybb.util.SpUtils;
 import com.zhizhen.ybb.util.TakePhotosDispose;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 /**
@@ -94,11 +99,13 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
                 .setRightOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        File file = new File(path);
+
                         mPresenter.editPersonalInfo(YbBaseApplication.instance.getToken(),
                                 txtName.getText().toString().trim(),
                                 txtSex.getText().toString().equals("男") ? "1" : "2",
-                                txtAge.getText().toString(), RequestBody.create(MediaType.parse("image/*"), new File(path))
-                        );
+                                txtAge.getText().toString(), RequestBody.create(MediaType.parse("file"), file));
                     }
                 })
                 .build();
@@ -117,6 +124,11 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
         linChoiceSex.setOnClickListener(this);
         linSetAge.setOnClickListener(this);
 
+        Map map = new HashMap();
+        map.put("Content-Type", "multipart/form-data");
+        map.put("dcreatedate", YbBaseApplication.instance.getDate());
+        map.put("spid", YbBaseApplication.instance.getPhone());
+        RxService.setHeaders(map);
     }
 
     @Override
@@ -125,7 +137,7 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
         Bundle bundle = intent.getExtras();
         mPersonInfo = (PersonInfo) bundle.getSerializable("personInfo");
         txtName.setText(mPersonInfo.getUsername());
-        txtSex.setText(mPersonInfo.getSex());
+        txtSex.setText(mPersonInfo.getSex().equals("1") ? "男" : "女");
         try {
             txtAge.setText(DateUtil.getAge(mPersonInfo.getBorn()));
         } catch (Exception e) {
@@ -167,7 +179,12 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
 
     @Override
     public void showEditDataInfo(BaseBean baseBean) {
-
+        Toast.makeText(this, baseBean.getStatusInfo(), Toast.LENGTH_SHORT).show();
+        Map map = new HashMap();
+        map.put("Content-Type", "application/x-www-form-urlencoded");
+        map.put("dcreatedate", YbBaseApplication.instance.getDate());
+        map.put("spid", YbBaseApplication.instance.getPhone());
+        RxService.setHeaders(map);
     }
 
     @Override
@@ -196,12 +213,11 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
                         cursor.close();
                         path = picturePath;
                     }
-                    System.out.println("path = " + path);
                     break;
                 default:
                     break;
-
             }
+            System.out.println("path = " + path);
             Glide.with(this).load(new File(path)).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
                 @Override
                 protected void setResource(Bitmap resource) {

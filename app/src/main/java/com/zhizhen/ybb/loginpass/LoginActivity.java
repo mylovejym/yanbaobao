@@ -98,9 +98,8 @@ public class LoginActivity extends YbBaseActivity<LoginPresenter, LoginModel> im
             Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
             SpUtils.putBoolean(this,"firstLogin",true);
             SpUtils.setUser(this,bean.getData());
-            YbBaseApplication.instance.setToken(bean.getData().getToken());
-            YbBaseApplication.instance.setPhone(edit_phone.getText().toString().trim());
-            YbBaseApplication.instance.setDate(DateUtil.getCompleteTime());
+            SpUtils.putString(this, "phone", edit_phone.getText().toString().trim());
+            SpUtils.putString(this, "date", DateUtil.getCompleteTime());
             intent.setClass(this, HomeActivity.class);
             startActivity(intent);
         }
