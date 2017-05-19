@@ -10,7 +10,7 @@
 	    android:layout_width="95dp"
 	    android:layout_gravity="center_horizontal"
 	    android:layout_marginTop="60dp"
-	    android:src="@mipmap/ic_launcher"
+	    android:src="@mipmap/wellcom"
 	    android:layout_height="103dp"
 	    />
 	
@@ -27,7 +27,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_centerVertical="true"
-	    android:src="@mipmap/ic_launcher"
+	    android:src="@mipmap/phone"
 	    />
 	<EditText
 		android:id="@+id/edit_phone"
@@ -38,7 +38,7 @@
 	    android:textSize="14sp"
 	    android:textColor="#998889a2"
 	    android:inputType="phone"
-		android:text="17621159290"
+		android:text=""
 	   	android:maxLength="11"
 	   	android:textColorHint="#998889a2"
 	    android:hint="输入手机号"
@@ -66,7 +66,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_centerVertical="true"
-	    android:src="@mipmap/ic_launcher"
+	    android:src="@mipmap/password"
 	    />
 	<EditText
 		android:id="@+id/edit_pass"
@@ -74,7 +74,7 @@
 	    android:layout_height="20dp"
 	    android:layout_marginLeft="5dp"
 	    android:singleLine="true"
-		android:text="123456"
+		android:text=""
 	    android:textSize="14sp"
 	    android:textColor="#998889a2"
 	    android:hint="输入密码"
