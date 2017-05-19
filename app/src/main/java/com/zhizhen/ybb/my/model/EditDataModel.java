@@ -18,7 +18,7 @@ import rx.Observable;
 
 public class EditDataModel implements MyContract.EditDataModel {
     @Override
-    public Observable<BaseBean> editPersonalInfo(String token, String username, String sex, String born, File photo) {
+    public Observable<BaseBean> editPersonalInfo(String token, String username, String sex, String born, String photo) {
         return RxService.createApi(YbbApi.class).editPersonalInfo(token, username, sex, born, photo).compose(RxUtil.rxSchedulerHelper());
     }
 }

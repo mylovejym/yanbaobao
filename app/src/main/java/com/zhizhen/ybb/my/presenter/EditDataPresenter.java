@@ -18,7 +18,7 @@ public class EditDataPresenter extends MyContract.EditDataPresenter {
     }
 
     @Override
-    public void editPersonalInfo(String token, String username, String sex, String born, File photo) {
+    public void editPersonalInfo(String token, String username, String sex, String born, String photo) {
         mRxManager.add(mModel
                 .editPersonalInfo(token, username, sex, born, photo)
                 .subscribe(

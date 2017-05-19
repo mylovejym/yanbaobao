@@ -52,6 +52,13 @@
         <activity
             android:name="com.zhizhen.ybb.home.HomeActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.zhizhen.ybb.my.ChoiceSampling"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.zhizhen.ybb.my.MyDeivce"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

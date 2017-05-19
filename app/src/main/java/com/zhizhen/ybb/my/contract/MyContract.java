@@ -75,18 +75,12 @@ public interface MyContract {
     abstract class EditDataPresenter extends YbBasePresenter<EditDataModel, EditDataView> {
         /**
          * 修改个人信息
-         *
-         * @param token
-         * @param username
-         * @param sex
-         * @param born
-         * @param photo
          */
-        public abstract void editPersonalInfo(String token, String username, String sex, String born, File photo);
+        public abstract void editPersonalInfo(String token, String username, String sex, String born, String photo);
     }
 
     interface EditDataModel extends WRBaseModel {
-        Observable<BaseBean> editPersonalInfo(String token, String username, String sex, String born, File photo);
+        Observable<BaseBean> editPersonalInfo(String token, String username, String sex, String born, String photo);
     }
 
     interface EditDataView extends WRBaseView {

@@ -25,6 +25,7 @@ import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.PersonInfo;
 import com.zhizhen.ybb.my.ChoiceSexActivity;
 import com.zhizhen.ybb.my.EditDataActivity;
+import com.zhizhen.ybb.my.MyDeivce;
 import com.zhizhen.ybb.my.MyVison;
 import com.zhizhen.ybb.my.contract.MyContract;
 import com.zhizhen.ybb.my.model.MyModel;
@@ -98,6 +99,7 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
     @Override
     public void onStart() {
         super.onStart();
+        System.out.println("onStart");
         mPresenter.getPersonInfo(YbBaseApplication.instance.getToken());
     }
 
@@ -115,8 +117,11 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
             bundle.putSerializable("personInfo", mPersonInfo);
             intent.putExtras(bundle);
             this.getContext().startActivity(intent);
-        } else if(v == btExit){
-            SpUtils.remove(getActivity(),"firstLogin");
+        } else if (v == btExit) {
+            SpUtils.remove(getActivity(), "firstLogin");
+        } else if (v == rlDevice) {
+            Intent intent = new Intent(this.getContext(), MyDeivce.class);
+            this.getContext().startActivity(intent);
         }
     }
 
@@ -132,7 +137,7 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
         if (mPersonInfo.getStatus().equals("0")) {
             txtName.setText(mPersonInfo.getData().getUsername());
             try {
-                txtAge.setText("年龄："+DateUtil.getAge(mPersonInfo.getData().getBorn()));
+                txtAge.setText("年龄：" + DateUtil.getAge(mPersonInfo.getData().getBorn()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -163,12 +168,5 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
     @Override
     protected void initLazyView() {
 
-    }
-
-    @Override
-    protected void onFragmentVisibleChange(boolean isVisible) {
-        if (isVisible){
-            mPresenter.getPersonInfo(YbBaseApplication.instance.getToken());
-        }
     }
 }

@@ -10,6 +10,7 @@ import java.io.File;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Multipart;
@@ -58,7 +59,7 @@ public interface YbbApi {
      */
     @FormUrlEncoded
     @POST("/Api/Hardware/forgetPass")
-    Observable<LoginBean> forgetPass(@Field("phone") String phone,@Field("code") String code,@Field("pass") String pass);
+    Observable<LoginBean> forgetPass(@Field("phone") String phone, @Field("code") String code, @Field("pass") String pass);
 
     /**
      * 修改个人信息
@@ -68,12 +69,9 @@ public interface YbbApi {
 //    @Multipart
 //    @POST("/Api/Hardware/editPersonalInfo")
 //    Observable<BaseBean> editPersonalInfo(@Part("token") RequestBody token, @Part("username") RequestBody username, @Part("sex") RequestBody sex, @Part("born") RequestBody born,  @Part MultipartBody.Part file);
-
     @FormUrlEncoded
     @POST("/Api/Hardware/editPersonalInfo")
-    Observable<BaseBean> editPersonalInfo(@Field("token") String token, @Field("username") String username, @Field("sex") String sex, @Field("born") String born, @Field("photo") File file);
-
-
+    Observable<BaseBean> editPersonalInfo(@Field("token") String token, @Field("username") String username, @Field("sex") String sex, @Field("born") String born, @Field("photo") String file);
 
     /**
      * 添加视力信息
