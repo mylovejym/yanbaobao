@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.psylife.wrmvplibrary.data.net.RxService;
 import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseApplication;
@@ -32,9 +31,6 @@ import com.zhizhen.ybb.my.model.MyModel;
 import com.zhizhen.ybb.my.presenter.MyPresenter;
 import com.zhizhen.ybb.util.DateUtil;
 import com.zhizhen.ybb.util.SpUtils;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 
@@ -119,6 +115,8 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
             bundle.putSerializable("personInfo", mPersonInfo);
             intent.putExtras(bundle);
             this.getContext().startActivity(intent);
+        } else if(v == btExit){
+            SpUtils.remove(getActivity(),"firstLogin");
         }
     }
 

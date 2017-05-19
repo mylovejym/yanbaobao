@@ -45,12 +45,12 @@
     <color name="gray_b3ffffff">#b3ffffff</color>
 
     <color name="gray_80eeeeee">#80eeeeee</color>
-
+    <color name="gray_c0c0c0">#c0c0c0</color>
 
     <color name="red">#f16d7a</color>
     <color name="green">#b7d28d</color>
     <color name="blue">#b8f1ed</color>
-
+    <color name="gray_2c2d3e">#2c2d3e</color>
     <color name="tab_sel_color">#37B6CA</color>
 
 

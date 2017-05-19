@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ public class RegisterActivity extends YbBaseActivity<RegisterPresenter, Register
 	private EditText edit_phone,edit_pass,edit_code;
 	private Button btn_login;
 	private Button btn_getcode;
+	private CheckBox checkbox;
 	@Override
 	public int getLayoutId() {
 		return R.layout.activity_register;
@@ -44,6 +46,8 @@ public class RegisterActivity extends YbBaseActivity<RegisterPresenter, Register
 	}
 
 	private void init(){
+		checkbox = (CheckBox) findViewById(R.id.checkbox);
+		checkbox.setChecked(true);
 		edit_code = (EditText) findViewById(R.id.edit_code);
 		edit_pass = (EditText) findViewById(R.id.edit_pass);
 		btn_getcode = (Button) findViewById(R.id.btn_getcode);
@@ -53,6 +57,18 @@ public class RegisterActivity extends YbBaseActivity<RegisterPresenter, Register
 	}
 
 	private void onClick(){
+		checkbox.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(checkbox.isChecked()){
+					btn_login.setBackgroundColor(getResources().getColor(R.color.gray_2c2d3e));
+					btn_login.setEnabled(true);
+				}else{
+					btn_login.setEnabled(false);
+					btn_login.setBackgroundColor(getResources().getColor(R.color.gray_c0c0c0));
+				}
+			}
+		});
 		btn_getcode.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
