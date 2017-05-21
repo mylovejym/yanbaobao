@@ -18,9 +18,9 @@ public class EditDataPresenter extends MyContract.EditDataPresenter {
     }
 
     @Override
-    public void editPersonalInfo(String token, String username, String sex, String born, String photo) {
+    public void editPersonalInfo(MultipartBody photo) {
         mRxManager.add(mModel
-                .editPersonalInfo(token, username, sex, born, photo)
+                .editPersonalInfo(photo)
                 .subscribe(
                         data -> {
                             mView.showEditDataInfo(data);

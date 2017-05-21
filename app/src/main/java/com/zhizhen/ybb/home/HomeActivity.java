@@ -94,7 +94,7 @@ public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeT
         YbBaseApplication.instance.setDate(SpUtils.getString(this, "date"));
         //添加报文头
         Map map = new HashMap();
-        map.put("Content-Type", "application/x-www-form-urlencoded");
+//        map.put("Content-Type", "application/x-www-form-urlencoded");
         map.put("dcreatedate", YbBaseApplication.instance.getDate());
         map.put("spid", YbBaseApplication.instance.getPhone());
         RxService.setHeaders(map);
@@ -188,5 +188,11 @@ public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeT
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        System.out.println("onRestart");
     }
 }

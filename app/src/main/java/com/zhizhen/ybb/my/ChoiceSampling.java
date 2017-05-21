@@ -50,7 +50,7 @@ public class ChoiceSampling extends YbBaseActivity implements View.OnClickListen
 
     @Override
     public View getTitleView() {
-        return new TitleBuilder(this).setLeftText(getString(R.string.edit_data))
+        return new TitleBuilder(this).setLeftText(getString(R.string.sampling))
                 .setLeftImage(R.mipmap.tab_back)
                 .setRightText(getString(R.string.complete))
                 .setTitleBgRes(R.color.blue_313245)
@@ -58,7 +58,7 @@ public class ChoiceSampling extends YbBaseActivity implements View.OnClickListen
                 .setRightOnClickListener(v -> {
                     Intent intent = new Intent(this, EditDataActivity.class);
                     intent.putExtra("sampling", sampling);
-                    this.setResult(EditDataActivity.SEX, intent);
+                    this.setResult(MyDeivce.SAMPLING, intent);
                     this.finish();
                 })
                 .build();

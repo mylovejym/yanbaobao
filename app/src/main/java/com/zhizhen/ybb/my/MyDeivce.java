@@ -3,12 +3,12 @@ package com.zhizhen.ybb.my;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
+import com.psylife.wrmvplibrary.utils.StringUtils;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
@@ -17,6 +17,7 @@ import com.zhizhen.ybb.my.adapter.BankItemAdapter;
 import com.zhizhen.ybb.my.adapter.DeviceAdapter;
 import com.zhizhen.ybb.my.interFace.BindingDeviceOnClickListener;
 import com.zhizhen.ybb.util.SpUtils;
+import com.zhizhen.ybb.view.SwitchView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import butterknife.BindView;
 
 
 /**
+ * 我的设备
  * Created by tc on 2017/5/19.
  */
 
@@ -40,6 +42,9 @@ public class MyDeivce extends YbBaseActivity implements View.OnClickListener {
 
     @BindView(R.id.txt_sampling)
     TextView txtSampling;
+
+    @BindView(R.id.device_open)
+    SwitchView switchView;
 
     private DeviceAdapter deviceAdapter;
 
@@ -63,7 +68,26 @@ public class MyDeivce extends YbBaseActivity implements View.OnClickListener {
 
     @Override
     public void initView(Bundle savedInstanceState) {
+
+        txtSampling.setText(SpUtils.getString(this, "sampling") + "s");
+
         linSampling.setOnClickListener(this);
+        switchView.setOnClickListener(this);
+        if (SpUtils.getBoolean(this, "switchView") != null)
+            switchView.toggleSwitch(SpUtils.getBoolean(this, "switchView"));
+        switchView.setOnStateChangedListener(new SwitchView.OnStateChangedListener() {
+            @Override
+            public void toggleToOn(SwitchView view) {
+                SpUtils.putBoolean(MyDeivce.this, "switchView", true);
+                view.toggleSwitch(true); // or false
+            }
+
+            @Override
+            public void toggleToOff(SwitchView view) {
+                SpUtils.putBoolean(MyDeivce.this, "switchView", false);
+                view.toggleSwitch(false); // or true
+            }
+        });
     }
 
     @Override
@@ -96,9 +120,12 @@ public class MyDeivce extends YbBaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         if (v == linSampling) {
             Intent intent = new Intent(this, ChoiceSampling.class);
-            SpUtils.putString(this, "sampling", "1");
+            if (StringUtils.isEmpty(SpUtils.getString(this, "sampling")))
+                SpUtils.putString(this, "sampling", "1");
             intent.putExtra("sampling", SpUtils.getString(this, "sampling"));
             this.startActivityForResult(intent, SAMPLING);
+        } else if (v == switchView) {
+            boolean isOpened = switchView.isOpened();
         }
     }
 

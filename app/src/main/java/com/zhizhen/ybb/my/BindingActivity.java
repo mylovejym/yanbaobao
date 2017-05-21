@@ -52,7 +52,7 @@ public class BindingActivity extends YbBaseActivity<MyPresenter, MyModel> implem
 
     private int a = 0;
 
-    @BindView(R2.id.costom_round)
+    @BindView(R.id.costom_round)
     WaveView mWaveView;
 
     private AnimatorSet mAnimatorSet;

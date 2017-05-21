@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:switch="http://schemas.android.com/apk/res-auto"
     android:background="@color/background_color"
     android:orientation="vertical">
 
@@ -23,13 +24,14 @@
             android:textColor="@color/gray_eeeeee"
             android:textSize="14sp" />
 
-        <ImageView
-            android:layout_width="12dp"
-            android:layout_height="21.5dp"
+        <com.zhizhen.ybb.view.SwitchView
+            android:id="@+id/device_open"
+            android:layout_width="36.2dp"
+            android:layout_height="22dp"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:layout_marginRight="11dp"
-            android:src="@mipmap/icon_more" />
+            switch:primaryColor="@color/blue_00aded"
+            android:layout_marginRight="11dp" />
     </RelativeLayout>
 
     <TextView
@@ -46,7 +48,7 @@
     <ListView
         android:id="@+id/list_device"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
 
     <TextView
@@ -83,8 +85,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="14dp"
-            android:layout_weight="1"
             android:layout_marginRight="16.5dp"
+            android:layout_weight="1"
             android:gravity="right"
             android:text="1s"
             android:textColor="@color/gray_b3ffffff"

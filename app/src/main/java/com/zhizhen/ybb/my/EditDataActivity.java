@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -39,6 +38,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import butterknife.BindView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * 编辑资料
@@ -96,30 +98,28 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
                 .setRightOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        MultipartBody.Builder builder = new MultipartBody.Builder();
+                        builder.setType(MultipartBody.FORM);
+                        builder.addFormDataPart("token", YbBaseApplication.instance.getToken());
+                        builder.addFormDataPart("username", txtName.getText().toString().trim());
+                        builder.addFormDataPart("sex", txtSex.getText().toString().equals("男") ? "1" : "2");
+                        builder.addFormDataPart("born", both);
                         if (path != null) {
                             System.out.println("传文件");
-                            BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inSampleSize = 2;
-                            Bitmap img = BitmapFactory.decodeFile(path, options);
-//                            String photo = Base64Class.encodeToString(
-//                                    Bitmap2Bytes22(img), 0);
-                            String photo = String.valueOf(Bitmap2Bytes22(img));
-                            System.out.println("photo = " + photo);
-                            mPresenter.editPersonalInfo(
-                                    YbBaseApplication.instance.getToken(),
-                                    txtName.getText().toString().trim(),
-                                    txtSex.getText().toString().equals("男") ? "1" : "2",
-                                    both,
-                                    photo);
 
-                        } else {
-                            mPresenter.editPersonalInfo(
-                                    YbBaseApplication.instance.getToken(),
-                                    txtName.getText().toString().trim(),
-                                    txtSex.getText().toString().equals("男") ? "1" : "2",
-                                    both,
-                                    "");
+                            File file = new File(path);
+                            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
+                            builder.addFormDataPart("photo", file.getName(), requestBody);
+//                            mPresenter.editPersonalInfo(
+//                                    YbBaseApplication.instance.getToken(),
+//                                    txtName.getText().toString().trim(),
+//                                    txtSex.getText().toString().equals("男") ? "1" : "2",
+//                                    both,
+//                                    part);
+
                         }
+                        mPresenter.editPersonalInfo(builder.build());
                     }
                 })
                 .build();
@@ -193,7 +193,7 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
                 }
             })
                     .setType(new boolean[]{true, true, true, false, false, false})
-                    .setTextColorCenter(R.color.blue_b3007aff)
+                    .setTextColorCenter(this.getResources().getColor(R.color.blue_b3007aff))
                     .setTitleSize(R.dimen.txt_size)
                     .isCenterLabel(true)
                     .build();

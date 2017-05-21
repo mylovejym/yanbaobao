@@ -76,11 +76,11 @@ public interface MyContract {
         /**
          * 修改个人信息
          */
-        public abstract void editPersonalInfo(String token, String username, String sex, String born, String photo);
+        public abstract void editPersonalInfo(MultipartBody photo);
     }
 
     interface EditDataModel extends WRBaseModel {
-        Observable<BaseBean> editPersonalInfo(String token, String username, String sex, String born, String photo);
+        Observable<BaseBean> editPersonalInfo(MultipartBody photo);
     }
 
     interface EditDataView extends WRBaseView {

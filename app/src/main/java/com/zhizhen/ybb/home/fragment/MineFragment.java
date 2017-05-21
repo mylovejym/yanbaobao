@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.psylife.wrmvplibrary.utils.LogUtil;
+import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.base.YbBaseFragment;
@@ -81,6 +82,10 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
         return R.layout.activity_my;
     }
 
+    public void setStatusBarColor() {
+        StatusBarUtil.setColor(getActivity(), 0);
+    }
+
     @Override
     public void initUI(View view, @Nullable Bundle savedInstanceState) {
         context = this.getContext();
@@ -93,14 +98,15 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
 
     @Override
     public void initData() {
-
+        System.out.println("initData");
+        mPresenter.getPersonInfo(YbBaseApplication.instance.getToken());
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        System.out.println("onStart");
-        mPresenter.getPersonInfo(YbBaseApplication.instance.getToken());
+
+
     }
 
     @Override
@@ -123,6 +129,12 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
             Intent intent = new Intent(this.getContext(), MyDeivce.class);
             this.getContext().startActivity(intent);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("onResume");
     }
 
     @Override
@@ -167,6 +179,6 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
 
     @Override
     protected void initLazyView() {
-
+        System.out.println("initLazyView");
     }
 }

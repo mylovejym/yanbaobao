@@ -67,11 +67,11 @@ public interface YbbApi {
      * @return
      */
 //    @Multipart
-//    @POST("/Api/Hardware/editPersonalInfo")
-//    Observable<BaseBean> editPersonalInfo(@Part("token") RequestBody token, @Part("username") RequestBody username, @Part("sex") RequestBody sex, @Part("born") RequestBody born,  @Part MultipartBody.Part file);
-    @FormUrlEncoded
     @POST("/Api/Hardware/editPersonalInfo")
-    Observable<BaseBean> editPersonalInfo(@Field("token") String token, @Field("username") String username, @Field("sex") String sex, @Field("born") String born, @Field("photo") String file);
+    Observable<BaseBean> editPersonalInfo(@Body MultipartBody file);
+//    @FormUrlEncoded
+//    @POST("/Api/Hardware/editPersonalInfo")
+//    Observable<BaseBean> editPersonalInfo(@Field("token") String token, @Field("username") String username, @Field("sex") String sex, @Field("born") String born, @Field("photo") String file);
 
     /**
      * 添加视力信息
