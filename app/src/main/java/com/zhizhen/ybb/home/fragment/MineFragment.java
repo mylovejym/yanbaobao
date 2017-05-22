@@ -26,8 +26,9 @@ import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.PersonInfo;
 import com.zhizhen.ybb.my.ChoiceSexActivity;
 import com.zhizhen.ybb.my.EditDataActivity;
-import com.zhizhen.ybb.my.MyDeivce;
-import com.zhizhen.ybb.my.MyVison;
+import com.zhizhen.ybb.my.MyDeivceActivity;
+import com.zhizhen.ybb.my.MyVisonActivity;
+import com.zhizhen.ybb.my.ParameterSetActivity;
 import com.zhizhen.ybb.my.contract.MyContract;
 import com.zhizhen.ybb.my.model.MyModel;
 import com.zhizhen.ybb.my.presenter.MyPresenter;
@@ -58,6 +59,9 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
 
     @BindView(R.id.rl_device)
     RelativeLayout rlDevice;
+
+    @BindView(R.id.rl_parameter_set)
+    RelativeLayout rlParameterSet;
 
     @BindView(R.id.rl_follow)
     RelativeLayout rlFollow;
@@ -92,6 +96,7 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
         rlVison.setOnClickListener(this);
         rlFollow.setOnClickListener(this);
         rlDevice.setOnClickListener(this);
+        rlParameterSet.setOnClickListener(this);
         linEditData.setOnClickListener(this);
         btExit.setOnClickListener(this);
     }
@@ -111,23 +116,33 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
 
     @Override
     public void onClick(View v) {
-        if (v == rlVison) {
-            Intent intent = new Intent(this.getContext(), MyVison.class);
-            this.getContext().startActivity(intent);
-        } else if (v == rlFollow) {
-            Intent intent = new Intent(this.getContext(), ChoiceSexActivity.class);
-            this.getContext().startActivity(intent);
-        } else if (v == linEditData) {
+        if (v == linEditData) {
             Intent intent = new Intent(this.getContext(), EditDataActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("personInfo", mPersonInfo);
             intent.putExtras(bundle);
             this.getContext().startActivity(intent);
-        } else if (v == btExit) {
-            SpUtils.remove(getActivity(), "firstLogin");
-        } else if (v == rlDevice) {
-            Intent intent = new Intent(this.getContext(), MyDeivce.class);
+        } else if (v == rlVison) {
+            //我的视力
+            Intent intent = new Intent(this.getContext(), MyVisonActivity.class);
             this.getContext().startActivity(intent);
+        } else if (v == rlDevice) {
+            //我的设备
+            Intent intent = new Intent(this.getContext(), MyDeivceActivity.class);
+            this.getContext().startActivity(intent);
+        } else if (v == rlParameterSet) {
+            //参数设置
+
+            Intent intent = new Intent(this.getContext(), ParameterSetActivity.class);
+            this.getContext().startActivity(intent);
+
+        } else if (v == rlFollow) {
+            //关注
+            Intent intent = new Intent(this.getContext(), ChoiceSexActivity.class);
+            this.getContext().startActivity(intent);
+        } else if (v == btExit) {
+            //退出
+            SpUtils.remove(getActivity(), "firstLogin");
         }
     }
 

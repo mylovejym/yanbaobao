@@ -2,20 +2,12 @@ package com.zhizhen.ybb.my;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
-import com.psylife.wrmvplibrary.widget.recyclerview.BaseViewHolder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 import com.zhizhen.ybb.my.adapter.BankItemAdapter;
@@ -39,6 +31,8 @@ public class ChoiceSampling extends YbBaseActivity implements View.OnClickListen
 
     private String sampling;
 
+    private List<String> mItemBeans = new ArrayList<>();
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_sampling;
@@ -58,7 +52,7 @@ public class ChoiceSampling extends YbBaseActivity implements View.OnClickListen
                 .setRightOnClickListener(v -> {
                     Intent intent = new Intent(this, EditDataActivity.class);
                     intent.putExtra("sampling", sampling);
-                    this.setResult(MyDeivce.SAMPLING, intent);
+                    this.setResult(MyDeivceActivity.SAMPLING, intent);
                     this.finish();
                 })
                 .build();
@@ -73,7 +67,10 @@ public class ChoiceSampling extends YbBaseActivity implements View.OnClickListen
     public void initdata() {
         Intent bundle = this.getIntent();
         sampling = bundle.getStringExtra("sampling");
-        bankItemAdapter = new BankItemAdapter(this, sampling);
+        for (int i = 1; i <= 10; i++) {
+            mItemBeans.add(i + "s");
+        }
+        bankItemAdapter = new BankItemAdapter(this, sampling, mItemBeans);
         listView.setAdapter(bankItemAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -83,6 +80,7 @@ public class ChoiceSampling extends YbBaseActivity implements View.OnClickListen
             }
         });
     }
+
     @Override
     public void onClick(View v) {
     }

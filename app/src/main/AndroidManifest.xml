@@ -30,7 +30,7 @@
         </activity>
 
         <activity
-            android:name=".my.MyVison"
+            android:name=".my.MyVisonActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.zhizhen.ybb.loginpass.ForgatPasswordActivity"
@@ -57,7 +57,35 @@
             android:name="com.zhizhen.ybb.my.ChoiceSampling"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.zhizhen.ybb.my.MyDeivce"
+            android:name="com.zhizhen.ybb.my.MyDeivceActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.zhizhen.ybb.my.ParameterSetActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.zhizhen.ybb.my.SetTimeActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.zhizhen.ybb.my.SetACTimeActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.zhizhen.ybb.my.SetSamplingActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.zhizhen.ybb.my.SetPosTureActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.zhizhen.ybb.my.SetShakingNumActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.zhizhen.ybb.my.SetShakingTimeActivity"
             android:screenOrientation="portrait" />
 
     </application>

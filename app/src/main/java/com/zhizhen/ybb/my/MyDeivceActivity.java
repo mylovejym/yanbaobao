@@ -13,7 +13,6 @@ import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 import com.zhizhen.ybb.bean.DeviceInfo;
-import com.zhizhen.ybb.my.adapter.BankItemAdapter;
 import com.zhizhen.ybb.my.adapter.DeviceAdapter;
 import com.zhizhen.ybb.my.interFace.BindingDeviceOnClickListener;
 import com.zhizhen.ybb.util.SpUtils;
@@ -30,7 +29,7 @@ import butterknife.BindView;
  * Created by tc on 2017/5/19.
  */
 
-public class MyDeivce extends YbBaseActivity implements View.OnClickListener {
+public class MyDeivceActivity extends YbBaseActivity implements View.OnClickListener {
 
     public static final int SAMPLING = 10090;
 
@@ -78,13 +77,13 @@ public class MyDeivce extends YbBaseActivity implements View.OnClickListener {
         switchView.setOnStateChangedListener(new SwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(SwitchView view) {
-                SpUtils.putBoolean(MyDeivce.this, "switchView", true);
+                SpUtils.putBoolean(MyDeivceActivity.this, "switchView", true);
                 view.toggleSwitch(true); // or false
             }
 
             @Override
             public void toggleToOff(SwitchView view) {
-                SpUtils.putBoolean(MyDeivce.this, "switchView", false);
+                SpUtils.putBoolean(MyDeivceActivity.this, "switchView", false);
                 view.toggleSwitch(false); // or true
             }
         });

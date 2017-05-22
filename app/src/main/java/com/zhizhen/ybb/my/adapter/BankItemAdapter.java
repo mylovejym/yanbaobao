@@ -19,16 +19,14 @@ public class BankItemAdapter extends BaseAdapter {
     private List<String> mItemBeans = new ArrayList<>();
     private String sampling;
 
-    public BankItemAdapter(Context context, String sampling) {
+    public BankItemAdapter(Context context, String sampling, List<String> mItemBeans) {
         mInflater = LayoutInflater.from(context);
-        this.sampling = sampling + "s";
-        for (int i = 1; i <= 10; i++) {
-            mItemBeans.add(i + "s");
-        }
+        this.sampling = sampling;
+        this.mItemBeans = mItemBeans;
     }
 
     public void refresh(String sampling) {
-        this.sampling = sampling + "s";
+        this.sampling = sampling;
         this.notifyDataSetChanged();
     }
 

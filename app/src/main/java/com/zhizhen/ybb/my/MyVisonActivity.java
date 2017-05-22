@@ -41,7 +41,7 @@ import butterknife.BindView;
  * Created by tc on 2017/5/15.
  */
 
-public class MyVison extends YbBaseActivity<MyVisonPresenter, MyVisonModel> implements MyContract.MyVisonView {
+public class MyVisonActivity extends YbBaseActivity<MyVisonPresenter, MyVisonModel> implements MyContract.MyVisonView {
 
 
     @BindView(R.id.edt_edit_left_eye_degree)

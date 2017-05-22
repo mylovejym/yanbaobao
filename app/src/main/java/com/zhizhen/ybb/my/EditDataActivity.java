@@ -34,8 +34,10 @@ import com.zhizhen.ybb.util.TakePhotosDispose;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import okhttp3.MediaType;
@@ -183,22 +185,7 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
             startActivityForResult(intent, NAME);
         } else if (v == linSetAge) {
             //时间选择器
-            TimePickerView pvTime = new TimePickerView.Builder(this, (date, v1) -> {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                both = sdf.format(date);
-                try {
-                    txtAge.setText("" + DateUtil.getAge(both));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            })
-                    .setType(new boolean[]{true, true, true, false, false, false})
-                    .setTextColorCenter(this.getResources().getColor(R.color.blue_b3007aff))
-                    .setTitleSize(R.dimen.txt_size)
-                    .isCenterLabel(true)
-                    .build();
-            pvTime.setDate(Calendar.getInstance());//注：根据需求来决定是否使用该方法（一般是精确到秒的情况），此项可以在弹出选择器的时候重新设置当前时间，避免在初始化之后由于时间已经设定，导致选中时间与当前时间不匹配的问题。
-            pvTime.show();
+            showTime();
         }
     }
 
@@ -275,9 +262,31 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
         }
     }
 
-    public static byte[] Bitmap2Bytes22(Bitmap bm) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        return baos.toByteArray();
+    private void showTime() {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+            // 指定一个日期
+            Date deTime = dateFormat.parse(mPersonInfo.getBorn());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(deTime);
+            //时间选择器
+            TimePickerView pvTime = new TimePickerView.Builder(this, (date, v1) -> {
+                both = dateFormat.format(date);
+                try {
+                    txtAge.setText("" + DateUtil.getAge(both));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            })
+                    .setType(new boolean[]{true, true, true, false, false, false})
+                    .setTextColorCenter(this.getResources().getColor(R.color.blue_b3007aff))
+                    .setTitleSize(R.dimen.txt_size)
+                    .isCenterLabel(true)
+                    .build();
+            pvTime.setDate(calendar);//注：根据需求来决定是否使用该方法（一般是精确到秒的情况），此项可以在弹出选择器的时候重新设置当前时间，避免在初始化之后由于时间已经设定，导致选中时间与当前时间不匹配的问题。
+            pvTime.show();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
