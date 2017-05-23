@@ -52,7 +52,7 @@ public class SetShakingTimeActivity extends YbBaseActivity implements View.OnCli
                 .setRightOnClickListener(v -> {
                     Intent intent = new Intent(this, EditDataActivity.class);
                     intent.putExtra("shakingTime", num);
-                    this.setResult(ParameterSetActivity.SET_SHAKING_NUM, intent);
+                    this.setResult(ParameterSetActivity.SET_SHAKING_DELAYED, intent);
                     this.finish();
                 })
                 .build();

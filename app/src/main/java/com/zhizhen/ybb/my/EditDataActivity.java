@@ -281,6 +281,7 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
                     .setType(new boolean[]{true, true, true, false, false, false})
                     .setTextColorCenter(this.getResources().getColor(R.color.blue_b3007aff))
                     .setTitleSize(R.dimen.txt_size)
+                    .setLineSpacingMultiplier(2.0f)
                     .isCenterLabel(true)
                     .build();
             pvTime.setDate(calendar);//注：根据需求来决定是否使用该方法（一般是精确到秒的情况），此项可以在弹出选择器的时候重新设置当前时间，避免在初始化之后由于时间已经设定，导致选中时间与当前时间不匹配的问题。
