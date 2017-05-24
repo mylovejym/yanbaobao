@@ -24,14 +24,16 @@ import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.base.YbBaseFragment;
 import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.PersonInfo;
+import com.zhizhen.ybb.loginpass.LoginActivity;
 import com.zhizhen.ybb.my.ChoiceSexActivity;
 import com.zhizhen.ybb.my.EditDataActivity;
+import com.zhizhen.ybb.my.FollowActivity;
 import com.zhizhen.ybb.my.MyDeivceActivity;
 import com.zhizhen.ybb.my.MyVisonActivity;
 import com.zhizhen.ybb.my.ParameterSetActivity;
 import com.zhizhen.ybb.my.contract.MyContract;
-import com.zhizhen.ybb.my.model.MyModel;
-import com.zhizhen.ybb.my.presenter.MyPresenter;
+import com.zhizhen.ybb.my.model.MyModelImp;
+import com.zhizhen.ybb.my.presenter.MyPresenterImp;
 import com.zhizhen.ybb.util.DateUtil;
 import com.zhizhen.ybb.util.SpUtils;
 
@@ -41,7 +43,7 @@ import butterknife.BindView;
  * Created by psylife00 on 2017/5/12.
  */
 
-public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implements MyContract.MyView, View.OnClickListener {
+public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> implements MyContract.MyView, View.OnClickListener {
     @BindView(R.id.txt_name)
     TextView txtName;
 
@@ -104,14 +106,12 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
     @Override
     public void initData() {
         System.out.println("initData");
-        mPresenter.getPersonInfo(YbBaseApplication.instance.getToken());
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-
+        mPresenter.getPersonInfo(YbBaseApplication.instance.getToken());
     }
 
     @Override
@@ -138,11 +138,14 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
 
         } else if (v == rlFollow) {
             //关注
-            Intent intent = new Intent(this.getContext(), ChoiceSexActivity.class);
+            Intent intent = new Intent(this.getContext(), FollowActivity.class);
             this.getContext().startActivity(intent);
         } else if (v == btExit) {
             //退出
             SpUtils.remove(getActivity(), "firstLogin");
+            Intent intent = new Intent(this.getContext(), LoginActivity.class);
+            this.getContext().startActivity(intent);
+            this.getActivity().finish();
         }
     }
 
@@ -162,31 +165,39 @@ public class MineFragment extends YbBaseFragment<MyPresenter, MyModel> implement
     public void showPersonInfo(BaseClassBean<PersonInfo> mPersonInfo) {
         this.mPersonInfo = mPersonInfo.getData();
         if (mPersonInfo.getStatus().equals("0")) {
-            txtName.setText(mPersonInfo.getData().getUsername());
             try {
-                txtAge.setText("年龄：" + DateUtil.getAge(mPersonInfo.getData().getBorn()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (mPersonInfo.getData().getSex().equals("1")) {
-                imageSex.setImageDrawable(this.getResources().getDrawable(R.mipmap.icon_man));
-            } else {
-                imageSex.setImageDrawable(this.getResources().getDrawable(R.mipmap.icon_girl));
-            }
-            try {
-                txtAge.setText(DateUtil.getAge(mPersonInfo.getData().getBorn()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Glide.with(this).load(mPersonInfo.getData().getPhoto()).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                    circularBitmapDrawable.setCircular(true);
-                    imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
+                if (mPersonInfo.getData().getUsername() != null)
+                    txtName.setText(mPersonInfo.getData().getUsername());
+
+                if (mPersonInfo.getData().getBorn() != null) {
+                    txtAge.setVisibility(View.VISIBLE);
+                    txtAge.setText("年龄：" + DateUtil.getAge(mPersonInfo.getData().getBorn()));
                 }
-            });
+
+                if (mPersonInfo.getData().getSex() != null) {
+                    imageSex.setVisibility(View.VISIBLE);
+                    if (mPersonInfo.getData().getSex().equals("1")) {
+                        imageSex.setImageDrawable(this.getResources().getDrawable(R.mipmap.icon_man));
+                    } else {
+                        imageSex.setImageDrawable(this.getResources().getDrawable(R.mipmap.icon_girl));
+                    }
+                }
+
+                if (mPersonInfo.getData().getPhoto() != null) {
+                    Glide.with(this).load(mPersonInfo.getData().getPhoto()).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             Toast.makeText(this.getContext(), mPersonInfo.getStatusInfo(), Toast.LENGTH_LONG).show();
         }

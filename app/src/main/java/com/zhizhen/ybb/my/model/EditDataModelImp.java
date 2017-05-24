@@ -16,7 +16,7 @@ import rx.Observable;
  * Created by tc on 2017/5/17.
  */
 
-public class EditDataModel implements MyContract.EditDataModel {
+public class EditDataModelImp implements MyContract.EditDataModel {
     @Override
     public Observable<BaseBean> editPersonalInfo(MultipartBody photo) {
         return RxService.createApi(YbbApi.class).editPersonalInfo(photo).compose(RxUtil.rxSchedulerHelper());

@@ -124,6 +124,8 @@
 
     <string name="pm">下午</string>
 
+    <string name="follow_hint">扫描二维码关注我们吧</string>
+
     <!--SharedPreferences  配置文件 key-->
     
     <!--自动连接设备开关-->

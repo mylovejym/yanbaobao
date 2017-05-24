@@ -11,7 +11,7 @@ import okhttp3.RequestBody;
  * Created by tc on 2017/5/17.
  */
 
-public class EditDataPresenter extends MyContract.EditDataPresenter {
+public class EditDataPresenterImp extends MyContract.EditDataPresenter {
     @Override
     public void onStart() {
 

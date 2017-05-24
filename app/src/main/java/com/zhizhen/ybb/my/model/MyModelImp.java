@@ -14,7 +14,7 @@ import rx.Observable;
  * 邮箱：qw805880101@qq.com
  * 版本：v1.0
  */
-public class MyModel implements MyContract.MyModel {
+public class MyModelImp implements MyContract.MyModel {
     @Override
     public Observable<BaseClassBean<PersonInfo>> getPersonInfo(String token) {
 

@@ -195,4 +195,8 @@ public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeT
         super.onRestart();
         System.out.println("onRestart");
     }
+
+    public void fin(){
+        this.finish();
+    }
 }

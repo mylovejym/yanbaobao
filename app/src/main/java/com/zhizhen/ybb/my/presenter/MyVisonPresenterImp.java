@@ -6,7 +6,7 @@ import com.zhizhen.ybb.my.contract.MyContract;
  * Created by tc on 2017/5/15.
  */
 
-public class MyVisonPresenter extends MyContract.MyVisonPresenter {
+public class MyVisonPresenterImp extends MyContract.MyVisonPresenter {
     @Override
     public void onStart() {
 

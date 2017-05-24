@@ -14,13 +14,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 import com.zhizhen.ybb.R;
-import com.zhizhen.ybb.R2;
 import com.zhizhen.ybb.base.YbBaseActivity;
 import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.PersonInfo;
 import com.zhizhen.ybb.my.contract.MyContract;
-import com.zhizhen.ybb.my.model.MyModel;
-import com.zhizhen.ybb.my.presenter.MyPresenter;
+import com.zhizhen.ybb.my.model.MyModelImp;
+import com.zhizhen.ybb.my.presenter.MyPresenterImp;
 import com.zhizhen.ybb.view.WaveView;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ import butterknife.BindView;
  * 邮箱：qw805880101@qq.com
  * 版本：v1.0
  */
-public class BindingActivity extends YbBaseActivity<MyPresenter, MyModel> implements MyContract.MyView, View.OnClickListener {
+public class BindingActivity extends YbBaseActivity<MyPresenterImp, MyModelImp> implements MyContract.MyView, View.OnClickListener {
 
     private Handler mHandler = new Handler() {
         @Override

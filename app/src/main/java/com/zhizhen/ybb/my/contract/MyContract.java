@@ -6,6 +6,7 @@ import com.zhizhen.ybb.base.YbBasePresenter;
 import com.zhizhen.ybb.bean.BaseBean;
 import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.EyesightInfo;
+import com.zhizhen.ybb.bean.FollowInfo;
 import com.zhizhen.ybb.bean.PersonInfo;
 
 import java.io.File;
@@ -24,7 +25,6 @@ public interface MyContract {
     //My界面获取个人信息
     abstract class MyPresenter extends YbBasePresenter<MyModel, MyView> {
         public abstract void getPersonInfo(String token);
-
     }
 
     interface MyModel extends WRBaseModel {
@@ -85,6 +85,22 @@ public interface MyContract {
 
     interface EditDataView extends WRBaseView {
         void showEditDataInfo(BaseBean baseBean);
+    }
+
+    //获取关注二维码地址
+    abstract class FollowPresenter extends YbBasePresenter<FollowlModel, FollowView> {
+        /**
+         * 修改个人信息
+         */
+        public abstract void focusMe(String token);
+    }
+
+    interface FollowlModel extends WRBaseModel {
+        Observable<BaseClassBean<FollowInfo>> focusMe(String token);
+    }
+
+    interface FollowView extends WRBaseView {
+        void showUrl(BaseClassBean<FollowInfo> mInfo);
     }
 
 

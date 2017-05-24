@@ -32,9 +32,10 @@ public class ChoiceSexActivity extends YbBaseActivity implements View.OnClickLis
     @BindView(R.id.image_choice_girl)
     ImageView imageGirl;
 
-    private String sex;
+    private String sex = "1";
 
     @Override
+
     public int getLayoutId() {
         return R.layout.activity_choice_sex;
     }
@@ -68,13 +69,15 @@ public class ChoiceSexActivity extends YbBaseActivity implements View.OnClickLis
     @Override
     public void initdata() {
         Intent bundle = this.getIntent();
-        sex = bundle.getStringExtra("sex");
-         if (sex.equals("1")){
-            imageMan.setVisibility(View.VISIBLE);
-            imageGirl.setVisibility(View.GONE);
-        } else if (sex.equals("2")){
-            imageMan.setVisibility(View.GONE);
-            imageGirl.setVisibility(View.VISIBLE);
+        if (bundle.getStringExtra("sex") != null) {
+            sex = bundle.getStringExtra("sex");
+            if (sex.equals("1")) {
+                imageMan.setVisibility(View.VISIBLE);
+                imageGirl.setVisibility(View.GONE);
+            } else if (sex.equals("2")) {
+                imageMan.setVisibility(View.GONE);
+                imageGirl.setVisibility(View.VISIBLE);
+            }
         }
     }
 

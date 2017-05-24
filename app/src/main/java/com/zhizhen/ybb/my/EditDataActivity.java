@@ -26,13 +26,12 @@ import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.bean.BaseBean;
 import com.zhizhen.ybb.bean.PersonInfo;
 import com.zhizhen.ybb.my.contract.MyContract;
-import com.zhizhen.ybb.my.model.EditDataModel;
-import com.zhizhen.ybb.my.presenter.EditDataPresenter;
+import com.zhizhen.ybb.my.model.EditDataModelImp;
+import com.zhizhen.ybb.my.presenter.EditDataPresenterImp;
 import com.zhizhen.ybb.util.DateUtil;
 import com.zhizhen.ybb.util.DialogUtils;
 import com.zhizhen.ybb.util.TakePhotosDispose;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,7 +48,7 @@ import okhttp3.RequestBody;
  * Created by tc on 2017/5/16.
  */
 
-public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditDataModel> implements MyContract.EditDataView, View.OnClickListener {
+public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditDataModelImp> implements MyContract.EditDataView, View.OnClickListener {
 
     public static final int NAME = 10086;
     public static final int SEX = 10010;
@@ -97,32 +96,24 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
                 .setRightText(getString(R.string.complete))
-                .setRightOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                .setRightOnClickListener(v -> {
 
-                        MultipartBody.Builder builder = new MultipartBody.Builder();
-                        builder.setType(MultipartBody.FORM);
-                        builder.addFormDataPart("token", YbBaseApplication.instance.getToken());
+                    MultipartBody.Builder builder = new MultipartBody.Builder();
+                    builder.setType(MultipartBody.FORM);
+                    builder.addFormDataPart("token", YbBaseApplication.instance.getToken());
+                    if (txtName.getText().toString() != null)
                         builder.addFormDataPart("username", txtName.getText().toString().trim());
+                    if (txtSex.getText().toString() != null)
                         builder.addFormDataPart("sex", txtSex.getText().toString().equals("男") ? "1" : "2");
+                    if (both != null)
                         builder.addFormDataPart("born", both);
-                        if (path != null) {
-                            System.out.println("传文件");
-
-                            File file = new File(path);
-                            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
-                            builder.addFormDataPart("photo", file.getName(), requestBody);
-//                            mPresenter.editPersonalInfo(
-//                                    YbBaseApplication.instance.getToken(),
-//                                    txtName.getText().toString().trim(),
-//                                    txtSex.getText().toString().equals("男") ? "1" : "2",
-//                                    both,
-//                                    part);
-
-                        }
-                        mPresenter.editPersonalInfo(builder.build());
+                    if (path != null) {
+                        System.out.println("传文件");
+                        File file = new File(path);
+                        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
+                        builder.addFormDataPart("photo", file.getName(), requestBody);
                     }
+                    mPresenter.editPersonalInfo(builder.build());
                 })
                 .build();
     }
@@ -152,23 +143,31 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
         mPersonInfo = (PersonInfo) bundle.getSerializable("personInfo");
-        txtName.setText(mPersonInfo.getUsername());
-        txtSex.setText(mPersonInfo.getSex().equals("1") ? "男" : "女");
-        try {
-            both = mPersonInfo.getBorn();
-            txtAge.setText("" + DateUtil.getAge(mPersonInfo.getBorn()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Glide.with(this).load(mPersonInfo.getPhoto()).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
-            @Override
-            protected void setResource(Bitmap resource) {
-                RoundedBitmapDrawable circularBitmapDrawable =
-                        RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                circularBitmapDrawable.setCircular(true);
-                imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
+        if (mPersonInfo.getUsername() != null)
+            txtName.setText(mPersonInfo.getUsername());
+
+        if (mPersonInfo.getSex() != null)
+            txtSex.setText(mPersonInfo.getSex().equals("1") ? "男" : "女");
+
+        if (mPersonInfo.getBorn() != null) {
+            try {
+                both = mPersonInfo.getBorn();
+                txtAge.setText("" + DateUtil.getAge(mPersonInfo.getBorn()));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        }
+
+        if (mPersonInfo.getPhoto() != null)
+            Glide.with(this).load(mPersonInfo.getPhoto()).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    RoundedBitmapDrawable circularBitmapDrawable =
+                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                    circularBitmapDrawable.setCircular(true);
+                    imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
+                }
+            });
     }
 
     @Override
@@ -265,10 +264,14 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenter, EditData
     private void showTime() {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-            // 指定一个日期
-            Date deTime = dateFormat.parse(mPersonInfo.getBorn());
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(deTime);
+            if (mPersonInfo.getBorn() != null) {
+                // 指定一个日期
+                String born = mPersonInfo.getBorn().replace("-", "");
+                Date deTime = dateFormat.parse(born);
+                calendar.setTime(deTime);
+            }
+
             //时间选择器
             TimePickerView pvTime = new TimePickerView.Builder(this, (date, v1) -> {
                 both = dateFormat.format(date);

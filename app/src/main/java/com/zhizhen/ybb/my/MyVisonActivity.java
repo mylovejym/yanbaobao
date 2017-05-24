@@ -3,13 +3,9 @@ package com.zhizhen.ybb.my;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,8 +24,8 @@ import com.zhizhen.ybb.bean.BaseBean;
 import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.EyesightInfo;
 import com.zhizhen.ybb.my.contract.MyContract;
-import com.zhizhen.ybb.my.model.MyVisonModel;
-import com.zhizhen.ybb.my.presenter.MyVisonPresenter;
+import com.zhizhen.ybb.my.model.MyVisonModelImp;
+import com.zhizhen.ybb.my.presenter.MyVisonPresenterImp;
 import com.zhizhen.ybb.util.DialogUtils;
 import com.zhizhen.ybb.util.TakePhotosDispose;
 
@@ -41,7 +37,7 @@ import butterknife.BindView;
  * Created by tc on 2017/5/15.
  */
 
-public class MyVisonActivity extends YbBaseActivity<MyVisonPresenter, MyVisonModel> implements MyContract.MyVisonView {
+public class MyVisonActivity extends YbBaseActivity<MyVisonPresenterImp, MyVisonModelImp> implements MyContract.MyVisonView {
 
 
     @BindView(R.id.edt_edit_left_eye_degree)

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/background_color"
-              android:orientation="vertical"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    android:orientation="vertical">
 
     <!--<include layout="@layout/view_title_bar"/>-->
 
@@ -15,8 +14,7 @@
         android:layout_marginTop="9dp"
         android:background="@color/blue_303048"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,8 +23,7 @@
             android:background="@null"
             android:text="@string/left_eye_degree"
             android:textColor="@color/gray_999999"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/edt_edit_left_eye_degree"
@@ -36,11 +33,10 @@
             android:layout_marginLeft="16dp"
             android:background="@null"
             android:hint="@string/eye_hint"
-            android:textColor="@color/white"
             android:inputType="number"
+            android:textColor="@color/white"
             android:textColorHint="@color/gray_80eeeeee"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -50,8 +46,7 @@
         android:layout_marginTop="1dp"
         android:background="@color/blue_303048"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,8 +55,7 @@
             android:background="@null"
             android:text="@string/right_eye_degree"
             android:textColor="@color/gray_999999"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/edt_edit_right_eye_degree"
@@ -70,12 +64,11 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:background="@null"
-            android:textColor="@color/white"
             android:hint="@string/eye_hint"
             android:inputType="number"
+            android:textColor="@color/white"
             android:textColorHint="@color/gray_80eeeeee"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -85,8 +78,7 @@
         android:layout_marginTop="1dp"
         android:background="@color/blue_303048"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -95,8 +87,7 @@
             android:background="@null"
             android:text="@string/left_eye_astigmatism"
             android:textColor="@color/gray_999999"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/edt_edit_left_eye_astigmatism"
@@ -106,11 +97,10 @@
             android:layout_marginLeft="16dp"
             android:background="@null"
             android:hint="@string/eye_hint"
-            android:textColor="@color/white"
             android:inputType="number"
+            android:textColor="@color/white"
             android:textColorHint="@color/gray_80eeeeee"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -120,8 +110,7 @@
         android:layout_marginTop="1dp"
         android:background="@color/blue_303048"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -130,8 +119,7 @@
             android:background="@null"
             android:text="@string/right_eye_astigmatism"
             android:textColor="@color/gray_999999"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/edt_edit_right_eye_astigmatism"
@@ -140,12 +128,11 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:background="@null"
-            android:textColor="@color/white"
             android:hint="@string/eye_hint"
             android:inputType="number"
+            android:textColor="@color/white"
             android:textColorHint="@color/gray_80eeeeee"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -154,8 +141,7 @@
         android:layout_marginTop="1dp"
         android:background="@color/blue_303048"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -164,8 +150,7 @@
             android:background="@null"
             android:text="@string/eye_pupil"
             android:textColor="@color/gray_999999"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/edt_edit_eye_pupil"
@@ -174,12 +159,11 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:background="@null"
-            android:textColor="@color/white"
             android:hint="@string/eye_hint"
             android:inputType="number"
+            android:textColor="@color/white"
             android:textColorHint="@color/gray_80eeeeee"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -192,7 +176,7 @@
         android:text="@string/update_bill"
         android:textColor="@color/gray_999999"
         android:textSize="14sp"
-        />
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -200,7 +184,7 @@
         android:layout_marginTop="14dp"
         android:background="@color/blue_303048"
         android:orientation="horizontal"
-        >
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/lin_take_photo"
@@ -209,14 +193,12 @@
             android:layout_gravity="center"
             android:layout_marginLeft="13dp"
             android:gravity="center"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_launcher"
-                />
+                android:src="@mipmap/ic_launcher" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -224,18 +206,17 @@
                 android:layout_marginTop="7.5dp"
                 android:text="@string/photo_bill"
                 android:textColor="@color/gray_535773"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/image_bill"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_gravity="center"
             android:layout_marginLeft="13dp"
-            android:visibility="gone"
             android:src="@mipmap/ic_launcher"
-            android:layout_gravity="center"/>
+            android:visibility="gone" />
 
     </LinearLayout>
 

@@ -14,7 +14,7 @@ import rx.Observable;
  * Created by tc on 2017/5/15.
  */
 
-public class MyVisonModel implements MyContract.MyVisonModel {
+public class MyVisonModelImp implements MyContract.MyVisonModel {
     @Override
     public Observable<BaseClassBean<EyesightInfo>> getEyesightInfo(String token) {
         return RxService.createApi(YbbApi.class).getEyesightInfo(token).compose(RxUtil.rxSchedulerHelper());

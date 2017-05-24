@@ -3,6 +3,7 @@ package com.zhizhen.ybb.api;
 import com.zhizhen.ybb.bean.BaseBean;
 import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.EyesightInfo;
+import com.zhizhen.ybb.bean.FollowInfo;
 import com.zhizhen.ybb.bean.LoginBean;
 import com.zhizhen.ybb.bean.PersonInfo;
 
@@ -105,8 +106,9 @@ public interface YbbApi {
      *
      * @return
      */
+    @FormUrlEncoded
     @POST("/Api/Hardware/focusMe")
-    Observable<Object> focusMe();
+    Observable<BaseClassBean<FollowInfo>> focusMe(@Field("token") String token);
 
     /**
      * APP写入数据
