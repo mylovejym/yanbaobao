@@ -69,8 +69,9 @@ public class SetTimeActivity extends YbBaseActivity {
     private void showTime() {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+            String str = txtTime.getText().toString().replace("-", "");
             // 指定一个日期
-            Date deTime = dateFormat.parse(txtTime.getText().toString());
+            Date deTime = dateFormat.parse(str);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(deTime);
             //时间选择器
