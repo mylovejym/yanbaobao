@@ -1,2 +1,2 @@
-include ':app', ':wrmvplibrary'
+include ':app', ':wrmvplibrary', ':pickerview'
 include ':xCLCharts'
