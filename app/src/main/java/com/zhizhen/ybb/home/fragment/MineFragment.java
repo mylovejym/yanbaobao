@@ -15,9 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.psylife.wrmvplibrary.utils.LogUtil;
+import com.psylife.wrmvplibrary.utils.SpUtil;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseApplication;
@@ -25,7 +28,6 @@ import com.zhizhen.ybb.base.YbBaseFragment;
 import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.PersonInfo;
 import com.zhizhen.ybb.loginpass.LoginActivity;
-import com.zhizhen.ybb.my.ChoiceSexActivity;
 import com.zhizhen.ybb.my.EditDataActivity;
 import com.zhizhen.ybb.my.FollowActivity;
 import com.zhizhen.ybb.my.MyDeivceActivity;
@@ -37,6 +39,8 @@ import com.zhizhen.ybb.my.presenter.MyPresenterImp;
 import com.zhizhen.ybb.util.DateUtil;
 import com.zhizhen.ybb.util.SpUtils;
 
+import java.io.File;
+
 import butterknife.BindView;
 
 /**
@@ -44,6 +48,9 @@ import butterknife.BindView;
  */
 
 public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> implements MyContract.MyView, View.OnClickListener {
+
+    public static final int EDIT_DATA = 10023;
+
     @BindView(R.id.txt_name)
     TextView txtName;
 
@@ -78,6 +85,8 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
 
     private PersonInfo mPersonInfo;
 
+    private boolean isLoad = true;// 是否网络加载
+
     @Override
     public View getTitleView() {
         return null;
@@ -111,7 +120,12 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
     @Override
     public void onStart() {
         super.onStart();
-        mPresenter.getPersonInfo(YbBaseApplication.instance.getToken());
+        if (null != SpUtils.getPersonInfo(this.getActivity())) {
+            this.mPersonInfo = SpUtils.getPersonInfo(this.getActivity());
+            showView();
+        } else {
+            loadData();
+        }
     }
 
     @Override
@@ -121,7 +135,7 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
             Bundle bundle = new Bundle();
             bundle.putSerializable("personInfo", mPersonInfo);
             intent.putExtras(bundle);
-            this.getContext().startActivity(intent);
+            startActivityForResult(intent, EDIT_DATA);
         } else if (v == rlVison) {
             //我的视力
             Intent intent = new Intent(this.getContext(), MyVisonActivity.class);
@@ -152,59 +166,88 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println("onResume");
+
     }
 
     @Override
     public void showError(Throwable e) {
+        this.stopProgressDialog();
         Toast.makeText(this.getContext(), "网络错误，请稍后再试", Toast.LENGTH_LONG).show();
         LogUtil.d("e=>>>" + e);
     }
 
     @Override
-    public void showPersonInfo(BaseClassBean<PersonInfo> mPersonInfo) {
-        this.mPersonInfo = mPersonInfo.getData();
-        if (mPersonInfo.getStatus().equals("0")) {
-            try {
-                if (mPersonInfo.getData().getUsername() != null)
-                    txtName.setText(mPersonInfo.getData().getUsername());
-
-                if (mPersonInfo.getData().getBorn() != null) {
-                    txtAge.setVisibility(View.VISIBLE);
-                    txtAge.setText("年龄：" + DateUtil.getAge(mPersonInfo.getData().getBorn()));
-                }
-
-                if (mPersonInfo.getData().getSex() != null) {
-                    imageSex.setVisibility(View.VISIBLE);
-                    if (mPersonInfo.getData().getSex().equals("1")) {
-                        imageSex.setImageDrawable(this.getResources().getDrawable(R.mipmap.icon_man));
-                    } else {
-                        imageSex.setImageDrawable(this.getResources().getDrawable(R.mipmap.icon_girl));
-                    }
-                }
-
-                if (mPersonInfo.getData().getPhoto() != null) {
-                    Glide.with(this).load(mPersonInfo.getData().getPhoto()).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                            circularBitmapDrawable.setCircular(true);
-                            imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
-                        }
-                    });
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    public void showPersonInfo(BaseClassBean<PersonInfo> mPersonInfos) {
+        this.stopProgressDialog();
+        this.mPersonInfo = mPersonInfos.getData();
+        SpUtils.setPersonInfo(this.getActivity(), mPersonInfo);
+        if (mPersonInfos.getStatus().equals("0")) {
+            showView();
         } else {
-            Toast.makeText(this.getContext(), mPersonInfo.getStatusInfo(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(), mPersonInfos.getStatusInfo(), Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     protected void initLazyView() {
         System.out.println("initLazyView");
+    }
+
+    private void loadData() {
+        if (isLoad) {
+            this.startProgressDialog(this.getContext());
+            mPresenter.getPersonInfo(YbBaseApplication.instance.getToken());
+        }
+
+        isLoad = false;
+    }
+
+    private void showView() {
+        try {
+            if (mPersonInfo.getUsername() != null)
+                txtName.setText(mPersonInfo.getUsername());
+
+            if (mPersonInfo.getBorn() != null) {
+                txtAge.setVisibility(View.VISIBLE);
+                txtAge.setText("年龄：" + DateUtil.getAge(mPersonInfo.getBorn()));
+            }
+
+            if (mPersonInfo.getSex() != null) {
+                imageSex.setVisibility(View.VISIBLE);
+                if (mPersonInfo.getSex().equals("1")) {
+                    imageSex.setImageDrawable(this.getResources().getDrawable(R.mipmap.icon_man));
+                } else {
+                    imageSex.setImageDrawable(this.getResources().getDrawable(R.mipmap.icon_girl));
+                }
+            }
+
+            if (mPersonInfo.getPhoto() != null) {
+
+                RequestManager requestManager = Glide.with(this);
+                DrawableTypeRequest drawableTypeRequest = requestManager.load(mPersonInfo.getPhoto());
+                drawableTypeRequest.placeholder(R.mipmap.wellcom) //设置占位图
+                        .error(R.mipmap.wellcom) //设置错误图片
+                        .crossFade(); //设置淡入淡出效果，默认300ms，可以传参
+                drawableTypeRequest.asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == EDIT_DATA) {
+            isLoad = true;
+            loadData();
+        }
     }
 }

@@ -27,7 +27,7 @@ import static com.bigkoo.pickerview.view.WheelTime.dateFormat;
 
 /**
  * 设定采集时段
- * Created by sandlovechao on 2017/5/22.
+ * Created by tc on 2017/5/22.
  */
 
 public class SetACTimeActivity extends YbBaseActivity {

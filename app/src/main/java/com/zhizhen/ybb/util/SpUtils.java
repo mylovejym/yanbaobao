@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.zhizhen.ybb.bean.PersonInfo;
 import com.zhizhen.ybb.bean.UserBean;
 
 /**
@@ -15,7 +16,7 @@ public class SpUtils {
     public static final String spFileName = "ShiGuangApp";
     private static SharedPreferences mSharedPreferences;
 
-    public synchronized static void setUser(Context ctx,UserBean user){
+    public synchronized static void setUser(Context ctx, UserBean user) {
         if (mSharedPreferences == null) {
             mSharedPreferences = ctx.getSharedPreferences(spFileName,
                     Context.MODE_PRIVATE);
@@ -25,7 +26,7 @@ public class SpUtils {
         mSharedPreferences.edit().putString("user", json).commit();
     }
 
-    public static UserBean getUser(Context ctx){
+    public static UserBean getUser(Context ctx) {
         if (mSharedPreferences == null) {
             mSharedPreferences = ctx.getSharedPreferences(spFileName,
                     Context.MODE_PRIVATE);
@@ -42,6 +43,32 @@ public class SpUtils {
         return user;
     }
 
+    public synchronized static void setPersonInfo(Context ctx, PersonInfo personInfo) {
+        if (mSharedPreferences == null) {
+            mSharedPreferences = ctx.getSharedPreferences(spFileName,
+                    Context.MODE_PRIVATE);
+        }
+        Gson gson = new Gson();
+        String json = gson.toJson(personInfo);
+        mSharedPreferences.edit().putString("personInfo", json).commit();
+    }
+
+    public static PersonInfo getPersonInfo(Context ctx) {
+        if (mSharedPreferences == null) {
+            mSharedPreferences = ctx.getSharedPreferences(spFileName,
+                    Context.MODE_PRIVATE);
+        }
+        PersonInfo personInfo = null;
+        String json = mSharedPreferences.getString("personInfo", null);
+        try {
+            Gson gson = new Gson();
+            personInfo = gson.fromJson(json, PersonInfo.class);
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+
+        }
+        return personInfo;
+    }
 
     public static String getString(Context context, String strKey) {
         SharedPreferences setPreferences = context.getSharedPreferences(
@@ -134,6 +161,7 @@ public class SpUtils {
         editor.putLong(strKey, strData);
         editor.commit();
     }
+
     public static float getFloat(Context context, String strKey) {
         SharedPreferences setPreferences = context.getSharedPreferences(
                 spFileName, Context.MODE_PRIVATE);
@@ -155,10 +183,11 @@ public class SpUtils {
         editor.putFloat(strKey, strData);
         editor.commit();
     }
-    public static void remove(Context context,String strKey){
+
+    public static void remove(Context context, String strKey) {
         SharedPreferences activityPreferences = context.getSharedPreferences(
                 spFileName, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor  = activityPreferences.edit();
+        SharedPreferences.Editor editor = activityPreferences.edit();
         editor.remove(strKey);
         editor.commit();
     }

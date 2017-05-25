@@ -34,11 +34,11 @@ import java.io.File;
 import butterknife.BindView;
 
 /**
+ * 我的视力
  * Created by tc on 2017/5/15.
  */
 
 public class MyVisonActivity extends YbBaseActivity<MyVisonPresenterImp, MyVisonModelImp> implements MyContract.MyVisonView {
-
 
     @BindView(R.id.edt_edit_left_eye_degree)
     EditText edtLeftDegree;
@@ -61,7 +61,7 @@ public class MyVisonActivity extends YbBaseActivity<MyVisonPresenterImp, MyVison
     @BindView(R.id.image_bill)
     ImageView imageBill;
 
-    private String leftDegree, rightDegree, leftAstigmatism, rightAstigmatism, pupil;
+    private String leftDegree = "", rightDegree = "", leftAstigmatism = "", rightAstigmatism = "", pupil = "";
 
     private String path;
 
@@ -82,6 +82,7 @@ public class MyVisonActivity extends YbBaseActivity<MyVisonPresenterImp, MyVison
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
                 .setRightOnClickListener(v -> {
+                    this.startProgressDialog(this);
                     leftDegree = edtLeftDegree.getText().toString().trim();
                     rightDegree = edtRightDegree.getText().toString().trim();
                     leftAstigmatism = edtLeftAstigmatism.getText().toString().trim();
@@ -102,6 +103,7 @@ public class MyVisonActivity extends YbBaseActivity<MyVisonPresenterImp, MyVison
 
     @Override
     public void initdata() {
+        this.startProgressDialog(this);
         mPresenter.getEyesightInfo(YbBaseApplication.getInstance().getToken());
     }
 
@@ -112,12 +114,14 @@ public class MyVisonActivity extends YbBaseActivity<MyVisonPresenterImp, MyVison
 
     @Override
     public void showError(Throwable e) {
+        this.stopProgressDialog();
         Toast.makeText(this, "网络错误，请稍后再试", Toast.LENGTH_LONG).show();
         LogUtil.d("e=>>>" + e);
     }
 
     @Override
     public void showEyesightInfo(BaseClassBean<EyesightInfo> mEyesightInfo) {
+        this.stopProgressDialog();
         if (mEyesightInfo.getStatus().equals("0")) {
             edtLeftDegree.setText(mEyesightInfo.getData().getLeft_eye_degree());
             edtRightDegree.setText(mEyesightInfo.getData().getRight_eye_degree());

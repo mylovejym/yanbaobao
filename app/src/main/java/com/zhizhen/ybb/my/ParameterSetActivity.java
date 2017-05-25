@@ -14,7 +14,8 @@ import com.zhizhen.ybb.base.YbBaseActivity;
 import butterknife.BindView;
 
 /**
- * Created by sandlovechao on 2017/5/22.
+ * 参数配置
+ * Created by tc on 2017/5/22.
  */
 
 public class ParameterSetActivity extends YbBaseActivity implements View.OnClickListener {
@@ -30,7 +31,6 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
     public static final int SET_SHAKING_NUM = 11940;
 
     public static final int SET_SHAKING_DELAYED = 11950;
-
 
     @BindView(R.id.lin_set_time)
     LinearLayout linSetTime;        //设置系统时间

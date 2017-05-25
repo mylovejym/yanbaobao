@@ -23,7 +23,7 @@ import butterknife.BindView;
 
 /**
  * 设定系统时间
- * Created by sandlovechao on 2017/5/22.
+ * Created by tc on 2017/5/22.
  */
 
 public class SetPosTureActivity extends YbBaseActivity {

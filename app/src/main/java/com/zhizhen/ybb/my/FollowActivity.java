@@ -21,6 +21,7 @@ import com.zhizhen.ybb.my.presenter.FollowPresenterImp;
 import butterknife.BindView;
 
 /**
+ * 关注界面
  * Created by tc on 2017/5/24.
  */
 
@@ -54,6 +55,7 @@ public class FollowActivity extends YbBaseActivity<FollowPresenterImp, FollowMod
 
     @Override
     public void initdata() {
+        this.startProgressDialog(this);
         mPresenter.focusMe(YbBaseApplication.getInstance().getToken());
     }
 
@@ -64,11 +66,13 @@ public class FollowActivity extends YbBaseActivity<FollowPresenterImp, FollowMod
 
     @Override
     public void showError(Throwable e) {
+        this.stopProgressDialog();
         Toast.makeText(this, "网络错误", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showUrl(BaseClassBean<FollowInfo> mInfo) {
+        this.stopProgressDialog();
         System.out.println(mInfo.getData().getSaoma());
         if (mInfo.getStatus().equals("0")) {
             Glide.with(this).load(mInfo.getData().getSaoma()).into(image);

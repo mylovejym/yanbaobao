@@ -22,9 +22,7 @@ public class EditDataPresenterImp extends MyContract.EditDataPresenter {
         mRxManager.add(mModel
                 .editPersonalInfo(photo)
                 .subscribe(
-                        data -> {
-                            mView.showEditDataInfo(data);
-                        }, e -> mView.showError(e)
+                        data -> mView.showEditDataInfo(data), e -> mView.showError(e)
                 ));
     }
 }

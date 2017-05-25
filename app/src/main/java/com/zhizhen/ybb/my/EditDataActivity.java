@@ -16,7 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.pickerview.TimePickerView;
+import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
@@ -25,6 +27,8 @@ import com.zhizhen.ybb.base.YbBaseActivity;
 import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.bean.BaseBean;
 import com.zhizhen.ybb.bean.PersonInfo;
+import com.zhizhen.ybb.home.HomeActivity;
+import com.zhizhen.ybb.home.fragment.MineFragment;
 import com.zhizhen.ybb.my.contract.MyContract;
 import com.zhizhen.ybb.my.model.EditDataModelImp;
 import com.zhizhen.ybb.my.presenter.EditDataPresenterImp;
@@ -113,6 +117,7 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditD
                         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
                         builder.addFormDataPart("photo", file.getName(), requestBody);
                     }
+                    this.startProgressDialog(this);
                     mPresenter.editPersonalInfo(builder.build());
                 })
                 .build();
@@ -195,21 +200,20 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditD
 
     @Override
     public void showError(Throwable e) {
-
+        Toast.makeText(this, "网络错误", Toast.LENGTH_SHORT).show();
+        this.stopProgressDialog();
     }
 
     @Override
     public void showEditDataInfo(BaseBean baseBean) {
+        this.stopProgressDialog();
         if (baseBean.getStatus().equals("0")) {
             Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, HomeActivity.class);
+            this.setResult(MineFragment.EDIT_DATA, intent);
             this.finish();
         } else
             Toast.makeText(this, baseBean.getStatusInfo(), Toast.LENGTH_SHORT).show();
-//        Map map = new HashMap();
-//        map.put("Content-Type", "application/x-www-form-urlencoded");
-//        map.put("dcreatedate", YbBaseApplication.instance.getDate());
-//        map.put("spid", YbBaseApplication.instance.getPhone());
-//        RxService.setHeaders(map);
     }
 
     @Override
@@ -243,7 +247,12 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditD
                     break;
             }
             System.out.println("path = " + path);
-            Glide.with(this).load(new File(path)).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
+            RequestManager requestManager = Glide.with(this);
+            DrawableTypeRequest drawableTypeRequest = requestManager.load(new File(path));
+            drawableTypeRequest.placeholder(R.mipmap.wellcom) //设置占位图
+                    .error(R.mipmap.wellcom) //设置错误图片
+                    .crossFade(); //设置淡入淡出效果，默认300ms，可以传参
+            drawableTypeRequest.asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
                 @Override
                 protected void setResource(Bitmap resource) {
                     RoundedBitmapDrawable circularBitmapDrawable =
