@@ -197,6 +197,12 @@ public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeT
         System.out.println("onRestart");
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SpUtils.remove(this, "personInfo");
+    }
+
     public void fin(){
         this.finish();
     }

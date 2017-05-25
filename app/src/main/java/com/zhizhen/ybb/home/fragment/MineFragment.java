@@ -180,10 +180,15 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
     public void showPersonInfo(BaseClassBean<PersonInfo> mPersonInfos) {
         this.stopProgressDialog();
         this.mPersonInfo = mPersonInfos.getData();
-        SpUtils.setPersonInfo(this.getActivity(), mPersonInfo);
         if (mPersonInfos.getStatus().equals("0")) {
+            SpUtils.setPersonInfo(this.getActivity(), mPersonInfo);
             showView();
         } else {
+            if (mPersonInfos.getStatus().equals("1009")) {
+                Intent intent = new Intent(this.getContext(), LoginActivity.class);
+                this.getContext().startActivity(intent);
+                this.getActivity().finish();
+            }
             Toast.makeText(this.getContext(), mPersonInfos.getStatusInfo(), Toast.LENGTH_LONG).show();
         }
     }
