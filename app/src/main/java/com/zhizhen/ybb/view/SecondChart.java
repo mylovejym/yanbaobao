@@ -155,7 +155,7 @@ public class SecondChart extends DemoView{
                     Double tmp = Double.parseDouble(value);
                     DecimalFormat df=new DecimalFormat("#0");
                     String label = df.format(tmp).toString();
-                    return (label+"%");
+                    return tmp==0?"":(label+"%");
                 }
 
             });

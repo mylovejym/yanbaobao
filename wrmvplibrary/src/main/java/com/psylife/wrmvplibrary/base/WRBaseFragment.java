@@ -54,8 +54,12 @@ public abstract class WRBaseFragment<T extends WRBasePresenter, E extends WRBase
         }
     }
 
+    private View rootView;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if(this.rootView!=null){
+            return this.rootView;
+        }
         View title = getTitleView();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         if (getLayoutView() != null) {
@@ -67,9 +71,11 @@ public abstract class WRBaseFragment<T extends WRBasePresenter, E extends WRBase
                 rootlayout.addView(title);
                 rootlayout.addView(view,params);
                 mLayout = SmartLoadingLayout.createDefaultLayout(mActivity, view);
+                this.rootView = rootlayout;
                 return rootlayout;
             }
-            return getLayoutView();
+            this.rootView = getLayoutView();
+            return this.rootView;
         } else {
             if(title !=null) {
                 View view = inflater.inflate(getLayoutId(), null);
@@ -79,9 +85,11 @@ public abstract class WRBaseFragment<T extends WRBasePresenter, E extends WRBase
                 rootlayout.addView(title);
                 rootlayout.addView(view,params);
                 mLayout = SmartLoadingLayout.createDefaultLayout(mActivity, view);
+                this.rootView = rootlayout;
                 return rootlayout;
             }
-            return inflater.inflate(getLayoutId(), null);
+            this.rootView = inflater.inflate(getLayoutId(), null);
+            return this.rootView;
         }
     }
     public View getTitleView(){

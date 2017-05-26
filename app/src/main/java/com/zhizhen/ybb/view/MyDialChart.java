@@ -66,7 +66,7 @@ public class MyDialChart extends View{
         maps.put(30,30);
         maps.put(60,20);
         maps.put(130,100);
-        maps.put(140,100);
+        maps.put(140,40);
         maps.put(150,70);
         p = new Paint();
         p.setColor(Color.RED);

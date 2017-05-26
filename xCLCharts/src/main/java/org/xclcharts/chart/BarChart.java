@@ -22,7 +22,10 @@
 
 package org.xclcharts.chart;
 
-import java.util.List;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.util.Log;
 
 import org.xclcharts.common.DrawHelper;
 import org.xclcharts.common.MathHelper;
@@ -35,10 +38,7 @@ import org.xclcharts.renderer.info.AnchorDataPoint;
 import org.xclcharts.renderer.info.PlotAxisTick;
 import org.xclcharts.renderer.line.PlotCustomLine;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Paint.Align;
-import android.util.Log;
+import java.util.List;
 
 /**
  * @ClassName BarChart
@@ -618,7 +618,9 @@ public class BarChart extends AxesChart {
 					 barTop = sub(drawBarButtomY,barHeight);						
 					 barRight = rightX;
 					 barBottom = drawBarButtomY ;
-				}	
+				}
+
+				Log.w("1111111",barLeft+";"+barRight);
 				
 				
 				// 画出柱形

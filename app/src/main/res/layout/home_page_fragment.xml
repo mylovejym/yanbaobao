@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/background_color"
+    android:layout_height="match_parent">
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="43dp"-->
+        <!--android:background="@color/blue_313245"-->
+        <!--&gt;-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:text="坐姿"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="17sp"-->
+            <!--/>-->
+        <!--<ImageView-->
+            <!--android:id="@+id/img_ly"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:src="@mipmap/ic_launcher"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_height="wrap_content" />-->
+    <!--</RelativeLayout>-->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:background="@color/md_grey_700"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:background="@color/blue_313245">
+
+                <View
+                    android:id="@+id/view_circle"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/shape_circle"></View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_toRightOf="@+id/view_circle"
+                    android:text="坐姿仪表盘"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+            </RelativeLayout>
+
+            <!--<ImageView
+                android:layout_width="match_parent"
+                android:layout_height="148dp"
+                android:src="@mipmap/ic_launcher" />-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+                <com.zhizhen.ybb.view.MyDialChart
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                >
+
+                <View
+                    android:id="@+id/view_tday"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/shape_black"></View>
+
+                <TextView
+                    android:id="@+id/txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_toRightOf="@+id/view_tday"
+                    android:text="今日坐姿端正率:"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/text_b"
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="6dp"
+                    android:text="74%"
+                    android:textColor="@color/blue_41adff"
+                    android:textSize="17sp"
+                    android:layout_toRightOf="@+id/txt"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/gray_666666"
+                android:layout_height="1dp"></View>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                >
+                <TextView
+                    android:id="@+id/txt_health"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="6dp"
+                    android:text="健康正常值"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="20dp"
+                    android:layout_height="10dp"
+                    android:layout_toLeftOf="@+id/txt_health"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="6dp"
+                    android:background="@drawable/shape_write"></View>
+                <TextView
+                    android:id="@+id/txt_teday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="6dp"
+                    android:text="今日测量值"
+                    android:layout_toLeftOf="@+id/view2"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="20dp"
+                    android:layout_toLeftOf="@+id/txt_teday"
+                    android:layout_height="10dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/shape_blue"></View>
+            </RelativeLayout>
+
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="148dp"-->
+                <!--android:src="@mipmap/ic_launcher" />-->
+            <com.zhizhen.ybb.view.SecondChart
+                android:layout_width="match_parent"
+                android:layout_height="148dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                >
+
+                <View
+                    android:id="@+id/view_black"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/shape_black"></View>
+
+                <TextView
+                    android:id="@+id/txt2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_toRightOf="@+id/view_black"
+                    android:text="坐姿在"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/text_two"
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="1dp"
+                    android:text="74%+10%"
+                    android:textColor="@color/blue_41adff"
+                    android:textSize="17sp"
+                    android:layout_toRightOf="@+id/txt2"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="1dp"
+                    android:text="都算端正坐姿"
+                    android:textColor="@color/white"
+                    android:textSize="17sp"
+                    android:layout_toRightOf="@+id/text_two"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:background="@color/blue_313245">
+
+                <View
+                    android:id="@+id/view_error"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/shape_circle"></View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_toRightOf="@+id/view_error"
+                    android:text="错误坐姿分析"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+                <Button
+                    android:id="@+id/btn_week"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="60dp"
+                    android:text="周报"
+                    android:textSize="17sp"
+                    android:layout_height="match_parent" />
+                <Button
+                    android:id="@+id/btn_day"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/btn_week"
+                    android:layout_width="60dp"
+                    android:text="日报"
+                    android:textSize="17sp"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="148dp"-->
+                <!--android:src="@mipmap/ic_launcher" />-->
+            <com.zhizhen.ybb.view.ThirdView
+                android:layout_width="match_parent"
+                android:layout_height="148dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

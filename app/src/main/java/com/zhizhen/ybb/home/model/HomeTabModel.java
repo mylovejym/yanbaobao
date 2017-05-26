@@ -18,7 +18,7 @@ public class HomeTabModel implements HomeContract.HomeTabModel {
     //R.drawable.tab_home
     @Override
     public int[] getImageIds() {
-        int[] imageIds = {R.mipmap.ic_launcher, R.mipmap.ic_launcher};
+        int[] imageIds = {R.drawable.health_selector, R.drawable.mine_selector};
         return imageIds;
     }
 
