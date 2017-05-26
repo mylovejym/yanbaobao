@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/pickerview/pickerview.iml" filepath="$PROJECT_DIR$/pickerview/pickerview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pickerview/pickerview.iml" filepath="$PROJECT_DIR$/pickerview/pickerview.iml" />
       <module fileurl="file://$PROJECT_DIR$/wrmvplibrary/wrmvplibrary.iml" filepath="$PROJECT_DIR$/wrmvplibrary/wrmvplibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/xCLCharts/xCLCharts.iml" filepath="$PROJECT_DIR$/xCLCharts/xCLCharts.iml" />
       <module fileurl="file://$PROJECT_DIR$/yanbaobao.iml" filepath="$PROJECT_DIR$/yanbaobao.iml" />

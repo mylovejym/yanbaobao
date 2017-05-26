@@ -13,7 +13,6 @@ import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.psylife.wrmvplibrary.utils.timeutils.TextUtil;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
-import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.bean.LoginBean;
 import com.zhizhen.ybb.home.HomeActivity;
 import com.zhizhen.ybb.loginpass.contract.LoginContract;
@@ -61,7 +60,7 @@ public class LoginActivity extends YbBaseActivity<LoginPresenter, LoginModel> im
                 }else if(TextUtil.isEmpty(edit_pass.getText().toString().trim())){
                     Toast.makeText(LoginActivity.this,"密码不能为空",Toast.LENGTH_SHORT).show();
                 }else if(!TextUtil.isEmpty(edit_phone.getText().toString().trim()) && !TextUtil.isEmpty(edit_pass.getText().toString().trim())){
-//                        Toast.makeText(LoginActivity.this,"啊啊啊啊啊啊啊啊啊啊啊啊",Toast.LENGTH_SHORT).show();
+                    this.startProgressDialog(LoginActivity.this);
                     mPresenter.login(edit_phone.getText().toString().trim(),edit_pass.getText().toString().trim());
                 }
         });
@@ -93,8 +92,8 @@ public class LoginActivity extends YbBaseActivity<LoginPresenter, LoginModel> im
 
     @Override
     public void showContent(LoginBean bean) {
-        this.stopProgressDialog();
         if(bean.getStatus().equals("0")){
+            this.stopProgressDialog();
             Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
             SpUtils.putBoolean(this,"firstLogin",true);
             SpUtils.setUser(this,bean.getData());
