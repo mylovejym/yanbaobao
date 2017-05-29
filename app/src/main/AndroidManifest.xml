@@ -11,6 +11,15 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+
+
+
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+
 
     <application
         android:name=".base.YbBaseApplication"
@@ -93,6 +102,14 @@
         <activity
             android:name="com.zhizhen.ybb.my.FollowActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".lanya.BLEDeviceLiatActivity"/>
+        <activity android:name=".lanya.MyBLEActivity"/>
+        <service android:name=".lanya.UartService"/>
+
+        <!--android:process=":remote"-->
+        <service
+            android:name=".lanya.MsgAidlService"
+            android:process=":remote" />
     </application>
 
 </manifest>

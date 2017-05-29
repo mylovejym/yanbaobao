@@ -32,8 +32,10 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -83,8 +85,16 @@ public class UartService extends Service {
     public static final UUID RX_SERVICE_UUID = UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
     public static final UUID RX_CHAR_UUID = UUID.fromString("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
     public static final UUID TX_CHAR_UUID = UUID.fromString("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
-    
-   
+
+    MyServiceConnection mServiceConnection = new MyServiceConnection();
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        UartService.this.bindService(new Intent(UartService.this,MsgAidlService.class),mServiceConnection, Context.BIND_IMPORTANT);
+//        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
+    }
+
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
@@ -365,5 +375,26 @@ public class UartService extends Service {
         if (mBluetoothGatt == null) return null;
 
         return mBluetoothGatt.getServices();
+    }
+
+    class MyServiceConnection implements ServiceConnection {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
+
+
+//	      Toast.makeText(MsgService.this,name+"连接成功",Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+//	      Toast.makeText(MsgService.this,TAG+"断开连接",Toast.LENGTH_SHORT).show();
+
+            UartService.this.startService(new Intent(UartService.this,MsgAidlService.class));
+
+            UartService.this.bindService(new Intent(UartService.this,MsgAidlService.class),mServiceConnection, Context.BIND_IMPORTANT);
+
+        }
     }
 }

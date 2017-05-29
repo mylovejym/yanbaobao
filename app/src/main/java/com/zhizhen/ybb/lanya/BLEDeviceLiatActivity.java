@@ -2,12 +2,14 @@ package com.zhizhen.ybb.lanya;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +19,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -58,18 +61,130 @@ public class BLEDeviceLiatActivity extends YbBaseActivity {
         return R.layout.ble_list_layout;
     }
 
+    private BluetoothAdapter.LeScanCallback mBLEScanCallback;
+    private boolean mIsScanning;
+
     @Override
     public void initView(Bundle savedInstanceState) {
-        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBtAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
+//        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+//            Toast.makeText(this, " ble not supported ", Toast.LENGTH_SHORT).show();
+//            finish();
+//        }
+////        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+//        final BluetoothManager bluetoothManager =
+//                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+//        mBtAdapter = bluetoothManager.getAdapter();
+//        if (mBtAdapter == null) {
+//            Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
+//            finish();
+//            return;
+//        }
+        Button  mScanButton = (Button) findViewById(R.id.btn_scan);
+
+
+
+
 
         service_init();
 
+        //自动开启蓝牙
+        Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        startActivityForResult(enableIntent, 1);
+
+        //BLE
+        mBLEScanCallback = getBLEScanCallback();
+        checkBLEDevice();
+
+        mScanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scanOtherBLEDevice(!mIsScanning);
+            }
+        });
+
+        populateList();
+
     }
+
+    private void scanOtherBLEDevice(boolean enable){
+        if(enable){
+            deviceList.clear();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //stop scan
+                    mIsScanning = false;
+                    mBtAdapter.stopLeScan(mBLEScanCallback);
+
+                }
+            }, SCAN_PERIOD);
+            //start scan
+            mIsScanning = true;
+            mBtAdapter.startLeScan(mBLEScanCallback);
+        }else{
+            //stop scan
+            mIsScanning = false;
+            mBtAdapter.stopLeScan(mBLEScanCallback);
+        }
+    }
+
+    private void checkBLEDevice(){
+        // Use this check to determine whether BLE is supported on the device.  Then you can
+        // selectively disable BLE-related features.
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, " ble not supported ", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
+        // BluetoothAdapter through BluetoothManager.
+        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBtAdapter = bluetoothManager.getAdapter();
+
+        // Checks if Bluetooth is supported on the device.
+        if (mBtAdapter == null) {
+            Toast.makeText(this, " ble not supported ", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+    }
+
+    private BluetoothAdapter.LeScanCallback getBLEScanCallback(){
+        return new BluetoothAdapter.LeScanCallback(){
+            @Override
+            public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
+
+                Log.i("Activity", device.getAddress());
+                addBLEDeviceData(device, rssi);
+
+            }
+        };
+    }
+
+    private void addBLEDeviceData(BluetoothDevice device, int rssi){
+        boolean deviceFound = false;
+
+        for (BluetoothDevice listDev : deviceList) {
+            if (listDev.getAddress().equals(device.getAddress())) {
+                deviceFound = true;
+                break;
+            }
+        }
+
+
+        deviceAdapter.put(device.getAddress(), rssi);
+        if (!deviceFound) {
+            deviceList.add(device);
+
+
+
+
+
+            deviceAdapter.notifyDataSetChanged();
+        }
+    }
+
+
 
     @Override
     public void initdata() {
@@ -281,12 +396,12 @@ public class BLEDeviceLiatActivity extends YbBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!mBtAdapter.isEnabled()) {
-            Log.i(TAG, "onResume - BT not enabled yet");
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-        }else{
-            populateList();
-        }
+//        if (!mBtAdapter.isEnabled()) {
+//            Log.i(TAG, "onResume - BT not enabled yet");
+//            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+//        }else{
+//            populateList();
+//        }
     }
 }

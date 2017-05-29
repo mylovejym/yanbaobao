@@ -29,7 +29,8 @@ import com.zhizhen.ybb.home.fragment.HomePageFragment;
 import com.zhizhen.ybb.home.fragment.MineFragment;
 import com.zhizhen.ybb.home.model.HomeTabModel;
 import com.zhizhen.ybb.home.presenter.HomeTabPresenter;
-import com.zhizhen.ybb.loginpass.WelcomActivity;
+import com.zhizhen.ybb.lanya.MsgAidlService;
+import com.zhizhen.ybb.lanya.UartService;
 import com.zhizhen.ybb.util.SpUtils;
 
 import java.util.ArrayList;
@@ -83,6 +84,9 @@ public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeT
         /*实现setOnTabChangedListener接口,目的是为监听界面切换），然后实现TabHost里面图片文字的选中状态切换*/
         /*简单来说,是为了当点击下面菜单时,上面的ViewPager能滑动到对应的Fragment*/
         tabhost.setOnTabChangedListener(this);
+
+        startService(new Intent(this, UartService.class));
+        startService(new Intent(this, MsgAidlService.class));
 
 
     }

@@ -8,7 +8,7 @@ import android.view.View;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseFragment;
-import com.zhizhen.ybb.lanya.BLEDeviceLiatActivity;
+import com.zhizhen.ybb.lanya.MyBLEActivity;
 
 
 /**
@@ -25,7 +25,7 @@ public class HomePageFragment extends YbBaseFragment {
                 .setRightText("蓝牙")
                 .setTitleBgRes(R.color.blue_313245)
                 .setRightOnClickListener(v -> {
-                    startActivity(new Intent(getActivity(),BLEDeviceLiatActivity.class));
+                    startActivity(new Intent(getActivity(),MyBLEActivity.class));
                 })
                 .build();
     }

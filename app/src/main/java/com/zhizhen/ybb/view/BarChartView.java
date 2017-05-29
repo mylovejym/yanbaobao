@@ -389,80 +389,8 @@ public class BarChartView extends View {
 	}
 
 	private boolean initMaxAndMin(int start, int stop) {
-		if (stop <= 0) {
-			return true;
-		}
-		if (stop > this.xRawDatas.size()) {
-			stop = this.xRawDatas.size();
-		}
-		List<Float> yRawDataNews = new ArrayList<>();
-		for (int i = 0; i < this.yRawData.size(); i++) {
-			yRawDataNews.addAll(yRawData.get(i).subList(start, stop));
-		}
-		float maxValueNews = getMaxArray(yRawDataNews);
-		float minValueNews = getMinArray(yRawDataNews);
-		if (isInteger) {
-			if (maxValueNews >= 0 && minValueNews >= 0) {
-				minValueNews = 0;
-				maxValueNews = ((int) ((maxValueNews - 1) / 5 + 1)) * 5;
-				yIndex = 5;
-			} else if (maxValueNews <= 0 && minValueNews < 0) {
-				maxValueNews = 0;
-				minValueNews = ((int) ((minValueNews) / 5)) * 5;
-				yIndex = 0;
-			} else {
-				float proportion = Math.abs(maxValueNews / minValueNews); // 比例
-				if (proportion >= 4) {
-					maxValueNews = ((int) ((maxValueNews - 1) / 4 + 1)) * 4;
-					minValueNews = -maxValueNews / 4;
-					yIndex = 4;
-				} else if (proportion >= 1) {
-					maxValueNews = ((int) ((maxValueNews - 1) / 3 + 1)) * 3;
-					minValueNews = -maxValueNews * 2 / 3;
-					yIndex = 3;
-				} else if (proportion >= 1 / 4) {
-					minValueNews = ((int) ((minValueNews) / 3)) * 3;
-					maxValueNews = -minValueNews * 2 / 3;
-					yIndex = 2;
-				} else {
-					minValueNews = ((int) ((minValueNews) / 4)) * 4;
-					maxValueNews = -minValueNews / 4;
-					yIndex = 1;
-				}
-			}
-		} else {
-			if (minValueNews < 0 && maxValueNews > 0) {
-				float proportion = Math.abs(maxValueNews / minValueNews); // 比例
-				if (proportion >= 4) {
-					minValueNews = -maxValueNews / 4;
-					yIndex = 4;
-				} else if (proportion >= 1) {
-					minValueNews = -maxValueNews * 2 / 3;
-					yIndex = 3;
-				} else if (proportion >= 1 / 4) {
-					maxValueNews = -minValueNews * 2 / 3;
-					yIndex = 2;
-				} else {
-					maxValueNews = -minValueNews / 4;
-					yIndex = 1;
-				}
-			} else if (minValueNews >= 0 && maxValueNews > 0) {
-				yIndex = 5;
-				minValueNews = 0;
-			} else if (minValueNews < 0 && maxValueNews <= 0) {
-				yIndex = 0;
-				maxValueNews = 0;
-			}
-		}
-
-		if (maxValueNews == minValueNews) {
-			minValueNews = +1;
-		}
-		if (maxValueNews == maxValue && minValue == minValueNews) {
-			return true;
-		}
-		maxValue = maxValueNews;
-		minValue = minValueNews;
+		maxValue = 10;
+		minValue = 0;
 		if (isCompanyUpdate) {
 			if (maxValue > 300000000 || minValue < -300000000) {
 				companyNews = "亿" + company;
@@ -487,8 +415,111 @@ public class BarChartView extends View {
 		}
 		coordinateRect = new RectF(marginLeft, marginTop + taggingHeight,
 				canvasWidth - marginRight, canvasHeight - marginBottom);
-		return false;
+
+		return true;
 	}
+
+//	private boolean initMaxAndMin(int start, int stop) {
+//		if (stop <= 0) {
+//			return true;
+//		}
+//		if (stop > this.xRawDatas.size()) {
+//			stop = this.xRawDatas.size();
+//		}
+//		List<Float> yRawDataNews = new ArrayList<>();
+//		for (int i = 0; i < this.yRawData.size(); i++) {
+//			yRawDataNews.addAll(yRawData.get(i).subList(start, stop));
+//		}
+//		float maxValueNews = getMaxArray(yRawDataNews);
+//		float minValueNews = getMinArray(yRawDataNews);
+//		if (isInteger) {
+//			if (maxValueNews >= 0 && minValueNews >= 0) {
+//				minValueNews = 0;
+//				maxValueNews = ((int) ((maxValueNews - 1) / 5 + 1)) * 5;
+//				yIndex = 5;
+//			} else if (maxValueNews <= 0 && minValueNews < 0) {
+//				maxValueNews = 0;
+//				minValueNews = ((int) ((minValueNews) / 5)) * 5;
+//				yIndex = 0;
+//			} else {
+//				float proportion = Math.abs(maxValueNews / minValueNews); // 比例
+//				if (proportion >= 4) {
+//					maxValueNews = ((int) ((maxValueNews - 1) / 4 + 1)) * 4;
+//					minValueNews = -maxValueNews / 4;
+//					yIndex = 4;
+//				} else if (proportion >= 1) {
+//					maxValueNews = ((int) ((maxValueNews - 1) / 3 + 1)) * 3;
+//					minValueNews = -maxValueNews * 2 / 3;
+//					yIndex = 3;
+//				} else if (proportion >= 1 / 4) {
+//					minValueNews = ((int) ((minValueNews) / 3)) * 3;
+//					maxValueNews = -minValueNews * 2 / 3;
+//					yIndex = 2;
+//				} else {
+//					minValueNews = ((int) ((minValueNews) / 4)) * 4;
+//					maxValueNews = -minValueNews / 4;
+//					yIndex = 1;
+//				}
+//			}
+//		} else {
+//			if (minValueNews < 0 && maxValueNews > 0) {
+//				float proportion = Math.abs(maxValueNews / minValueNews); // 比例
+//				if (proportion >= 4) {
+//					minValueNews = -maxValueNews / 4;
+//					yIndex = 4;
+//				} else if (proportion >= 1) {
+//					minValueNews = -maxValueNews * 2 / 3;
+//					yIndex = 3;
+//				} else if (proportion >= 1 / 4) {
+//					maxValueNews = -minValueNews * 2 / 3;
+//					yIndex = 2;
+//				} else {
+//					maxValueNews = -minValueNews / 4;
+//					yIndex = 1;
+//				}
+//			} else if (minValueNews >= 0 && maxValueNews > 0) {
+//				yIndex = 5;
+//				minValueNews = 0;
+//			} else if (minValueNews < 0 && maxValueNews <= 0) {
+//				yIndex = 0;
+//				maxValueNews = 0;
+//			}
+//		}
+//
+//		if (maxValueNews == minValueNews) {
+//			minValueNews = +1;
+//		}
+//		if (maxValueNews == maxValue && minValue == minValueNews) {
+//			return true;
+//		}
+//		maxValue = maxValueNews;
+//		minValue = minValueNews;
+//		if (isCompanyUpdate) {
+//			if (maxValue > 300000000 || minValue < -300000000) {
+//				companyNews = "亿" + company;
+//				priceWeight = 100000000;
+//			} else if (maxValue > 3000000 || minValue < -3000000) {
+//				companyNews = "百万" + company;
+//				priceWeight = 1000000;
+//			} else if (maxValue > 30000 || minValue < -30000) {
+//				companyNews = "万" + company;
+//				priceWeight = 10000;
+//			} else if (maxValue > 300 || minValue < -300) {
+//				companyNews = "百" + company;
+//				priceWeight = 100;
+//			} else {
+//				companyNews = company;
+//			}
+//		} else {
+//			companyNews = company;
+//		}
+//		if (minValue < 0) {
+//			marginBottom = dip2px(30);
+//		}
+//		coordinateRect = new RectF(marginLeft, marginTop + taggingHeight,
+//				canvasWidth - marginRight, canvasHeight - marginBottom);
+//		return false;
+//	}
 
 	/**
 	 * 根据数据大小返回Y坐标
