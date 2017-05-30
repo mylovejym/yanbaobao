@@ -7,23 +7,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.OptionsPickerView;
-import com.bigkoo.pickerview.TimePickerView;
 import com.bigkoo.pickerview.listener.ItemListen;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
-
-import static com.bigkoo.pickerview.view.WheelTime.dateFormat;
 
 /**
  * 设定采集时段
@@ -91,6 +84,10 @@ public class SetACTimeActivity extends YbBaseActivity {
 //        txtStartTime.setText(bundle.getStringExtra("startTime"));
 //        txtEndTime.setText(bundle.getStringExtra("endTime"));
     }
+
+
+
+
 
     private void showTime(String deTime, int type) {
 

@@ -5,13 +5,19 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +29,8 @@ import android.widget.Toast;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +62,10 @@ public class MyBLEActivity extends YbBaseActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothAdapter.LeScanCallback mBLEScanCallback;
+
+    private UartService mService = null;
+
+    private BluetoothDevice mDevice = null;
 
 
 
@@ -97,13 +109,14 @@ public class MyBLEActivity extends YbBaseActivity {
         mBLEScanCallback = getBLEScanCallback();
         checkBLEDevice();
         //scanOtherBLEDevice(true);
+        scanOtherBLEDevice(!mIsScanning);
 
-        mScanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                scanOtherBLEDevice(!mIsScanning);
-            }
-        });
+//        mScanButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                scanOtherBLEDevice(!mIsScanning);
+//            }
+//        });
 
         mBLEDeviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -112,6 +125,13 @@ public class MyBLEActivity extends YbBaseActivity {
                 BluetoothDevice device = mDataList.get(i);
                 mBluetoothAdapter.stopLeScan(mBLEScanCallback);
 
+                String deviceAddress = device.getAddress();
+                mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
+
+                Log.d(TAG, "... onActivityResultdevice.address==" + mDevice + "mserviceValue" + mService);
+
+                mService.connect(deviceAddress);
+
 //                Intent intent = new Intent(MyBLEActivity.this, NormalDeviceActivity.class);
 //                intent.putExtra(BluetoothDevice.EXTRA_DEVICE, device.getAddress());
 //                intent.putExtra(BLEDEVICE_NAME, device.getName());
@@ -119,9 +139,100 @@ public class MyBLEActivity extends YbBaseActivity {
             }
         });
 
+        service_init();
+
 
 
     }
+
+    private void service_init() {
+        Intent bindIntent = new Intent(this, UartService.class);
+        bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
+    }
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
+//        intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
+//        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
+//        intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
+        return intentFilter;
+    }
+
+    //UART service connected/disconnected
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder rawBinder) {
+            mService = ((UartService.LocalBinder) rawBinder).getService();
+            Log.d(TAG, "onServiceConnected mService= " + mService);
+            if (!mService.initialize()) {
+                Log.e(TAG, "Unable to initialize Bluetooth");
+                finish();
+            }
+
+        }
+
+        public void onServiceDisconnected(ComponentName classname) {
+            ////     mService.disconnect(mDevice);
+            mService = null;
+        }
+    };
+    private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            final Intent mIntent = intent;
+            //*********************//
+            if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
+                        Log.d(TAG, "UART_CONNECT_MSG");
+                        Toast.makeText(MyBLEActivity.this,"连接成功",Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            //*********************//
+            if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
+                        Log.d(TAG, "UART_DISCONNECT_MSG");
+//                        btnConnectDisconnect.setText("Connect");
+//                        edtMessage.setEnabled(false);
+//                        btnSend.setEnabled(false);
+//                        ((TextView) findViewById(R.id.deviceName)).setText("Not Connected");
+//                        listAdapter.add("["+currentDateTimeString+"] Disconnected to: "+ mDevice.getName());
+//                        mState = UART_PROFILE_DISCONNECTED;
+//                        mService.close();
+                        //setUiState();
+
+                    }
+                });
+            }
+
+
+//            //*********************//
+//            if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
+//                mService.enableTXNotification();
+//            }
+//            //*********************//
+//            if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
+//
+//
+//            }
+//            //*********************//
+//            if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)){
+//
+//                mService.disconnect();
+//            }
+
+
+        }
+    };
 
     @Override
     public void initdata() {
@@ -241,6 +352,20 @@ public class MyBLEActivity extends YbBaseActivity {
                 finish();
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");
+
+        try {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(UARTStatusChangeReceiver);
+        } catch (Exception ignore) {
+            Log.e(TAG, ignore.toString());
+        }
+        unbindService(mServiceConnection);
+
     }
 
 

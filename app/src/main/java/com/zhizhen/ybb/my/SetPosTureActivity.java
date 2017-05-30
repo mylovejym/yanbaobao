@@ -6,17 +6,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.OptionsPickerView;
-import com.bigkoo.pickerview.TimePickerView;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,6 +26,8 @@ public class SetPosTureActivity extends YbBaseActivity {
 
     @BindView(R.id.txt_posture)
     TextView txtPosture;
+
+
 
     @Override
     public int getLayoutId() {
@@ -62,6 +60,8 @@ public class SetPosTureActivity extends YbBaseActivity {
             showTime();
         });
     }
+
+
 
     @Override
     public void initdata() {

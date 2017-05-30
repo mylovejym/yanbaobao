@@ -404,4 +404,18 @@ public class BLEDeviceLiatActivity extends YbBaseActivity {
 //            populateList();
 //        }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");
+
+        try {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(UARTStatusChangeReceiver);
+        } catch (Exception ignore) {
+            Log.e(TAG, ignore.toString());
+        }
+        unbindService(mServiceConnection);
+
+    }
 }
