@@ -1,23 +1,10 @@
 package com.zhizhen.ybb.api;
 
-import com.zhizhen.ybb.bean.BaseBean;
-import com.zhizhen.ybb.bean.BaseClassBean;
-import com.zhizhen.ybb.bean.EyesightInfo;
-import com.zhizhen.ybb.bean.FollowInfo;
-import com.zhizhen.ybb.bean.LoginBean;
-import com.zhizhen.ybb.bean.PersonInfo;
+import com.zhizhen.ybb.bean.*;
 
-import java.io.File;
-
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.Multipart;
-import retrofit2.http.POST;
-import retrofit2.http.Part;
-import rx.Observable;
+import okhttp3.*;
+import retrofit2.http.*;
+import rx.*;
 
 /**
  * 作者：tc on 2017/5/15.
@@ -115,14 +102,16 @@ public interface YbbApi {
      *
      * @return
      */
+    @FormUrlEncoded
     @POST("/Api/Hardware/addHardwareData")
-    Observable<Object> addHardwareData();
+    Observable<BaseBean> addHardwareData(@Field("token") String token, @Field("data") String data);
 
     /**
      * 统计数据接口
      *
      * @return
      */
+    @FormUrlEncoded
     @POST("/Api/Hardware/static_data")
-    Observable<Object> static_data();
+    Observable<Object> static_data(@Field("token") String token);
 }
