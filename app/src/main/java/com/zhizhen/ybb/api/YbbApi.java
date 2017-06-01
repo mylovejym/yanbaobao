@@ -113,5 +113,5 @@ public interface YbbApi {
      */
     @FormUrlEncoded
     @POST("/Api/Hardware/static_data")
-    Observable<Object> static_data(@Field("token") String token);
+    Observable<BaseClassBean<GetStatistics>> static_data(@Field("token") String token);
 }

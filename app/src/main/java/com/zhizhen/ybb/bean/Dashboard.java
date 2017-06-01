@@ -1,19 +1,33 @@
 package com.zhizhen.ybb.bean;
 
 /**
+ *
+ * 仪表盘所需数据
+ *
  * Created by tc on 2017/6/1.
  */
 
 public class Dashboard {
-    private String total_time;
 
-    private String pid;
+    private String degree_interval;  //度数区间 1代表【0°，10°】 2代表【10°，20°】 3代表【20°，30°】依次类推
+
+    private String total_time;       //当天所存数据总时间
+
+    private String pid;             //用户ID
 
     private String duration;
 
-    private String percent;
+    private String percent;         //【0°，10°】所占时长
 
-    private String date;
+    private String date;            //记录日期
+
+    public String getDegree_interval() {
+        return degree_interval;
+    }
+
+    public void setDegree_interval(String degree_interval) {
+        this.degree_interval = degree_interval;
+    }
 
     public void setTotal_time(String total_time) {
         this.total_time = total_time;
