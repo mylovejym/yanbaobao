@@ -1,5 +1,10 @@
 package com.zhizhen.ybb;
 
+import com.zhizhen.ybb.bean.BaseClassBean;
+import com.zhizhen.ybb.bean.GetStatistics;
+import com.zhizhen.ybb.util.Base64Class;
+import com.zhizhen.ybb.util.DataSex;
+
 import org.junit.*;
 
 import java.util.*;
@@ -792,16 +797,6 @@ public class ExampleUnitTest {
                 "                \"serious_time_percent\": \"0.25333333333333\",\n" +
                 "                \"date\": \"2017-05-31\",\n" +
                 "                \"pid\": \"19\"\n" +
-                "            },\n" +
-                "            \"65\": {\n" +
-                "                \"mild_time\": \"0\",\n" +
-                "                \"middle_time\": \"6\",\n" +
-                "                \"serious_time\": \"0\",\n" +
-                "                \"mild_time_percent\": \"0\",\n" +
-                "                \"middle_time_percent\": \"0.01\",\n" +
-                "                \"serious_time_percent\": \"0\",\n" +
-                "                \"date\": \"2017-05-31\",\n" +
-                "                \"pid\": \"19\"\n" +
                 "            }\n" +
                 "        },\n" +
                 "        \"sit_info\": {\n" +
@@ -810,48 +805,8 @@ public class ExampleUnitTest {
                 "        }\n" +
                 "    }\n" +
                 "}";
-        bean2 bo = JSON.parseObject(json, bean2.class);
-        Map<String, Object> map = new HashMap();
-        Map<String, Object> histogramMap = new HashMap();
-        Map<String, Object> sit_infoMap = new HashMap();
-        Map<String, Object> dashboardMap = new HashMap();
-        Object dashboard = "", histogram = "", sit_info = "";
-        map = JSON.parseObject(bo.getData(), Map.class);
-
-        for (Entry<String, Object> s : map.entrySet()) {
-            if (s.getKey().equals("dashboard")) {
-                dashboard = s.getValue();
-            } else if (s.getKey().equals("histogram")) {
-                histogram = s.getValue();
-            } else if (s.getKey().equals("sit_info")) {
-                sit_info = s.getValue();
-            }
-        }
-
-        List<bean_3> bean_3s = new ArrayList<>();
-        bean_3 bean3;
-        dashboardMap = JSON.parseObject(dashboard.toString(), Map.class);
-        for (Entry<String, Object> s : dashboardMap.entrySet()) {
-            bean3 = JSON.parseObject(s.getValue().toString(), bean_3.class);
-            bean3.setKey(s.getKey());
-            bean_3s.add(bean3);
-        }
-
-        System.out.println("dashboard= >Value " + bean_3s.size());
-
-        histogramMap = JSON.parseObject(histogram.toString(), Map.class);
-        for (Entry<String, Object> s : histogramMap.entrySet()) {
-//            System.out.println("histogram= >Key  " + s.getKey());
-//            System.out.println("histogram= >Value " + s.getValue());
-        }
-
-
-        sit_infoMap = JSON.parseObject(sit_info.toString(), Map.class);
-        for (Entry<String, Object> s : sit_infoMap.entrySet()) {
-//            System.out.println("sit_info= >Key  " + s.getKey());
-//            System.out.println("sit_info= >Value " + s.getValue());
-        }
-
+        String[] keys = {"dashboard", "histogram", "sit_info"};
+        DataSex.sex(json);
     }
 
 }
