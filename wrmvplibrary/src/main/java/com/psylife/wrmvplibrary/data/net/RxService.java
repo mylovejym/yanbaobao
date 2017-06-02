@@ -1,22 +1,20 @@
 package com.psylife.wrmvplibrary.data.net;
 
 
-import com.psylife.wrmvplibrary.WRCoreApp;
-import com.psylife.wrmvplibrary.utils.LogUtil;
+import com.psylife.wrmvplibrary.*;
+import com.psylife.wrmvplibrary.utils.*;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
 
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.OkHttpClient.Builder;
-import okhttp3.Request;
+import okhttp3.*;
+import okhttp3.OkHttpClient.*;
 import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import okhttp3.logging.*;
+import retrofit2.*;
+import retrofit2.adapter.rxjava.*;
+import retrofit2.converter.gson.*;
 
 /**
  * Created by hpw on 16/11/2.
@@ -58,6 +56,17 @@ public class RxService {
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        return retrofit.create(clazz);
+    }
+
+    public static <T> T createApiString(Class<T> clazz, String url) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .client(okHttpClient)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(StringConverterFactory.create())
                 .build();
 
         return retrofit.create(clazz);
