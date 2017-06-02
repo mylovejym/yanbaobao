@@ -805,8 +805,11 @@ public class ExampleUnitTest {
                 "        }\n" +
                 "    }\n" +
                 "}";
-        String[] keys = {"dashboard", "histogram", "sit_info"};
-        DataSex.sex(json);
+
+        String json_1 = "{\"status\" : 0, \"statusInfo\" : \"霑无数据\", \"data\" : {}}";
+
+        BaseClassBean<GetStatistics> s = DataSex.sex(json_1);
+        System.out.println(s.getStatusInfo());
     }
 
 }
