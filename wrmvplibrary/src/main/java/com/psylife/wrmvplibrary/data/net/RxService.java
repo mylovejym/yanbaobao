@@ -60,6 +60,9 @@ public class RxService {
 
         return retrofit.create(clazz);
     }
+    public static <T> T createApiString(Class<T> clazz) {
+        return createApiString(clazz, WRCoreApp.getInstance().setBaseUrl());
+    }
 
     public static <T> T createApiString(Class<T> clazz, String url) {
         Retrofit retrofit = new Retrofit.Builder()

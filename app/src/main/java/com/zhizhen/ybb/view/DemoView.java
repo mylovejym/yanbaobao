@@ -55,10 +55,10 @@ public class DemoView extends ChartView{
 	protected int[] getBarLnDefaultSpadding()
 	{
 		int [] ltrb = new int[4];
-		ltrb[0] = DensityUtil.dip2px(getContext(), 40); //left	
-		ltrb[1] = DensityUtil.dip2px(getContext(), 60); //top	
-		ltrb[2] = DensityUtil.dip2px(getContext(), 20); //right	
-		ltrb[3] = DensityUtil.dip2px(getContext(), 40); //bottom						
+		ltrb[0] = DensityUtil.dip2px(getContext(), 30); //left
+		ltrb[1] = DensityUtil.dip2px(getContext(), 10); //top
+		ltrb[2] = DensityUtil.dip2px(getContext(), 10); //right
+		ltrb[3] = DensityUtil.dip2px(getContext(), 25); //bottom
 		return ltrb;
 	}
 	

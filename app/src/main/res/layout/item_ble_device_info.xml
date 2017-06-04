@@ -11,7 +11,7 @@
             android:layout_marginTop="10px"
             android:layout_marginLeft="30px"
             android:text="name"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/white"/>
 
         <TextView
             android:id="@+id/tv_address"
@@ -21,6 +21,6 @@
             android:layout_marginTop="30px"
             android:layout_marginLeft="30px"
             android:text="address"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/white"/>
     </RelativeLayout>
 </RelativeLayout>

@@ -36,7 +36,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/blue_303048">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -71,6 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal">
                 <com.zhizhen.ybb.view.MyDialChart
+                    android:id="@+id/my_dial_chart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -163,8 +165,9 @@
                 <!--android:layout_height="148dp"-->
                 <!--android:src="@mipmap/ic_launcher" />-->
             <com.zhizhen.ybb.view.SecondChart
+                android:id="@+id/SecondChart"
                 android:layout_width="match_parent"
-                android:layout_height="148dp"/>
+                android:layout_height="200dp"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"

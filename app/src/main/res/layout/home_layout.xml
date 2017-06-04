@@ -22,7 +22,7 @@
          android:id="@android:id/tabhost"
          android:layout_width="fill_parent"
          android:layout_height="49dp"
-         android:background="@android:color/white"
+         android:background="@color/blue_313245"
           >
 
          <FrameLayout

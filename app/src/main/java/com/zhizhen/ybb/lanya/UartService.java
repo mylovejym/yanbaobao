@@ -43,8 +43,22 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.psylife.wrmvplibrary.data.net.RxService;
+import com.psylife.wrmvplibrary.utils.LogUtil;
+import com.psylife.wrmvplibrary.utils.helper.RxUtil;
+import com.zhizhen.ybb.api.YbbApi;
+import com.zhizhen.ybb.base.YbBaseApplication;
+import com.zhizhen.ybb.bean.BLEData;
+import com.zhizhen.ybb.util.BLEUtils;
+import com.zhizhen.ybb.util.Utils;
+
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
+
+import static com.zhizhen.ybb.util.Utils.hexStringToBytes;
 
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
@@ -87,12 +101,51 @@ public class UartService extends Service {
     public static final UUID TX_CHAR_UUID = UUID.fromString("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
 
     MyServiceConnection mServiceConnection = new MyServiceConnection();
+    private BLEData bleData = new BLEData();
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         UartService.this.bindService(new Intent(UartService.this,MsgAidlService.class),mServiceConnection, Context.BIND_IMPORTANT);
 //        return super.onStartCommand(intent, flags, startId);
         return START_STICKY;
+    }
+
+    Timer timer;
+    BLEData data;
+
+    private void startTimer(){
+        if(timer!= null) {
+            timer.cancel();
+        }
+        writeRXCharacteristic(hexStringToBytes("AA03030155"));
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+//                System.out.println("task   run:"+getCurrentTime());
+                if(data == null) {
+                    data = new BLEData();
+                    data.copy(bleData);
+                }
+                if(data.getMeasure_time()==null||data.getMeasure_time().size()==0){
+                    writeRXCharacteristic(hexStringToBytes("AA03030155"));
+                    return;
+                }
+                Gson mGson = new Gson();
+                String json = mGson.toJson(data);
+                LogUtil.e("json:"+json);
+                RxService.createApi(YbbApi.class).addHardwareData(YbBaseApplication.instance.getToken(),json).compose(RxUtil.rxSchedulerHelper()).subscribe(baseBean->{
+                    if (baseBean.getStatus().equals("0")) {
+                        LogUtil.e("cccccccccccccccccccccccccccggggggggggggggggggggggg");
+                        data =null;
+                        writeRXCharacteristic(hexStringToBytes("AA03030155"));
+                    }
+
+                },e->{});
+            }
+        };
+        timer = new Timer();
+        timer.schedule(task, 60*1000,60*1000);
+
     }
 
     // Implements callback methods for GATT events that the app cares about.  For example,
@@ -106,6 +159,7 @@ public class UartService extends Service {
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
                 broadcastUpdate(intentAction);
+                startTimer();
                 Log.i(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
                 Log.i(TAG, "Attempting to start service discovery:" +
@@ -135,6 +189,7 @@ public class UartService extends Service {
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
+
                 broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
             }
         }
@@ -159,7 +214,28 @@ public class UartService extends Service {
         if (TX_CHAR_UUID.equals(characteristic.getUuid())) {
         	
            // Log.d(TAG, String.format("Received TX: %d",characteristic.getValue() ));
-            intent.putExtra(EXTRA_DATA, characteristic.getValue());
+            String text = BLEUtils.bytesToHexString(characteristic.getValue());
+            LogUtil.e("RX2:"+text);
+            if(text.startsWith("aa0a03")){
+                String str = text.substring(6,14);
+                Long longStr = Long.parseLong(str, 16);
+                int time = longStr.intValue();
+//                LogUtil.e("sssssstime:"+time);
+                bleData.addMeasure_time(""+time);
+                String str2 = text.substring(14,18);
+                Integer intStr = Integer.parseInt(str2, 16);
+                short duration = intStr.shortValue();
+//                LogUtil.e("ssssssduration:"+duration);
+                bleData.addDuration(""+duration);
+                String str3 = text.substring(18,20);
+                byte[] bs=Utils.hexStringToBytes(str3);
+                int degree = bs[0];
+//                LogUtil.e("ssssssdegree:"+degree);
+                bleData.addMeasure_degree(""+degree);
+
+            }else {
+                intent.putExtra(EXTRA_DATA, characteristic.getValue());
+            }
         } else {
         	
         }
@@ -182,7 +258,7 @@ public class UartService extends Service {
         // After using a given device, you should make sure that BluetoothGatt.close() is called
         // such that resources are cleaned up properly.  In this particular example, close() is
         // invoked when the UI is disconnected from the Service.
-        close();
+//        close();
         return super.onUnbind(intent);
     }
 

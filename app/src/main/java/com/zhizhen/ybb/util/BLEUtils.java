@@ -5,6 +5,7 @@ import com.psylife.wrmvplibrary.utils.LogUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import static com.zhizhen.ybb.util.Utils.hexStringToBytes;
 
@@ -21,15 +22,24 @@ public class BLEUtils {
      */
     public static byte[] getTimeString(String time)  {
         Date date = null;
+//        timeFormat.setTimeZone(TimeZone.getTimeZone("Etc/GMT+0"));
         try {
             date = timeFormat.parse(time);
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
+//        long t = date.getTime();
+
+        //美国洛杉矶时区
+        TimeZone tz=TimeZone.getTimeZone("America/Los_Angeles");
+        //时区转换
+
 
         //1、取得本地时间：
         java.util.Calendar cal = java.util.Calendar.getInstance();
         cal.setTime(date);
+        cal.setTimeZone(tz);
 
         //2、取得时间偏移量：
         int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
@@ -39,8 +49,10 @@ public class BLEUtils {
         //4、从本地时间里扣除这些差量，即可以取得UTC时间：
         cal.add(java.util.Calendar.MILLISECOND, -(zoneOffset + dstOffset));
         long t = cal.getTimeInMillis();
+        String aa = Utils.intToHexString((int) (t/1000),4);
+        LogUtil.e("aaaa:"+aa);
         String str = Utils.longToHexString(t/1000,8);
-        String command = "AA0602"+str.substring(str.length()-8)+"55";
+        String command = "AA0602"+Utils.intToHexString((int) (t/1000),4)+"55";
         LogUtil.e("command:"+command);
 
 //				try {
@@ -48,6 +60,64 @@ public class BLEUtils {
         byte[]  value = hexStringToBytes(command);
 
         return value;
+    }
+
+    public static byte[] getHz(String hz){
+        String command =null;
+        if(hz.equals("每1秒一次")){
+            command = "AA03010155";
+        }else if(hz.equals("每2秒一次")){
+            command = "AA03010255";
+        }else{
+            command = "AA03010455";
+        }
+        byte[]  value = hexStringToBytes(command);
+
+        return value;
+    }
+
+    public static byte[] getNum(String Num){
+        String command =null;
+        if(Num.equals("震动3次")){
+            command = "AA03050355";
+        }else if(Num.equals("震动2次")){
+            command = "AA03050255";
+        }else{
+            command = "AA03050155";
+        }
+        byte[]  value = hexStringToBytes(command);
+
+        return value;
+    }
+
+    public static byte[] getDelay(String delay){
+        String command =null;
+        if(delay.equals("60s")){
+            command = "AA03073c55";
+        }else if(delay.equals("30s")){
+            command = "AA03071E55";
+        }else{
+            command = "AA03070555";
+        }
+        byte[]  value = hexStringToBytes(command);
+
+        return value;
+    }
+
+    public static String bytesToHexString(byte[] src){
+        StringBuilder stringBuilder = new StringBuilder("");
+        if (src == null || src.length <= 0) {
+            return null;
+        }
+        for (int i = 0; i < src.length; i++) {
+            int v = src[i] & 0xFF;
+            String hv = Integer.toHexString(v);
+            if (hv.length() < 2) {
+                stringBuilder.append(0);
+            }
+            stringBuilder.append(hv);
+        }
+        return stringBuilder.toString();
     }
 
 

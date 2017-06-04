@@ -83,9 +83,11 @@ public class SecondChart extends DemoView{
             //标签轴
             chart.setCategories(mLabels);
 
-            chart.getCategoryAxis().getAxisPaint().setColor(Color.RED);
-            chart.getCategoryAxis().getTickLabelPaint().setColor(Color.RED);
-            chart.getCategoryAxis().getTickMarksPaint().setColor(Color.RED);
+            chart.getCategoryAxis().getAxisPaint().setColor(Color.WHITE);
+            chart.getCategoryAxis().getTickLabelPaint().setColor(Color.WHITE);
+            chart.getCategoryAxis().getTickMarksPaint().setColor(Color.WHITE);
+            chart.getCategoryAxis().getTickLabelPaint().setTextSize(30f);
+            chart.getCategoryAxis().setTickLabelMargin(10);
 
             //数据轴
             chart.setDataSource(mDataset);
@@ -97,7 +99,8 @@ public class SecondChart extends DemoView{
             //数据轴刻度间隔
             chart.getDataAxis().setAxisSteps(20);
 
-            chart.getDataAxis().getTickLabelPaint().setColor(Color.RED);
+            chart.getDataAxis().getTickLabelPaint().setColor(Color.WHITE);//0xff303048
+            chart.getDataAxis().getTickLabelPaint().setTextSize(30f);
 //            chart.getDataAxis().setLabelFormatter(new IFormatterTextCallBack(){
 //
 //                @Override
@@ -238,8 +241,8 @@ public class SecondChart extends DemoView{
 //        line2.getLabelOptions().getBox().getBackgroundPaint().setColor(Color.rgb(250, 194, 142));
 
 
-        AreaData line3 = new AreaData("小小小熊",dataSeries3,
-                Color.rgb(246, 134, 31),Color.rgb(213, 198, 126));
+        AreaData line3 = new AreaData(null,dataSeries3,
+                0xff41adff,0x00ffffff,0x00ffffff);
         //设置线上每点对应标签的颜色
         //line3.getDotLabelPaint().setColor(Color.YELLOW);
 //        line3.setLineStyle(XEnum.LineStyle.DOT);

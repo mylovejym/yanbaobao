@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
@@ -192,11 +193,15 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
                 runOnUiThread(new Runnable() {
                     public void run() {
                         try {
-                            String text = new String(txValue, "UTF-8");
+//                            String text = new String(txValue, "UTF-8");
+                            String text = BLEUtils.bytesToHexString(txValue);
                             String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
                             LogUtil.e("RX:"+text);
 //                            listAdapter.add("["+currentDateTimeString+"] RX: "+text);
 //                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
+                            if(text.equalsIgnoreCase("AA0155")){
+                                Toast.makeText(ParameterSetActivity.this,"设置成功",Toast.LENGTH_LONG).show();
+                            }
 
                         } catch (Exception e) {
                             Log.e(TAG, e.toString());
@@ -276,16 +281,36 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
             txtAcTime.setText(data.getStringExtra("startTime") + "-" + data.getStringExtra("endTime"));
         } else if (resultCode == SET_SAMPLING){
             //设置采集频率
-            txtSampling.setText(data.getStringExtra("sampling"));
+            String hz = data.getStringExtra("sampling");
+            txtSampling.setText(hz);
+            mService.writeRXCharacteristic(BLEUtils.getHz(hz));
         } else if (resultCode == SET_POSTURE){
             //设置标准坐姿
             txtPosture.setText(data.getStringExtra("posture"));
         } else if (resultCode == SET_SHAKING_NUM){
             //设置振动次数
-            txtShakingNum.setText(data.getStringExtra("shakingNum"));
+            String num = data.getStringExtra("shakingNum");
+            txtShakingNum.setText(num);
+            mService.writeRXCharacteristic(BLEUtils.getNum(num));
         } else if (resultCode == SET_SHAKING_DELAYED){
             //设置振动延时
-            txtShakingTime.setText(data.getStringExtra("shakingTime"));
+            String delay = data.getStringExtra("shakingTime");
+            txtShakingTime.setText(delay);
+            mService.writeRXCharacteristic(BLEUtils.getDelay(delay));
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");
+
+        try {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(UARTStatusChangeReceiver);
+        } catch (Exception ignore) {
+            Log.e(TAG, ignore.toString());
+        }
+        unbindService(mServiceConnection);
+
     }
 }

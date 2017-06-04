@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -15,9 +14,12 @@ import android.view.View;
 
 import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.zhizhen.ybb.R;
+import com.zhizhen.ybb.bean.Dashboard;
+import com.zhizhen.ybb.util.DensityUtil;
 import com.zhizhen.ybb.view.renderer.PointerRender;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,16 +65,25 @@ public class MyDialChart extends View{
         maps.put(110,0);maps.put(120,0); maps.put(130,0);maps.put(140,0);maps.put(150,0);maps.put(160,0);maps.put(170,0);maps.put(180,0);
 
 
-        maps.put(30,30);
-        maps.put(60,20);
-        maps.put(130,100);
-        maps.put(140,40);
-        maps.put(150,70);
+//        maps.put(30,30);
+//        maps.put(60,20);
+//        maps.put(130,100);
+//        maps.put(140,40);
+//        maps.put(150,70);
         p = new Paint();
-        p.setColor(Color.RED);
+        p.setColor(0xff61cace);//0x61cace
         p.setStyle(Paint.Style.FILL);
         p.setAntiAlias(true);
 
+
+    }
+
+    public void put(List<Dashboard> dashboard){
+        for(int i=0;i<=dashboard.size();i++){
+            float p = Float.valueOf(dashboard.get(i).getPercent());
+            maps.put(i*10, (int) p);
+        }
+        postInvalidate();
 
     }
 
@@ -80,9 +91,10 @@ public class MyDialChart extends View{
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(bitmapbg,this.getLeft(),this.getTop(),null );
         canvas.drawBitmap(bitmapper,this.getLeft(),this.getTop()+bitmapbg.getHeight(),null );
+        int needlew = bitmapneedle.getHeight()/2;
         Matrix matrix = new Matrix();
 //        matrix.preTranslate(this.getLeft()+bitmapbg.getWidth()/2-bitmapneedle.getWidth(),this.getTop()+bitmapbg.getHeight()-bitmapneedle.getHeight()/2);
-        matrix.setRotate(30,bitmapneedle.getWidth(),bitmapneedle.getHeight()/2);
+        matrix.setRotate(90,bitmapneedle.getWidth(),bitmapneedle.getHeight()/2);
 //        matrix.setRotate(30);
         Bitmap bitmapDisplay = Bitmap.createBitmap(bitmapneedle,0,0,bitmapneedle.getWidth(),bitmapneedle.getHeight(),matrix,true);
 
@@ -101,7 +113,7 @@ public class MyDialChart extends View{
 
         path.close();
         canvas.drawPath(path,p);
-        canvas.drawBitmap(bitmapDisplay,this.getLeft()+bitmapbg.getWidth()/2-bitmapDisplay.getWidth(),this.getTop()+bitmapbg.getHeight()-bitmapDisplay.getHeight(),null);
+        canvas.drawBitmap(bitmapDisplay,this.getLeft()+bitmapbg.getWidth()/2-bitmapDisplay.getWidth()+needlew,this.getTop()+bitmapbg.getHeight()-bitmapDisplay.getHeight(),null);
 //        canvas.drawBitmap(bitmapneedle,matrix,null);
         canvas.drawBitmap(bitmapcircle,this.getLeft()+bitmapbg.getWidth()/2-bitmapcircle.getWidth()/2,this.getTop()+bitmapbg.getHeight()-bitmapcircle.getHeight()/2 ,null);
 //        mPointer = new PointerRender();
@@ -123,10 +135,12 @@ public class MyDialChart extends View{
 
     private int sin(int angle, int v){
         LogUtil.w("aa:"+(v/100*l+bitmapcircle.getWidth()/2));
-        return (int) (Math.sin(Math.PI*angle/180.0)*(v/100f*l+bitmapcircle.getWidth()/2));
+        int w = bitmapcircle.getWidth()- DensityUtil.dip2px(getContext(),4);
+        return (int) (Math.sin(Math.PI*angle/180.0)*(v/100f*l+w/2));
     }
     private int cos(int angle, int v){
-        return (int) (Math.cos(Math.PI*angle/180.0)*(v/100f*l+bitmapcircle.getWidth()/2));
+        int w = bitmapcircle.getWidth()- DensityUtil.dip2px(getContext(),4);
+        return (int) (Math.cos(Math.PI*angle/180.0)*(v/100f*l+w/2));
     }
 
     /**

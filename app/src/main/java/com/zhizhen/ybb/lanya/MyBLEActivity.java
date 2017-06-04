@@ -22,10 +22,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.psylife.wrmvplibrary.utils.StatusBarUtil;
+import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 
@@ -48,7 +49,7 @@ public class MyBLEActivity extends YbBaseActivity {
 
     private ListView mBLEDeviceListView;
     private BLEDeviceAdapter mBLEDeviceAdapter;
-    private Button mScanButton;
+
     private ViewGroup mMainLayout;
 
     private Handler mHandler;
@@ -67,6 +68,19 @@ public class MyBLEActivity extends YbBaseActivity {
 
     private BluetoothDevice mDevice = null;
 
+    public void setStatusBarColor() {
+        StatusBarUtil.setColor(this, this.getResources().getColor(R.color.blue_313245));
+    }
+
+    @Override
+    public View getTitleView() {
+        return new TitleBuilder(this).setLeftText("健康报告")
+                .setLeftImage(R.mipmap.tab_back)
+                .setTitleBgRes(R.color.blue_313245)
+                .setLeftOnClickListener(v -> finish())
+                .build();
+    }
+
 
 
     @Override
@@ -78,7 +92,7 @@ public class MyBLEActivity extends YbBaseActivity {
     public void initView(Bundle savedInstanceState) {
 
         mBLEDeviceListView = (ListView) findViewById(R.id.lv_device);
-        mScanButton = (Button) findViewById(R.id.btn_scan);
+
 
         mMainLayout = (ViewGroup) findViewById(R.id.rl_main).getParent();
 
@@ -111,12 +125,7 @@ public class MyBLEActivity extends YbBaseActivity {
         //scanOtherBLEDevice(true);
         scanOtherBLEDevice(!mIsScanning);
 
-//        mScanButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                scanOtherBLEDevice(!mIsScanning);
-//            }
-//        });
+
 
         mBLEDeviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -155,7 +164,7 @@ public class MyBLEActivity extends YbBaseActivity {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
         intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
-//        intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
 //        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
 //        intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
         return intentFilter;
@@ -215,10 +224,12 @@ public class MyBLEActivity extends YbBaseActivity {
             }
 
 
+
+
 //            //*********************//
-//            if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
-//                mService.enableTXNotification();
-//            }
+            if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
+                mService.enableTXNotification();
+            }
 //            //*********************//
 //            if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 //
@@ -287,20 +298,20 @@ public class MyBLEActivity extends YbBaseActivity {
                     //stop scan
                     mIsScanning = false;
                     mBluetoothAdapter.stopLeScan(mBLEScanCallback);
-                    mScanButton.setText("start scan");
+
 
                 }
             }, SCAN_PERIOD);
             //start scan
             mIsScanning = true;
             Boolean a=mBluetoothAdapter.startLeScan(mBLEScanCallback);
-            mScanButton.setText("stop scan");
+
 
         }else{
             //stop scan
             mIsScanning = false;
             mBluetoothAdapter.stopLeScan(mBLEScanCallback);
-            mScanButton.setText("start scan");
+
 
         }
     }
