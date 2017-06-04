@@ -23,6 +23,7 @@ import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 import com.zhizhen.ybb.lanya.UartService;
+import com.zhizhen.ybb.my.presenter.SetPosTureActivity2;
 import com.zhizhen.ybb.util.BLEUtils;
 
 import java.text.DateFormat;
@@ -254,7 +255,7 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
             this.startActivityForResult(intent, SET_SAMPLING);
         } else if (v == linSetPosture){
             //设置标准坐姿
-            Intent intent = new Intent(this, SetPosTureActivity.class);
+            Intent intent = new Intent(this, SetPosTureActivity2.class);
             this.startActivityForResult(intent, SET_POSTURE);
         } else if (v == linShakingNum){
             //设置振动次数
@@ -279,6 +280,12 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
         } else if (resultCode == SET_AC_TIME){
             //设置采集时段
             txtAcTime.setText(data.getStringExtra("startTime") + "-" + data.getStringExtra("endTime"));
+            int startH = data.getIntExtra("startH",0);
+            int startm = data.getIntExtra("startm",0);
+            int endH = data.getIntExtra("endH",0);
+            int endm = data.getIntExtra("endm",0);
+            mService.writeRXCharacteristic(BLEUtils.getACTime(startH,startm,endH,endm));
+
         } else if (resultCode == SET_SAMPLING){
             //设置采集频率
             String hz = data.getStringExtra("sampling");
@@ -286,7 +293,9 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
             mService.writeRXCharacteristic(BLEUtils.getHz(hz));
         } else if (resultCode == SET_POSTURE){
             //设置标准坐姿
-            txtPosture.setText(data.getStringExtra("posture"));
+            String pos = data.getStringExtra("posture");
+            txtPosture.setText(pos);
+            mService.writeRXCharacteristic(BLEUtils.getPos(pos));
         } else if (resultCode == SET_SHAKING_NUM){
             //设置振动次数
             String num = data.getStringExtra("shakingNum");

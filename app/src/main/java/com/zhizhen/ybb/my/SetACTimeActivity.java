@@ -41,6 +41,11 @@ public class SetACTimeActivity extends YbBaseActivity {
     @BindView(R.id.txt_end_time)
     TextView txtEndTime;
 
+    int startH;
+    int startm;
+    int endH;
+    int endm;
+
     @Override
     public int getLayoutId() {
         return R.layout.avtivity_set_ac_time;
@@ -61,6 +66,10 @@ public class SetACTimeActivity extends YbBaseActivity {
                     Intent intent = new Intent(this, EditDataActivity.class);
                     intent.putExtra("startTime", txtStartTime.getText().toString().trim());
                     intent.putExtra("endTime", txtEndTime.getText().toString().trim());
+                    intent.putExtra("startH",startH);
+                    intent.putExtra("startm",startm);
+                    intent.putExtra("endH",endH);
+                    intent.putExtra("endm",endm);
                     this.setResult(ParameterSetActivity.SET_AC_TIME, intent);
                     this.finish();
                 })
@@ -109,8 +118,26 @@ public class SetACTimeActivity extends YbBaseActivity {
             //返回的分别是三个级别的选中位置
             if (type == START_TIME) {
                 txtStartTime.setText(item_1.get(options1).equals("上午") ? "早上" + item_2.get(option2) + ":" + item_3.get(options3) : "晚上" + item_2.get(option2) + ":" + item_3.get(options3));
+//                if(item_1.get(options1).equals("上午")){
+//                    startH = Integer.parseInt(item_2.get(option2));
+//                    startm = Integer.parseInt(item_3.get(options3));
+//                }else{
+//                    startH = Integer.parseInt(item_2.get(option2))+12;
+//                    startm = Integer.parseInt(item_3.get(options3));
+//                }
+                startH = Integer.parseInt(item_2.get(option2));
+                startm = Integer.parseInt(item_3.get(options3));
             } else if (type == END_TIME) {
                 txtEndTime.setText(item_1.get(options1).equals("上午") ? "早上" + item_2.get(option2) + ":" + item_3.get(options3) : "晚上" + item_2.get(option2) + ":" + item_3.get(options3));
+//                if(item_1.get(options1).equals("上午")){
+//                    endH = Integer.parseInt(item_2.get(option2));
+//                    endm = Integer.parseInt(item_3.get(options3));
+//                }else{
+//                    endH = Integer.parseInt(item_2.get(option2))+12;
+//                    endm = Integer.parseInt(item_3.get(options3));
+//                }
+                endH = Integer.parseInt(item_2.get(option2));
+                endm = Integer.parseInt(item_3.get(options3));
             }
         })
                 .setTextColorCenter(this.getResources().getColor(R.color.blue_b3007aff))

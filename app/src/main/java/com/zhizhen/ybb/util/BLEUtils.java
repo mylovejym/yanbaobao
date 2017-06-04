@@ -4,6 +4,7 @@ import com.psylife.wrmvplibrary.utils.LogUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -51,6 +52,7 @@ public class BLEUtils {
         long t = cal.getTimeInMillis();
         String aa = Utils.intToHexString((int) (t/1000),4);
         LogUtil.e("aaaa:"+aa);
+//        LogUtil.e("aaaast:"+((int)t));
         String str = Utils.longToHexString(t/1000,8);
         String command = "AA0602"+Utils.intToHexString((int) (t/1000),4)+"55";
         LogUtil.e("command:"+command);
@@ -60,6 +62,49 @@ public class BLEUtils {
         byte[]  value = hexStringToBytes(command);
 
         return value;
+    }
+
+    public static byte[] getACTime(int startH, int startm, int endH, int endm){
+        //美国洛杉矶时区
+        TimeZone tz=TimeZone.getTimeZone("America/Los_Angeles");
+        //时区转换
+
+
+        //1、取得本地时间：
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(tz);
+
+        //2、取得时间偏移量：
+        int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
+
+        //3、取得夏令时差：
+        int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
+        //4、从本地时间里扣除这些差量，即可以取得UTC时间：
+        cal.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+        long zt = cal.getTimeInMillis();
+        cal.set(Calendar.HOUR_OF_DAY, startH);
+        cal.set(Calendar.MINUTE,startm);
+        long startTime = cal.getTimeInMillis() - zt;
+        cal.set(Calendar.HOUR_OF_DAY, endH);
+        cal.set(Calendar.MINUTE,endm);
+        long endTime = cal.getTimeInMillis() - zt;
+
+        LogUtil.e("aaaast:"+((int)startTime/1000));
+        String startStr = Utils.intToHexString((int)(startTime/1000),4);
+        LogUtil.e("aaaa:"+startStr);
+
+        String endStr = Utils.intToHexString((int) (endTime/1000),4);
+        LogUtil.e("bbbb:"+endStr);
+
+        String command = "AA0308" + startStr + endStr + "55";
+        LogUtil.e("command:"+command);
+        byte[]  value = hexStringToBytes(command);
+
+        return value;
+
     }
 
     public static byte[] getHz(String hz){
@@ -98,6 +143,20 @@ public class BLEUtils {
             command = "AA03071E55";
         }else{
             command = "AA03070555";
+        }
+        byte[]  value = hexStringToBytes(command);
+
+        return value;
+    }
+
+    public static byte[] getPos(String Pos){
+        String command =null;
+        if(Pos.equals("10°")){
+            command = "AA0400810A55";
+        }else if(Pos.equals("20°")){
+            command = "AA0400811455";
+        }else{
+            command = "AA0400810F55";
         }
         byte[]  value = hexStringToBytes(command);
 

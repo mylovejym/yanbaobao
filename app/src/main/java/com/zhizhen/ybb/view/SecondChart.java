@@ -8,6 +8,8 @@ import android.graphics.Paint.Align;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import com.zhizhen.ybb.bean.Dashboard;
+
 import org.xclcharts.chart.AreaChart;
 import org.xclcharts.chart.AreaData;
 import org.xclcharts.common.IFormatterDoubleCallBack;
@@ -57,7 +59,7 @@ public class SecondChart extends DemoView{
     private void initView()
     {
         chartLabels();
-        chartDataSet();
+//        chartDataSet();
         chartRender();
         drawTitle();
 
@@ -254,6 +256,18 @@ public class SecondChart extends DemoView{
 
     }
 
+    public void put(List<Dashboard> dashboard){
+        List<Double> dataSeries3 = new LinkedList<Double>();
+        for(int i=0;i<=dashboard.size();i++){
+            double p = Double.valueOf(dashboard.get(i).getPercent());
+            dataSeries3.add( p);
+        }
+        AreaData line3 = new AreaData(null,dataSeries3,
+                0xff41adff,0x00ffffff,0x00ffffff);
+        postInvalidate();
+
+    }
+
     private void chartLabels()
     {
         mLabels.add("0°");
@@ -285,6 +299,8 @@ public class SecondChart extends DemoView{
             Log.e(TAG, e.toString());
         }
     }
+
+
 
 
 //    @Override

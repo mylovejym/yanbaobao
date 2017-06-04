@@ -46,7 +46,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     @BindView(R.id.view1)
     View view1;
     @BindView(R.id.SecondChart)
-    com.zhizhen.ybb.view.SecondChart SecondChart;
+    com.zhizhen.ybb.view.SecondChart secondChart;
     @BindView(R.id.view_black)
     View viewBlack;
     @BindView(R.id.txt2)
@@ -102,6 +102,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         if (mPersonBean.getStatus().equals("0")) {
             if(mPersonBean.getData().getDashboard()!=null){
                 myDialChart.put(mPersonBean.getData().getDashboard());
+                secondChart.put(mPersonBean.getData().getDashboard());
             }
 
         }
