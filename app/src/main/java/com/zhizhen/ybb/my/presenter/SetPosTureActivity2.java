@@ -53,7 +53,7 @@ public class SetPosTureActivity2 extends YbBaseActivity implements View.OnClickL
                 .setRightOnClickListener(v -> {
                     Intent intent = new Intent(this, EditDataActivity.class);
                     intent.putExtra("posture", posture);
-                    this.setResult(ParameterSetActivity.SET_SAMPLING, intent);
+                    this.setResult(ParameterSetActivity.SET_POSTURE, intent);
                     this.finish();
                 })
                 .build();

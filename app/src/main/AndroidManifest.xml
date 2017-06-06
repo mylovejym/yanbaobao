@@ -105,6 +105,7 @@
         <activity android:name=".lanya.BLEDeviceLiatActivity"/>
         <activity android:name=".lanya.MyBLEActivity"/>
         <service android:name=".lanya.UartService"/>
+        <activity android:name=".my.presenter.SetPosTureActivity2"/>
 
         <!--android:process=":remote"-->
         <service

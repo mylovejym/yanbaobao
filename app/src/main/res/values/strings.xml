@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ybb</string>
+    <string name="app_name">眼保宝</string>
 
     <string name="my">我的</string>
 
@@ -96,7 +96,7 @@
 
     <string name="set_sampling">设定采集频率</string>
 
-    <string name="set_posture">设定标准坐姿</string>
+    <string name="set_posture">设定前倾提醒</string>
 
     <string name="set_shaking_num">设定振动次数</string>
 

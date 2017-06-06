@@ -41,9 +41,9 @@ public class SetACTimeActivity extends YbBaseActivity {
     @BindView(R.id.txt_end_time)
     TextView txtEndTime;
 
-    int startH;
+    int startH =8;
     int startm;
-    int endH;
+    int endH=22;
     int endm;
 
     @Override

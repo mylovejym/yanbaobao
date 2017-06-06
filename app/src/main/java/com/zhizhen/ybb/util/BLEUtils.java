@@ -99,7 +99,7 @@ public class BLEUtils {
         String endStr = Utils.intToHexString((int) (endTime/1000),4);
         LogUtil.e("bbbb:"+endStr);
 
-        String command = "AA0308" + startStr + endStr + "55";
+        String command = "AA0A08" + startStr + endStr + "55";
         LogUtil.e("command:"+command);
         byte[]  value = hexStringToBytes(command);
 
