@@ -155,9 +155,9 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             float value3 = 0;
 
             if(histogram != null &&histogram.size()>i){
-                value =Float.parseFloat(histogram.get(i).getSerious_time_percent());
-                value2 = Float.parseFloat(histogram.get(i).getMiddle_time_percent());
-                value3 = Float.parseFloat(histogram.get(i).getMild_time_percent());
+                value =Float.parseFloat(histogram.get(i).getSerious_time_percent())*10;
+                value2 = Float.parseFloat(histogram.get(i).getMiddle_time_percent())*10;
+                value3 = Float.parseFloat(histogram.get(i).getMild_time_percent())*10;
             }
 //            if(j!=0){
 //                value = (float) (Math.random() * 10/*100以内的随机数*/);
