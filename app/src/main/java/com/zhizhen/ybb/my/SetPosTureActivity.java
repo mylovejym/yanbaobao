@@ -1,24 +1,21 @@
 package com.zhizhen.ybb.my;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
+import android.content.*;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
 
-import com.bigkoo.pickerview.OptionsPickerView;
-import com.psylife.wrmvplibrary.utils.StatusBarUtil;
-import com.psylife.wrmvplibrary.utils.TitleBuilder;
+import com.bigkoo.pickerview.*;
+import com.psylife.wrmvplibrary.utils.*;
 import com.zhizhen.ybb.R;
-import com.zhizhen.ybb.base.YbBaseActivity;
+import com.zhizhen.ybb.base.*;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import butterknife.BindView;
+import butterknife.*;
 
 /**
- * 设定系统时间
+ * 设定前倾提醒(废弃)
  * Created by tc on 2017/5/22.
  */
 
@@ -26,8 +23,6 @@ public class SetPosTureActivity extends YbBaseActivity {
 
     @BindView(R.id.txt_posture)
     TextView txtPosture;
-
-
 
     @Override
     public int getLayoutId() {

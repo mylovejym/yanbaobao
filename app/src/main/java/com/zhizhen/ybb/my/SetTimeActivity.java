@@ -10,6 +10,7 @@ import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
+import com.zhizhen.ybb.util.SpUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,6 +46,7 @@ public class SetTimeActivity extends YbBaseActivity {
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
                 .setRightOnClickListener(v -> {
+                    SpUtils.putString(this, "time", txtTime.getText().toString().trim());
                     Intent intent = new Intent(this, EditDataActivity.class);
                     intent.putExtra("time", txtTime.getText().toString().trim());
                     this.setResult(ParameterSetActivity.SET_TIME, intent);
@@ -62,17 +64,19 @@ public class SetTimeActivity extends YbBaseActivity {
 
     @Override
     public void initdata() {
-//        Intent bundle = this.getIntent();
-//        txtTime.setText(bundle.getStringExtra("time"));
+        Intent bundle = this.getIntent();
+        txtTime.setText(bundle.getStringExtra("time"));
     }
 
     private void showTime() {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            // 指定一个日期
-            Date deTime = dateFormat.parse(txtTime.getText().toString());
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(deTime);
+            // 指定一个日期
+            if (!txtTime.getText().toString().equals("")){
+                Date deTime = dateFormat.parse(txtTime.getText().toString());
+                calendar.setTime(deTime);
+            }
             //时间选择器
             TimePickerView pvTime = new TimePickerView.Builder(this, (date, v1) -> {
                 txtTime.setText(dateFormat.format(date));

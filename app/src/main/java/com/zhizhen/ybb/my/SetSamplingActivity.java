@@ -11,6 +11,7 @@ import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 import com.zhizhen.ybb.my.adapter.BankItemAdapter;
+import com.zhizhen.ybb.util.SpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class SetSamplingActivity extends YbBaseActivity implements View.OnClickL
 
     private BankItemAdapter bankItemAdapter;
 
-    private String sampling = "1";
+    private String sampling = "每1秒一次";
 
     @Override
     public int getLayoutId() {
@@ -50,6 +51,7 @@ public class SetSamplingActivity extends YbBaseActivity implements View.OnClickL
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
                 .setRightOnClickListener(v -> {
+                    SpUtils.putString(this, "sampling", sampling); //存储采集频率
                     Intent intent = new Intent(this, EditDataActivity.class);
                     intent.putExtra("sampling", sampling);
                     this.setResult(ParameterSetActivity.SET_SAMPLING, intent);
@@ -65,8 +67,8 @@ public class SetSamplingActivity extends YbBaseActivity implements View.OnClickL
 
     @Override
     public void initdata() {
-//        Intent bundle = this.getIntent();
-//        sampling = bundle.getStringExtra("sampling");
+        Intent bundle = this.getIntent();
+        sampling = bundle.getStringExtra("sampling");
         for (int i = 1; i <= 4; i++) {
             if (i == 1 || i == 2 || i == 4)
                 mItemBeans.add("每" + i + "秒一次");

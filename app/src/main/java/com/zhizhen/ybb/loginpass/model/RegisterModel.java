@@ -22,4 +22,9 @@ public class RegisterModel implements RegisterContract.GetPhoneCodeModel{
     public Observable<LoginBean> getPhoneSuccess(String phone, String code, String pass) {
         return RxService.createApi(YbbApi.class).getPhoneSuccess(phone,code,pass).compose(RxUtil.rxSchedulerHelper());
     }
+
+    @Override
+    public Observable<LoginBean> login(String phone, String pass) {
+        return RxService.createApi(YbbApi.class).login(phone,pass).compose(RxUtil.rxSchedulerHelper());
+    }
 }

@@ -23,8 +23,8 @@ import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 import com.zhizhen.ybb.lanya.UartService;
-import com.zhizhen.ybb.my.presenter.SetPosTureActivity2;
 import com.zhizhen.ybb.util.BLEUtils;
+import com.zhizhen.ybb.util.SpUtils;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -86,6 +86,8 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
     @BindView(R.id.txt_shaking_delayed)
     TextView txtShakingTime;        //振动延时
 
+    private String time = "", acTime = "", sampling = "", posture = "", shakingNum = "", shakingTime = "";
+
     private UartService mService = null;
 
     @Override
@@ -125,8 +127,21 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
 
     @Override
     public void initdata() {
-        service_init();
+        time = SpUtils.getString(this, "time");
+        acTime = SpUtils.getString(this, "startTime") + "-" + SpUtils.getString(this, "endTime");
+        sampling = SpUtils.getString(this, "sampling");
+        posture = SpUtils.getString(this, "posture");
+        shakingNum = SpUtils.getString(this, "shakingNum");
+        shakingTime = SpUtils.getString(this, "shakingTime");
 
+        txtTime.setText(time.equals("") ? "去设置" : time);
+        txtAcTime.setText(acTime.equals("") ? "未设置" : acTime);
+        txtSampling.setText(sampling.equals("") ? "未设置" : sampling);
+        txtPosture.setText(posture.equals("") ? "未设置" : posture);
+        txtShakingNum.setText(shakingNum.equals("") ? "未设置" : shakingNum);
+        txtShakingTime.setText(shakingTime.equals("") ? "未设置" : shakingTime);
+
+        service_init();
     }
 
 
@@ -136,6 +151,7 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
 
         LocalBroadcastManager.getInstance(this).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
     }
+
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
@@ -197,11 +213,11 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
 //                            String text = new String(txValue, "UTF-8");
                             String text = BLEUtils.bytesToHexString(txValue);
                             String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
-                            LogUtil.e("RX:"+text);
+                            LogUtil.e("RX:" + text);
 //                            listAdapter.add("["+currentDateTimeString+"] RX: "+text);
 //                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
-                            if(text.equalsIgnoreCase("AA0155")){
-                                Toast.makeText(ParameterSetActivity.this,"设置成功",Toast.LENGTH_LONG).show();
+                            if (text.equalsIgnoreCase("AA0155")) {
+                                Toast.makeText(ParameterSetActivity.this, "设置成功", Toast.LENGTH_LONG).show();
                             }
 
                         } catch (Exception e) {
@@ -211,7 +227,7 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
                 });
             }
             //*********************//
-            if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)){
+            if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)) {
 //                showMessage("Device doesn't support UART. Disconnecting");
                 mService.disconnect();
             }
@@ -241,29 +257,36 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        if (v == linSetTime){
+        if (v == linSetTime) {
             //设置系统时间
             Intent intent = new Intent(this, SetTimeActivity.class);
+            intent.putExtra("time", time);
             this.startActivityForResult(intent, SET_TIME);
-        } else if (v == linSetACTime){
+        } else if (v == linSetACTime) {
             //设置采集时段
             Intent intent = new Intent(this, SetACTimeActivity.class);
+            intent.putExtra("startTime", acTime.split("-")[0]);
+            intent.putExtra("endTime", acTime.split("-")[1]);
             this.startActivityForResult(intent, SET_AC_TIME);
-        } else if (v == linSetSampling){
+        } else if (v == linSetSampling) {
             //设置采集频率
             Intent intent = new Intent(this, SetSamplingActivity.class);
+            intent.putExtra("sampling", sampling);
             this.startActivityForResult(intent, SET_SAMPLING);
-        } else if (v == linSetPosture){
+        } else if (v == linSetPosture) {
             //设置标准坐姿
             Intent intent = new Intent(this, SetPosTureActivity2.class);
+            intent.putExtra("posture", posture);
             this.startActivityForResult(intent, SET_POSTURE);
-        } else if (v == linShakingNum){
+        } else if (v == linShakingNum) {
             //设置振动次数
             Intent intent = new Intent(this, SetShakingNumActivity.class);
+            intent.putExtra("shakingNum", shakingNum);
             this.startActivityForResult(intent, SET_SHAKING_NUM);
-        } else if (v == linShakingDelayed){
+        } else if (v == linShakingDelayed) {
             //设置振动延时
             Intent intent = new Intent(this, SetShakingTimeActivity.class);
+            intent.putExtra("shakingTime", shakingTime);
             this.startActivityForResult(intent, SET_SHAKING_DELAYED);
         }
     }
@@ -271,41 +294,42 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == SET_TIME){
+        if (resultCode == SET_TIME) {
             //设置系统时间
-            String time= data.getStringExtra("time");
+            time = data.getStringExtra("time");
             txtTime.setText(time);
             mService.writeRXCharacteristic(BLEUtils.getTimeString(time));
 
-        } else if (resultCode == SET_AC_TIME){
+        } else if (resultCode == SET_AC_TIME) {
             //设置采集时段
-            txtAcTime.setText(data.getStringExtra("startTime") + "-" + data.getStringExtra("endTime"));
-            int startH = data.getIntExtra("startH",0);
-            int startm = data.getIntExtra("startm",0);
-            int endH = data.getIntExtra("endH",0);
-            int endm = data.getIntExtra("endm",0);
+            acTime = data.getStringExtra("startTime") + "-" + data.getStringExtra("endTime");
+            txtAcTime.setText(acTime);
+            int startH = data.getIntExtra("startH", 0);
+            int startm = data.getIntExtra("startm", 0);
+            int endH = data.getIntExtra("endH", 0);
+            int endm = data.getIntExtra("endm", 0);
             mService.writeRXCharacteristic(BLEUtils.getACTime(startH,startm,endH,endm));
 
-        } else if (resultCode == SET_SAMPLING){
+        } else if (resultCode == SET_SAMPLING) {
             //设置采集频率
-            String hz = data.getStringExtra("sampling");
-            txtSampling.setText(hz);
-            mService.writeRXCharacteristic(BLEUtils.getHz(hz));
-        } else if (resultCode == SET_POSTURE){
+            sampling = data.getStringExtra("sampling");
+            txtSampling.setText(sampling);
+            mService.writeRXCharacteristic(BLEUtils.getHz(sampling));
+        } else if (resultCode == SET_POSTURE) {
             //设置标准坐姿
-            String pos = data.getStringExtra("posture");
-            txtPosture.setText(pos);
-            mService.writeRXCharacteristic(BLEUtils.getPos(pos));
-        } else if (resultCode == SET_SHAKING_NUM){
+            posture = data.getStringExtra("posture");
+            txtPosture.setText(posture);
+            mService.writeRXCharacteristic(BLEUtils.getPos(posture));
+        } else if (resultCode == SET_SHAKING_NUM) {
             //设置振动次数
-            String num = data.getStringExtra("shakingNum");
-            txtShakingNum.setText(num);
-            mService.writeRXCharacteristic(BLEUtils.getNum(num));
-        } else if (resultCode == SET_SHAKING_DELAYED){
+            shakingNum = data.getStringExtra("shakingNum");
+            txtShakingNum.setText(shakingNum);
+            mService.writeRXCharacteristic(BLEUtils.getNum(shakingNum));
+        } else if (resultCode == SET_SHAKING_DELAYED) {
             //设置振动延时
-            String delay = data.getStringExtra("shakingTime");
-            txtShakingTime.setText(delay);
-            mService.writeRXCharacteristic(BLEUtils.getDelay(delay));
+            shakingTime = data.getStringExtra("shakingTime");
+            txtShakingTime.setText(shakingTime);
+            mService.writeRXCharacteristic(BLEUtils.getDelay(shakingTime));
         }
     }
 

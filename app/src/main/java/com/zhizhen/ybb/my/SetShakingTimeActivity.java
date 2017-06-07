@@ -1,21 +1,19 @@
 package com.zhizhen.ybb.my;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.content.*;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
 
-import com.psylife.wrmvplibrary.utils.StatusBarUtil;
-import com.psylife.wrmvplibrary.utils.TitleBuilder;
+import com.psylife.wrmvplibrary.utils.*;
 import com.zhizhen.ybb.R;
-import com.zhizhen.ybb.base.YbBaseActivity;
-import com.zhizhen.ybb.my.adapter.BankItemAdapter;
+import com.zhizhen.ybb.base.*;
+import com.zhizhen.ybb.my.adapter.*;
+import com.zhizhen.ybb.util.SpUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import butterknife.BindView;
+import butterknife.*;
 
 /**
  * 设定振动延时
@@ -31,7 +29,7 @@ public class SetShakingTimeActivity extends YbBaseActivity implements View.OnCli
 
     private BankItemAdapter bankItemAdapter;
 
-    private String num = "1";
+    private String num = "5s";
 
     @Override
     public int getLayoutId() {
@@ -44,12 +42,13 @@ public class SetShakingTimeActivity extends YbBaseActivity implements View.OnCli
 
     @Override
     public View getTitleView() {
-        return new TitleBuilder(this).setLeftText(getString(R.string.set_shaking_num))
+        return new TitleBuilder(this).setLeftText(getString(R.string.set_shaking_delayed))
                 .setLeftImage(R.mipmap.tab_back)
                 .setRightText(getString(R.string.complete))
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
                 .setRightOnClickListener(v -> {
+                    SpUtils.putString(this, "shakingTime", num); //存储振动延时
                     Intent intent = new Intent(this, EditDataActivity.class);
                     intent.putExtra("shakingTime", num);
                     this.setResult(ParameterSetActivity.SET_SHAKING_DELAYED, intent);
@@ -65,20 +64,23 @@ public class SetShakingTimeActivity extends YbBaseActivity implements View.OnCli
 
     @Override
     public void initdata() {
-//        Intent bundle = this.getIntent();
-//        sampling = bundle.getStringExtra("sampling");
+        Intent bundle = this.getIntent();
+        num = bundle.getStringExtra("shakingTime");
+        System.out.println("num = " + num);
+
+        if (null == SpUtils.getString(this, "shakingTime")) {
+            num = ("" + SpUtils.getString(this, "shakingTime"));
+        }
+
         for (int i = 1; i <= 60; i++) {
             if (i == 5 || i == 30 || i == 60)
                 mItemBeans.add(i + "s");
         }
         bankItemAdapter = new BankItemAdapter(this, num, mItemBeans);
         listView.setAdapter(bankItemAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                num = "" + (mItemBeans.get(position));
-                bankItemAdapter.refresh("" + num);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            num = "" + (mItemBeans.get(position));
+            bankItemAdapter.refresh("" + num);
         });
     }
 

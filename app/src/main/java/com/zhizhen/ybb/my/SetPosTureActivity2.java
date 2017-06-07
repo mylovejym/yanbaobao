@@ -1,18 +1,16 @@
-package com.zhizhen.ybb.my.presenter;
+package com.zhizhen.ybb.my;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
-import com.zhizhen.ybb.my.EditDataActivity;
-import com.zhizhen.ybb.my.ParameterSetActivity;
 import com.zhizhen.ybb.my.adapter.BankItemAdapter;
+import com.zhizhen.ybb.util.SpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +49,7 @@ public class SetPosTureActivity2 extends YbBaseActivity implements View.OnClickL
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
                 .setRightOnClickListener(v -> {
+                    SpUtils.putString(this, "posture", posture);
                     Intent intent = new Intent(this, EditDataActivity.class);
                     intent.putExtra("posture", posture);
                     this.setResult(ParameterSetActivity.SET_POSTURE, intent);
@@ -66,19 +65,19 @@ public class SetPosTureActivity2 extends YbBaseActivity implements View.OnClickL
 
     @Override
     public void initdata() {
-//        Intent bundle = this.getIntent();
-//        sampling = bundle.getStringExtra("sampling");
-        for (int i = 10; i <21; i+=5) {
-                mItemBeans.add(i + "°");
+
+        Intent bundle = this.getIntent();
+        posture = bundle.getStringExtra("posture");
+        System.out.println("posture = " + posture);
+
+        for (int i = 10; i < 21; i += 5) {
+            mItemBeans.add(i + "°");
         }
         bankItemAdapter = new BankItemAdapter(this, posture, mItemBeans);
         listView.setAdapter(bankItemAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                posture = "" + (mItemBeans.get(position));
-                bankItemAdapter.refresh("" + posture);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            posture = "" + (mItemBeans.get(position));
+            bankItemAdapter.refresh("" + posture);
         });
     }
 

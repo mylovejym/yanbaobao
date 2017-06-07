@@ -12,6 +12,7 @@ import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
+import com.zhizhen.ybb.util.SpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,9 @@ public class SetACTimeActivity extends YbBaseActivity {
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
                 .setRightOnClickListener(v -> {
+                    SpUtils.putString(this, "startTime", txtStartTime.getText().toString().trim());
+                    SpUtils.putString(this, "endTime", txtEndTime.getText().toString().trim());
+
                     Intent intent = new Intent(this, EditDataActivity.class);
                     intent.putExtra("startTime", txtStartTime.getText().toString().trim());
                     intent.putExtra("endTime", txtEndTime.getText().toString().trim());
@@ -89,14 +93,10 @@ public class SetACTimeActivity extends YbBaseActivity {
 
     @Override
     public void initdata() {
-//        Intent bundle = this.getIntent();
-//        txtStartTime.setText(bundle.getStringExtra("startTime"));
-//        txtEndTime.setText(bundle.getStringExtra("endTime"));
+        Intent bundle = this.getIntent();
+        txtStartTime.setText(bundle.getStringExtra("startTime"));
+        txtEndTime.setText(bundle.getStringExtra("endTime"));
     }
-
-
-
-
 
     private void showTime(String deTime, int type) {
 

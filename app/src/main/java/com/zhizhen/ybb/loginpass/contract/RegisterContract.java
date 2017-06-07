@@ -15,14 +15,16 @@ public interface RegisterContract {
     public abstract class GetPhoneCodePresenter extends YbBasePresenter<GetPhoneCodeModel, GetPhoneCodeView> {
         public abstract void getPhoneCode(String phone);
         public abstract void getPhoneSuccess(String phone,String code,String pass);
-
+        public abstract void login(String phone,String pass);
     }
     interface GetPhoneCodeModel extends WRBaseModel {
         Observable<LoginBean> getPhoneCode(String phone);
         Observable<LoginBean> getPhoneSuccess(String phone,String code,String pass);
+        Observable<LoginBean> login(String phone, String pass);
     }
     interface GetPhoneCodeView extends WRBaseView {
         void showPhoneCode(LoginBean loginBean);
         void showPhoneSuccess(LoginBean loginBean);
+        void showContent(LoginBean bean);
     }
 }

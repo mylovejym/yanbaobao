@@ -6,7 +6,7 @@ import com.zhizhen.ybb.loginpass.contract.RegisterContract;
  * Created by songxiang on 2017/5/16.
  */
 
-public class RegisterPresenter extends RegisterContract.GetPhoneCodePresenter{
+public class RegisterPresenter extends RegisterContract.GetPhoneCodePresenter {
     @Override
     public void getPhoneCode(String phone) {
         mRxManager.add(mModel
@@ -21,10 +21,23 @@ public class RegisterPresenter extends RegisterContract.GetPhoneCodePresenter{
     @Override
     public void getPhoneSuccess(String phone, String code, String pass) {
         mRxManager.add(mModel
-                .getPhoneSuccess(phone,code,pass)
+                .getPhoneSuccess(phone, code, pass)
                 .subscribe(
                         data -> {
                             mView.showPhoneSuccess(data);
+                        }, e -> mView.showError(e)
+                ));
+    }
+
+    @Override
+    public void login(String phone, String pass) {
+        mRxManager.add(mModel
+                .login(phone, pass)
+                .subscribe(
+                        data -> {
+                            mView.showContent(data);
+
+
                         }, e -> mView.showError(e)
                 ));
     }
