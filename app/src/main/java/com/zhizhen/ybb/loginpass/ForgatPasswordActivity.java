@@ -124,6 +124,7 @@ public class ForgatPasswordActivity extends YbBaseActivity<ForgatPasswordPresent
 
 	@Override
 	public void showforgetPass(LoginBean loginBean) {
+		this.stopProgressDialog();
 		if(loginBean.getStatus().equals("0")){
 			Toast.makeText(ForgatPasswordActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
 			finish();

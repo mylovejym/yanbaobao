@@ -141,7 +141,6 @@ public class RegisterActivity extends YbBaseActivity<RegisterPresenter, Register
     public void showContent(LoginBean bean) {
         this.stopProgressDialog();
         if (bean.getStatus().equals("0")) {
-            this.stopProgressDialog();
             Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
             SpUtils.putBoolean(this, "firstLogin", true);
             SpUtils.setUser(this, bean.getData());
