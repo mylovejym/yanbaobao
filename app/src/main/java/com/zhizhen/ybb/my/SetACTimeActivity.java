@@ -66,6 +66,10 @@ public class SetACTimeActivity extends YbBaseActivity {
                 .setRightOnClickListener(v -> {
                     SpUtils.putString(this, "startTime", txtStartTime.getText().toString().trim());
                     SpUtils.putString(this, "endTime", txtEndTime.getText().toString().trim());
+                    SpUtils.putInt(this,"startH",startH);
+                    SpUtils.putInt(this,"startm",startm);
+                    SpUtils.putInt(this,"endH",endH);
+                    SpUtils.putInt(this,"endm",endm);
 
                     Intent intent = new Intent(this, EditDataActivity.class);
                     intent.putExtra("startTime", txtStartTime.getText().toString().trim());
@@ -94,8 +98,22 @@ public class SetACTimeActivity extends YbBaseActivity {
     @Override
     public void initdata() {
         Intent bundle = this.getIntent();
-        txtStartTime.setText(bundle.getStringExtra("startTime"));
-        txtEndTime.setText(bundle.getStringExtra("endTime"));
+        if(bundle.getStringExtra("startTime")!=null){
+            txtStartTime.setText(bundle.getStringExtra("startTime"));
+            startH = SpUtils.getInt(this, "startH");
+            startm = SpUtils.getInt(this, "startm");
+        }else{
+            txtStartTime.setText("早上08:00");
+        }
+        if(bundle.getStringExtra("endTime")!=null){
+            txtEndTime.setText(bundle.getStringExtra("endTime"));
+            endH = SpUtils.getInt(this, "endH");
+            endm = SpUtils.getInt(this, "endm");
+        }else{
+            txtEndTime.setText("晚上22:00");
+        }
+
+
     }
 
     private void showTime(String deTime, int type) {
