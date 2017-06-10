@@ -36,6 +36,7 @@ import com.zhizhen.ybb.my.contract.MyContract;
 import com.zhizhen.ybb.my.model.MyModelImp;
 import com.zhizhen.ybb.my.presenter.MyPresenterImp;
 import com.zhizhen.ybb.util.DateUtil;
+import com.zhizhen.ybb.util.GlideCircleTransform;
 import com.zhizhen.ybb.util.SpUtils;
 
 import butterknife.BindView;
@@ -226,20 +227,12 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
 
             if (mPersonInfo.getPhoto() != null) {
 
-                RequestManager requestManager = Glide.with(this);
-                DrawableTypeRequest drawableTypeRequest = requestManager.load(mPersonInfo.getPhoto());
-                drawableTypeRequest.placeholder(R.mipmap.wellcom) //设置占位图
+                Glide.with(this).load(mPersonInfo.getPhoto())
+                        .placeholder(R.mipmap.wellcom) //设置占位图
                         .error(R.mipmap.wellcom) //设置错误图片
-                        .crossFade(); //设置淡入淡出效果，默认300ms，可以传参
-                drawableTypeRequest.asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                        circularBitmapDrawable.setCircular(true);
-                        imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
-                    }
-                });
+                        .crossFade() //设置淡入淡出效果，默认300ms，可以传参
+                        .transform(new GlideCircleTransform(context)).into(imageHeadPhoto);
+
             }
         } catch (Exception e) {
             e.printStackTrace();

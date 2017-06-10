@@ -34,6 +34,7 @@ import com.zhizhen.ybb.my.model.EditDataModelImp;
 import com.zhizhen.ybb.my.presenter.EditDataPresenterImp;
 import com.zhizhen.ybb.util.DateUtil;
 import com.zhizhen.ybb.util.DialogUtils;
+import com.zhizhen.ybb.util.GlideCircleTransform;
 import com.zhizhen.ybb.util.TakePhotosDispose;
 
 import java.io.File;
@@ -166,15 +167,11 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditD
         }
 
         if (mPersonInfo.getPhoto() != null)
-            Glide.with(this).load(mPersonInfo.getPhoto()).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                    circularBitmapDrawable.setCircular(true);
-                    imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
-                }
-            });
+            Glide.with(this).load(mPersonInfo.getPhoto())
+                    .placeholder(R.mipmap.wellcom) //设置占位图
+                    .error(R.mipmap.wellcom) //设置错误图片
+                    .crossFade() //设置淡入淡出效果，默认300ms，可以传参
+                    .transform(new GlideCircleTransform(context)).into(imageHeadPhoto);
     }
 
     @Override
@@ -249,20 +246,13 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditD
                     break;
             }
             System.out.println("path = " + path);
-            RequestManager requestManager = Glide.with(this);
-            DrawableTypeRequest drawableTypeRequest = requestManager.load(new File(path));
-            drawableTypeRequest.placeholder(R.mipmap.wellcom) //设置占位图
+
+            Glide.with(this).load(new File(path))
+                    .placeholder(R.mipmap.wellcom) //设置占位图
                     .error(R.mipmap.wellcom) //设置错误图片
-                    .crossFade(); //设置淡入淡出效果，默认300ms，可以传参
-            drawableTypeRequest.asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                    circularBitmapDrawable.setCircular(true);
-                    imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
-                }
-            });
+                    .crossFade() //设置淡入淡出效果，默认300ms，可以传参
+                    .transform(new GlideCircleTransform(context)).into(imageHeadPhoto);
+
         } else if (resultCode == SEX) {
             txtSex.setText(data.getStringExtra("sex").equals("1") ? "男" : "女");
             mPersonInfo.setSex(data.getStringExtra("sex"));
