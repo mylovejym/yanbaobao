@@ -191,4 +191,12 @@ public class SpUtils {
         editor.remove(strKey);
         editor.commit();
     }
+
+    public static void clean(Context context) {
+        SharedPreferences activityPreferences = context.getSharedPreferences(
+                spFileName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = activityPreferences.edit();
+        editor.clear();
+        editor.commit();
+    }
 }

@@ -145,7 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="13dp"
-            android:text="@string/age_1"
+            android:text="@string/both"
             android:textColor="@color/white"
             android:layout_weight="1"
             android:textSize="14sp"
@@ -156,7 +156,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="@string/no_set"
+            android:text="1999-01-01"
             android:textColor="@color/gray_b3ffffff"
             android:textSize="14sp"
             />

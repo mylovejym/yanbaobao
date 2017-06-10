@@ -70,18 +70,18 @@
                         android:id="@+id/image_sex"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:src="@mipmap/icon_girl"
-                        android:visibility="gone" />
+                        android:src="@mipmap/icon_man"
+                        android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/txt_age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="11.5dp"
-                        android:text="@string/age"
+                        android:text="年龄：18"
                         android:textColor="@color/white"
                         android:textSize="14sp"
-                        android:visibility="gone" />
+                        android:visibility="visible" />
 
                 </LinearLayout>
 

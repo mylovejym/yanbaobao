@@ -157,7 +157,7 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditD
         if (mPersonInfo.getBorn() != null) {
             try {
                 both = mPersonInfo.getBorn();
-                txtAge.setText("" + DateUtil.getAge(mPersonInfo.getBorn()));
+                txtAge.setText(both);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -272,12 +272,11 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditD
 
     private void showTime() {
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
             if (mPersonInfo.getBorn() != null) {
                 // 指定一个日期
-                String born = mPersonInfo.getBorn().replace("-", "");
-                Date deTime = dateFormat.parse(born);
+                Date deTime = dateFormat.parse(both);
                 calendar.setTime(deTime);
             }
 
@@ -285,7 +284,7 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditD
             TimePickerView pvTime = new TimePickerView.Builder(this, (date, v1) -> {
                 both = dateFormat.format(date);
                 try {
-                    txtAge.setText("" + DateUtil.getAge(both));
+                    txtAge.setText(both);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

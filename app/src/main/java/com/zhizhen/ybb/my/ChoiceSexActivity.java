@@ -48,10 +48,8 @@ public class ChoiceSexActivity extends YbBaseActivity implements View.OnClickLis
     public View getTitleView() {
         return new TitleBuilder(this).setLeftText(getString(R.string.edit_data))
                 .setLeftImage(R.mipmap.tab_back)
-                .setRightText(getString(R.string.complete))
                 .setTitleBgRes(R.color.blue_313245)
-                .setLeftOnClickListener(v -> finish())
-                .setRightOnClickListener(v -> {
+                .setLeftOnClickListener(v -> {
                     Intent intent = new Intent(this, EditDataActivity.class);
                     intent.putExtra("sex", sex);
                     this.setResult(EditDataActivity.SEX, intent);
@@ -89,7 +87,6 @@ public class ChoiceSexActivity extends YbBaseActivity implements View.OnClickLis
             imageGirl.setVisibility(View.GONE);
         } else if (v == rlGirl) {
             sex = "2";
-
             imageMan.setVisibility(View.GONE);
             imageGirl.setVisibility(View.VISIBLE);
         }

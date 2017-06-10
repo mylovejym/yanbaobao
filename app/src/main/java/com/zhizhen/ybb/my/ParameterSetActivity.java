@@ -103,15 +103,8 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
     public View getTitleView() {
         return new TitleBuilder(this).setLeftText(getString(R.string.parameter_set))
                 .setLeftImage(R.mipmap.tab_back)
-//                .setRightText(getString(R.string.complete))
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
-//                .setRightOnClickListener(v -> {
-//                    Intent intent = new Intent(this, EditDataActivity.class);
-//                    intent.putExtra("sex", sex);
-//                    this.setResult(EditDataActivity.SEX, intent);
-//                    this.finish();
-//                })
                 .build();
     }
 

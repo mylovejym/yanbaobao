@@ -153,7 +153,7 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
             this.getContext().startActivity(intent);
         } else if (v == btExit) {
             //退出
-            SpUtils.remove(getActivity(), "firstLogin");
+            SpUtils.clean(getActivity());
             Intent intent = new Intent(this.getContext(), LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             this.getContext().startActivity(intent);
