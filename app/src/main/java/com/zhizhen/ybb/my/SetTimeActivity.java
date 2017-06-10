@@ -70,7 +70,7 @@ public class SetTimeActivity extends YbBaseActivity {
 
     private void showTime() {
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Calendar calendar = Calendar.getInstance();
             // 指定一个日期
             if (!txtTime.getText().toString().equals("")){
@@ -81,7 +81,7 @@ public class SetTimeActivity extends YbBaseActivity {
             TimePickerView pvTime = new TimePickerView.Builder(this, (date, v1) -> {
                 txtTime.setText(dateFormat.format(date));
             })
-                    .setType(new boolean[]{true, true, true, false, false, false})
+                    .setType(new boolean[]{true, true, true, true, true, true})
                     .setTextColorCenter(this.getResources().getColor(R.color.blue_b3007aff))
                     .setTitleSize(R.dimen.txt_size)
                     .isCenterLabel(true)

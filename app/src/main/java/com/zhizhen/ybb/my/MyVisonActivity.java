@@ -96,9 +96,7 @@ public class MyVisonActivity extends YbBaseActivity<MyVisonPresenterImp, MyVison
 
     @Override
     public void initView(Bundle savedInstanceState) {
-        linTakPhoto.setOnClickListener(v -> {
-            DialogUtils.showTakePhotoDialog(this);
-        });
+        linTakPhoto.setOnClickListener(v -> DialogUtils.showTakePhotoDialog(this));
     }
 
     @Override
