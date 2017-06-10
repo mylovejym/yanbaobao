@@ -161,6 +161,8 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditD
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            both = txtAge.getText().toString().trim();
         }
 
         if (mPersonInfo.getPhoto() != null)
