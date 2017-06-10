@@ -128,7 +128,7 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
         shakingTime = SpUtils.getString(this, "shakingTime");
 
         txtTime.setText(time.equals("") ? "去设置" : time);
-        txtAcTime.setText(acTime.equals("") ? "未设置" : acTime);
+        txtAcTime.setText(acTime.equals("-") ? "未设置" : acTime);
         txtSampling.setText(sampling.equals("") ? "未设置" : sampling);
         txtPosture.setText(posture.equals("") ? "未设置" : posture);
         txtShakingNum.setText(shakingNum.equals("") ? "未设置" : shakingNum);
@@ -258,8 +258,12 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
         } else if (v == linSetACTime) {
             //设置采集时段
             Intent intent = new Intent(this, SetACTimeActivity.class);
-            intent.putExtra("startTime", acTime.split("-")[0]);
-            intent.putExtra("endTime", acTime.split("-")[1]);
+            try {
+                intent.putExtra("startTime", acTime.split("-")[0]);
+                intent.putExtra("endTime", acTime.split("-")[1]);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             this.startActivityForResult(intent, SET_AC_TIME);
         } else if (v == linSetSampling) {
             //设置采集频率

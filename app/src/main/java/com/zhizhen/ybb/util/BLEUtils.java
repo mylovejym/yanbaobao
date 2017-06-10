@@ -4,9 +4,7 @@ import com.psylife.wrmvplibrary.utils.LogUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 import static com.zhizhen.ybb.util.Utils.hexStringToBytes;
 
@@ -15,7 +13,7 @@ import static com.zhizhen.ybb.util.Utils.hexStringToBytes;
  */
 
 public class BLEUtils {
-    static SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");//系统时间format
+    static SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//系统时间format
 
     /**
      * 系统时间转换成UTC时间的16进制命令字符串
@@ -23,80 +21,102 @@ public class BLEUtils {
      */
     public static byte[] getTimeString(String time)  {
         Date date = null;
+        Date date2 = null;
 //        timeFormat.setTimeZone(TimeZone.getTimeZone("Etc/GMT+0"));
         try {
             date = timeFormat.parse(time);
+            date2 = timeFormat.parse("2000-01-01 00:00:00");
+            long t = date.getTime()-date2.getTime();
+            String aa = Utils.intToHexString((int) (t/1000),4);
+            LogUtil.e("aaaa:"+aa);
+//        LogUtil.e("aaaast:"+((int)t));
+            String str = Utils.longToHexString(t/1000,8);
+            String command = "AA0602"+Utils.intToHexString((int) (t/1000),4)+"55";
+            LogUtil.e("command:"+command);
+
+//				try {
+            //send data to service
+            byte[]  value = hexStringToBytes(command);
+
+            return value;
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
 //        long t = date.getTime();
 
-        //美国洛杉矶时区
-        TimeZone tz=TimeZone.getTimeZone("America/Los_Angeles");
-        //时区转换
+//        //美国洛杉矶时区
+//        TimeZone tz=TimeZone.getTimeZone("America/Los_Angeles");
+//        //时区转换
+//
+//
+//        //1、取得本地时间：
+//        java.util.Calendar cal = java.util.Calendar.getInstance();
+//        cal.setTime(date);
+//        cal.setTimeZone(tz);
+//
+//        //2、取得时间偏移量：
+//        int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
+//
+//        //3、取得夏令时差：
+//        int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
+//        //4、从本地时间里扣除这些差量，即可以取得UTC时间：
+//        cal.add(java.util.Calendar.MILLISECOND, -(zoneOffset + dstOffset));
+//        long t = cal.getTimeInMillis();
 
 
-        //1、取得本地时间：
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.setTime(date);
-        cal.setTimeZone(tz);
+//        String aa = Utils.intToHexString((int) (t/1000),4);
+//        LogUtil.e("aaaa:"+aa);
+////        LogUtil.e("aaaast:"+((int)t));
+//        String str = Utils.longToHexString(t/1000,8);
+//        String command = "AA0602"+Utils.intToHexString((int) (t/1000),4)+"55";
+//        LogUtil.e("command:"+command);
+//
+////				try {
+//        //send data to service
+//        byte[]  value = hexStringToBytes(command);
 
-        //2、取得时间偏移量：
-        int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
-
-        //3、取得夏令时差：
-        int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
-        //4、从本地时间里扣除这些差量，即可以取得UTC时间：
-        cal.add(java.util.Calendar.MILLISECOND, -(zoneOffset + dstOffset));
-        long t = cal.getTimeInMillis();
-        String aa = Utils.intToHexString((int) (t/1000),4);
-        LogUtil.e("aaaa:"+aa);
-//        LogUtil.e("aaaast:"+((int)t));
-        String str = Utils.longToHexString(t/1000,8);
-        String command = "AA0602"+Utils.intToHexString((int) (t/1000),4)+"55";
-        LogUtil.e("command:"+command);
-
-//				try {
-        //send data to service
-        byte[]  value = hexStringToBytes(command);
-
-        return value;
+        return new byte[0];
     }
 
     public static byte[] getACTime(int startH, int startm, int endH, int endm){
-        //美国洛杉矶时区
-        TimeZone tz=TimeZone.getTimeZone("America/Los_Angeles");
-        //时区转换
+//        //美国洛杉矶时区
+//        TimeZone tz=TimeZone.getTimeZone("America/Los_Angeles");
+//        //时区转换
+//
+//
+//        //1、取得本地时间：
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTimeZone(tz);
+//
+//        //2、取得时间偏移量：
+//        int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
+//
+//        //3、取得夏令时差：
+//        int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
+//        //4、从本地时间里扣除这些差量，即可以取得UTC时间：
+//        cal.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));
+//        cal.set(Calendar.HOUR_OF_DAY, 0);
+//        cal.set(Calendar.MINUTE,0);
+//        cal.set(Calendar.SECOND,0);
+//        long zt = cal.getTimeInMillis();
+//        cal.set(Calendar.HOUR_OF_DAY, startH);
+//        cal.set(Calendar.MINUTE,startm);
+//        long startTime = cal.getTimeInMillis() - zt;
+//        cal.set(Calendar.HOUR_OF_DAY, endH);
+//        cal.set(Calendar.MINUTE,endm);
+//        long endTime = cal.getTimeInMillis() - zt;
 
-
-        //1、取得本地时间：
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(tz);
-
-        //2、取得时间偏移量：
-        int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
-
-        //3、取得夏令时差：
-        int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
-        //4、从本地时间里扣除这些差量，即可以取得UTC时间：
-        cal.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.SECOND,0);
-        long zt = cal.getTimeInMillis();
-        cal.set(Calendar.HOUR_OF_DAY, startH);
-        cal.set(Calendar.MINUTE,startm);
-        long startTime = cal.getTimeInMillis() - zt;
-        cal.set(Calendar.HOUR_OF_DAY, endH);
-        cal.set(Calendar.MINUTE,endm);
-        long endTime = cal.getTimeInMillis() - zt;
+        int startTime = startH*3600+ startm *60;
+        int endTime = endH*3600+ endm*60;
 
         LogUtil.e("aaaast:"+((int)startTime/1000));
-        String startStr = Utils.intToHexString((int)(startTime/1000),4);
+//        String startStr = Utils.intToHexString((int)(startTime/1000),4);
+        String startStr = Utils.intToHexString(startTime,4);
         LogUtil.e("aaaa:"+startStr);
 
-        String endStr = Utils.intToHexString((int) (endTime/1000),4);
+//        String endStr = Utils.intToHexString((int) (endTime/1000),4);
+        String endStr = Utils.intToHexString(endTime/1000,4);
         LogUtil.e("bbbb:"+endStr);
 
         String command = "AA0A08" + startStr + endStr + "55";
