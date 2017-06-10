@@ -20,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.psylife.wrmvplibrary.utils.LogUtil;
-import com.psylife.wrmvplibrary.utils.SpUtil;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseApplication;
@@ -38,8 +37,6 @@ import com.zhizhen.ybb.my.model.MyModelImp;
 import com.zhizhen.ybb.my.presenter.MyPresenterImp;
 import com.zhizhen.ybb.util.DateUtil;
 import com.zhizhen.ybb.util.SpUtils;
-
-import java.io.File;
 
 import butterknife.BindView;
 
@@ -158,6 +155,7 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
             //退出
             SpUtils.remove(getActivity(), "firstLogin");
             Intent intent = new Intent(this.getContext(), LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             this.getContext().startActivity(intent);
             this.getActivity().finish();
         }
