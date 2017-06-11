@@ -119,6 +119,8 @@ public class ForgatPasswordActivity extends YbBaseActivity<ForgatPasswordPresent
 			Toast.makeText(ForgatPasswordActivity.this,"获取验证码成功",Toast.LENGTH_SHORT).show();
 			CountDownTimerUtils mCountDownTimerUtils = new CountDownTimerUtils(btn_getcode, 60000, 1000);
 			mCountDownTimerUtils.start();
+		}else{
+			Toast.makeText(ForgatPasswordActivity.this, loginBean.getStatusInfo(), Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -128,6 +130,8 @@ public class ForgatPasswordActivity extends YbBaseActivity<ForgatPasswordPresent
 		if(loginBean.getStatus().equals("0")){
 			Toast.makeText(ForgatPasswordActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
 			finish();
+		}else{
+			Toast.makeText(ForgatPasswordActivity.this, loginBean.getStatusInfo(), Toast.LENGTH_SHORT).show();
 		}
 	}
 }

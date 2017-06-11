@@ -101,6 +101,8 @@ public class LoginActivity extends YbBaseActivity<LoginPresenter, LoginModel> im
             SpUtils.putString(this, "date", DateUtil.getCompleteTime());
             intent.setClass(this, HomeActivity.class);
             startActivity(intent);
+        }else {
+            Toast.makeText(LoginActivity.this, bean.getStatusInfo(), Toast.LENGTH_SHORT).show();
         }
     }
 }

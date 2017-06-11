@@ -148,6 +148,8 @@ public class RegisterActivity extends YbBaseActivity<RegisterPresenter, Register
             SpUtils.putString(this, "date", DateUtil.getCompleteTime());
             startActivity(new Intent(this, HomeActivity.class));
             finish();
+        }else{
+            Toast.makeText(RegisterActivity.this, bean.getStatusInfo(), Toast.LENGTH_SHORT).show();
         }
     }
 }
