@@ -96,7 +96,7 @@ public class TakePhotosDispose {
 	public static String getPhotoFileName() {
 		Date date = new Date(System.currentTimeMillis());
 //		 注意命名:'IMG'_yyyyMMdd_HHmmss,
-		SimpleDateFormat dateFormat = new SimpleDateFormat("'YBY'_yyyyMMdd_HHmmss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("'YBB'_yyyyMMdd_HHmmss");
 		return dateFormat.format(date) + ".jpg";
 	}
 

@@ -1,5 +1,7 @@
 package com.zhizhen.ybb.my;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.View;
@@ -47,12 +50,18 @@ import butterknife.BindView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 
 /**
  * 编辑资料
  * Created by tc on 2017/5/16.
  */
-
+@RuntimePermissions
 public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditDataModelImp> implements MyContract.EditDataView, View.OnClickListener {
 
     public static final int NAME = 10086;
@@ -177,7 +186,7 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditD
     @Override
     public void onClick(View v) {
         if (v == linHeadPhoto) {
-            DialogUtils.showTakePhotoDialog(this);
+            EditDataActivityPermissionsDispatcher.showCameraWithCheck(this);
         } else if (v == linChoiceSex) {
             Intent intent = new Intent(this, ChoiceSexActivity.class);
             intent.putExtra("sex", mPersonInfo.getSex());
@@ -293,4 +302,51 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditD
             e.printStackTrace();
         }
     }
+
+    /**
+     * 注释请求的权限后面跟着权限获取后执行的方法
+     */
+    @NeedsPermission({Manifest.permission.CAMERA,  Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    void showCamera() {
+        DialogUtils.showTakePhotoDialog(this);
+    }
+
+    /**
+     * 一般用于展示用户点击取消后向用户说明原因
+     * 在positiveButton上一般帮一个监听器执行request.proceed()方法，在取消按钮上帮一个监听器执行request.cancel()方法
+     *
+     * @param request
+     */
+    @OnShowRationale({Manifest.permission.CAMERA,  Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    void showRationaleForCamera(final PermissionRequest request) {
+        new AlertDialog.Builder(this)
+                .setMessage("设置头像需获取相关权限")
+                .setPositiveButton("确定", (dialog, button) -> request.proceed())
+                .setNegativeButton("取消", (dialog, button) -> request.cancel())
+                .show();
+    }
+
+    /**
+     * 用户拒绝后执行的方法
+     */
+    @OnPermissionDenied({Manifest.permission.CAMERA,  Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    void showDeniedForCamera() {
+        Toast.makeText(this, "拒绝设置相关权限", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 用户点击不再询问后执行的方法
+     */
+    @OnNeverAskAgain({Manifest.permission.CAMERA,  Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    void showNeverAskForCamera() {
+        Toast.makeText(this, "要使用此功能需设置相关权限", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EditDataActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+
 }

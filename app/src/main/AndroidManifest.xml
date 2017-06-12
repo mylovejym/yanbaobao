@@ -44,63 +44,63 @@
             android:name=".my.MyVisonActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.zhizhen.ybb.loginpass.ForgatPasswordActivity"
+            android:name=".loginpass.ForgatPasswordActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.zhizhen.ybb.loginpass.LoginActivity"
+            android:name=".loginpass.LoginActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.zhizhen.ybb.loginpass.RegisterActivity"
+            android:name=".loginpass.RegisterActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.zhizhen.ybb.my.ChoiceSexActivity"
+            android:name=".my.ChoiceSexActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.zhizhen.ybb.my.EditDataActivity"
+            android:name=".my.EditDataActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.zhizhen.ybb.my.EditNameActivity"
+            android:name=".my.EditNameActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.zhizhen.ybb.home.HomeActivity"
+            android:name=".home.HomeActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.zhizhen.ybb.my.ChoiceSampling"
+            android:name=".my.ChoiceSampling"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.zhizhen.ybb.my.MyDeivceActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity
-            android:name="com.zhizhen.ybb.my.ParameterSetActivity"
+            android:name=".my.MyDeivceActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name="com.zhizhen.ybb.my.SetTimeActivity"
+            android:name=".my.ParameterSetActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name="com.zhizhen.ybb.my.SetACTimeActivity"
+            android:name=".my.SetTimeActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name="com.zhizhen.ybb.my.SetSamplingActivity"
+            android:name=".my.SetACTimeActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name="com.zhizhen.ybb.my.SetPosTureActivity"
+            android:name=".my.SetSamplingActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name="com.zhizhen.ybb.my.SetShakingNumActivity"
+            android:name=".my.SetPosTureActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name="com.zhizhen.ybb.my.SetShakingTimeActivity"
+            android:name=".my.SetShakingNumActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name="com.zhizhen.ybb.my.FollowActivity"
+            android:name=".my.SetShakingTimeActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".my.FollowActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".lanya.BLEDeviceLiatActivity"/>
         <activity android:name=".lanya.MyBLEActivity"/>
