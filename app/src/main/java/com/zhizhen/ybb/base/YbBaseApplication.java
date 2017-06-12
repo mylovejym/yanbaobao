@@ -1,6 +1,8 @@
 package com.zhizhen.ybb.base;
 
 import android.content.Context;
+import android.os.Build;
+import android.os.StrictMode;
 
 import com.psylife.wrmvplibrary.WRCoreApp;
 import com.zhizhen.ybb.util.SpUtils;
@@ -22,6 +24,10 @@ public class YbBaseApplication extends WRCoreApp {
         super.onCreate();
         instance = this;
         context = getApplicationContext();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+        }
     }
     public static YbBaseApplication getInstance() {
         return instance;

@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.psylife.wrmvplibrary.utils.LogUtil;
+import com.psylife.wrmvplibrary.utils.StatusBarUtil;
+import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.psylife.wrmvplibrary.utils.timeutils.TextUtil;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
@@ -21,14 +23,27 @@ import com.zhizhen.ybb.util.AllUtils;
 import com.zhizhen.ybb.view.CountDownTimerUtils;
 
 public class ForgatPasswordActivity extends YbBaseActivity<ForgatPasswordPresenter, ForgatPasswordModel> implements ForgatPasswordContract.GetPhoneCodeView{
-	private ImageView img_back;
-	private TextView txt_back;
 	private EditText edit_phone,edit_pass,edit_code;
 	private Button btn_login;
 	private Button btn_getcode;
 	@Override
 	public int getLayoutId() {
 		return R.layout.activity_forgat_password;
+	}
+
+	public void setStatusBarColor() {
+		StatusBarUtil.setColor(this, this.getResources().getColor(R.color.background_color));
+	}
+
+	@Override
+	public View getTitleView() {
+		return new TitleBuilder(this)
+				.setTitleText("找回密码")
+				.setTitleTextColor(this, R.color.white)
+				.setLeftImage(R.mipmap.tab_back)
+				.setTitleBgRes(R.color.background_color)
+				.setLeftOnClickListener(v -> finish())
+				.build();
 	}
 
 	@Override
@@ -42,19 +57,12 @@ public class ForgatPasswordActivity extends YbBaseActivity<ForgatPasswordPresent
 
 	}
 
-	@Override
-	public View getTitleView() {
-		return null;
-	}
-
 	private void init(){
 		edit_code = (EditText) findViewById(R.id.edit_code);
 		edit_pass = (EditText) findViewById(R.id.edit_pass);
 		btn_getcode = (Button) findViewById(R.id.btn_getcode);
 		btn_login = (Button) findViewById(R.id.btn_login);
 		edit_phone = (EditText) findViewById(R.id.edit_phone);
-		img_back = (ImageView) findViewById(R.id.img_back);
-		txt_back = (TextView) findViewById(R.id.txt_back);
 	}
 	private void onClick(){
 		btn_getcode.setOnClickListener(new View.OnClickListener() {
@@ -84,18 +92,6 @@ public class ForgatPasswordActivity extends YbBaseActivity<ForgatPasswordPresent
 				}else if(!TextUtil.isEmpty(edit_phone.getText().toString().trim()) && !TextUtil.isEmpty(edit_code.getText().toString().trim()) && !TextUtil.isEmpty(edit_pass.getText().toString().trim())){
 					mPresenter.forgetPass(edit_phone.getText().toString().trim(),edit_code.getText().toString().trim(),edit_pass.getText().toString().trim());
 				}
-			}
-		});
-		img_back.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
-		txt_back.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
 			}
 		});
 	}
