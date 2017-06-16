@@ -68,6 +68,7 @@
                 android:layout_height="148dp"
                 android:src="@mipmap/ic_launcher" />-->
             <LinearLayout
+                android:id="@+id/first_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal">
@@ -241,7 +242,8 @@
                     android:layout_width="60dp"
                     android:text="周报"
                     android:textSize="17sp"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
                 <Button
                     android:id="@+id/btn_day"
                     android:layout_centerVertical="true"
@@ -249,7 +251,8 @@
                     android:layout_width="60dp"
                     android:text="日报"
                     android:textSize="17sp"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
             </RelativeLayout>
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/spreadBarChart"

@@ -1,6 +1,5 @@
 package com.zhizhen.ybb.home.presenter;
 
-import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.home.contract.HomeContract;
 import com.zhizhen.ybb.util.DataSex;
 
@@ -11,11 +10,13 @@ import com.zhizhen.ybb.util.DataSex;
 public class HomePagePresenter extends HomeContract.HomePagePresenter {
     @Override
     public void onStart() {
-        static_data(YbBaseApplication.instance.getToken());
+
     }
 
     @Override
     public void static_data(String token) {
+        if(mModel==null)
+            return;
         mRxManager.add(mModel
                 .static_data(token)
                 .subscribe(

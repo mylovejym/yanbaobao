@@ -25,10 +25,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
+import com.zhizhen.ybb.util.BLEUtils;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -74,7 +76,7 @@ public class MyBLEActivity extends YbBaseActivity {
 
     @Override
     public View getTitleView() {
-        return new TitleBuilder(this).setLeftText("健康报告")
+        return new TitleBuilder(this).setLeftText("设备列表")
                 .setLeftImage(R.mipmap.tab_back)
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
@@ -165,7 +167,7 @@ public class MyBLEActivity extends YbBaseActivity {
         intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
         intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
         intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
-//        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
 //        intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
         return intentFilter;
     }
@@ -228,13 +230,33 @@ public class MyBLEActivity extends YbBaseActivity {
 
 //            //*********************//
             if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
-                mService.enableTXNotification();
+//                mService.enableTXNotification();
             }
 //            //*********************//
-//            if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
-//
-//
-//            }
+            if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
+                final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        try {
+//                            String text = new String(txValue, "UTF-8");
+                            String text = BLEUtils.bytesToHexString(txValue);
+//                            String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
+                            LogUtil.e("RX:" + text);
+//                            listAdapter.add("["+currentDateTimeString+"] RX: "+text);
+//                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
+                            if (text.equalsIgnoreCase("AA0155")) {
+                                Toast.makeText(MyBLEActivity.this, "系统时间设置成功", Toast.LENGTH_LONG).show();
+                            }else if(text.startsWith("aa0a03")){
+                                Toast.makeText(MyBLEActivity.this, "正在获取数据", Toast.LENGTH_LONG).show();
+                            }
+
+                        } catch (Exception e) {
+                            Log.e(TAG, e.toString());
+                        }
+                    }
+                });
+
+            }
 //            //*********************//
 //            if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)){
 //

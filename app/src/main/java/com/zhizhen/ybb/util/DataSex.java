@@ -1,16 +1,17 @@
 package com.zhizhen.ybb.util;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
 import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.Dashboard;
 import com.zhizhen.ybb.bean.GetStatistics;
 import com.zhizhen.ybb.bean.Histogram;
 import com.zhizhen.ybb.bean.SitInfo;
 
-import org.json.JSONObject;
-
-import java.util.*;
-import java.util.Map.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * 获取数据 解析 json
@@ -19,16 +20,18 @@ import java.util.Map.*;
 
 public class DataSex {
 
-    private static Gson gson = new Gson();
+
     private static String[] keys = {"dashboard", "histogram", "sit_info"};
-    private static List<Map<String, Object>> maps = new ArrayList<>();
-    private static String data;
-    private static List<Dashboard> dashboard = new ArrayList<>();
-    private static List<Histogram> histogram = new ArrayList<>();
-    private static List<SitInfo> sit_info = new ArrayList<>();
-    private static BaseClassBean<GetStatistics> cla = new BaseClassBean<>();
-    public static BaseClassBean<GetStatistics> sex(String str) {
+    public  static BaseClassBean<GetStatistics> sex(String str) {
+        Gson gson = new Gson();
+        List<Map<String, Object>> maps = new ArrayList<>();
+        String data = null;
+        List<Dashboard> dashboard = new ArrayList<>();
+        List<Histogram> histogram = new ArrayList<>();
+        List<SitInfo> sit_info = new ArrayList<>();
         Map<String, Object> map = new HashMap();
+        BaseClassBean<GetStatistics> cla = new BaseClassBean<>();
+
         map = gson.fromJson(str, Map.class);
         for (Entry<String, Object> entry : map.entrySet()) {
             if (entry.getKey().equals("data")) {

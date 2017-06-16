@@ -59,7 +59,7 @@ public class SecondChart extends DemoView{
     private void initView()
     {
         chartLabels();
-//        chartDataSet();
+        chartDataSet();
         chartRender();
         drawTitle();
 
@@ -183,6 +183,7 @@ public class SecondChart extends DemoView{
         }
     }
 
+    List<Double> dataSeries3;
     private void chartDataSet()
     {
 //        //将标签与对应的数据集分别绑定
@@ -201,26 +202,26 @@ public class SecondChart extends DemoView{
 //        dataSeries2.add((double)30); //30
 //        dataSeries2.add((double)0); //15
 
-        List<Double> dataSeries3 = new LinkedList<Double>();
-        dataSeries3.add((double)35);
-        dataSeries3.add((double)45);
-        dataSeries3.add((double)65);
-        dataSeries3.add((double)75);
-        dataSeries3.add((double)55);
-        dataSeries3.add((double)35);
-        dataSeries3.add((double)45);
-        dataSeries3.add((double)65);
-        dataSeries3.add((double)75);
-        dataSeries3.add((double)55);
-        dataSeries3.add((double)35);
-        dataSeries3.add((double)45);
-        dataSeries3.add((double)65);
-        dataSeries3.add((double)75);
-        dataSeries3.add((double)55);
-        dataSeries3.add((double)35);
-        dataSeries3.add((double)45);
-        dataSeries3.add((double)65);
-        dataSeries3.add((double)75);
+       dataSeries3 = new LinkedList<Double>();
+//        dataSeries3.add((double)35);
+//        dataSeries3.add((double)45);
+//        dataSeries3.add((double)65);
+//        dataSeries3.add((double)75);
+//        dataSeries3.add((double)55);
+//        dataSeries3.add((double)35);
+//        dataSeries3.add((double)45);
+//        dataSeries3.add((double)65);
+//        dataSeries3.add((double)75);
+//        dataSeries3.add((double)55);
+//        dataSeries3.add((double)35);
+//        dataSeries3.add((double)45);
+//        dataSeries3.add((double)65);
+//        dataSeries3.add((double)75);
+//        dataSeries3.add((double)55);
+//        dataSeries3.add((double)35);
+//        dataSeries3.add((double)45);
+//        dataSeries3.add((double)65);
+//        dataSeries3.add((double)75);
 
 //        //设置每条线各自的显示属性
 //        //key,数据集,线颜色,区域颜色
@@ -257,14 +258,17 @@ public class SecondChart extends DemoView{
     }
 
     public void put(List<Dashboard> dashboard){
-        List<Double> dataSeries3 = new LinkedList<Double>();
-        for(int i=0;i<=dashboard.size();i++){
+//        List<Double> dataSeries3 = new LinkedList<Double>();
+        dataSeries3.clear();
+        for(int i=0;i<dashboard.size();i++){
             double p = Double.valueOf(dashboard.get(i).getPercent());
             dataSeries3.add( p);
         }
         AreaData line3 = new AreaData(null,dataSeries3,
                 0xff41adff,0x00ffffff,0x00ffffff);
-        postInvalidate();
+//        mDataset.add(line3);
+//        chart.setDataSource(mDataset);
+        refreshChart();
 
     }
 
@@ -296,6 +300,7 @@ public class SecondChart extends DemoView{
         try{
             chart.render(canvas);
         } catch (Exception e){
+            e.printStackTrace();
             Log.e(TAG, e.toString());
         }
     }

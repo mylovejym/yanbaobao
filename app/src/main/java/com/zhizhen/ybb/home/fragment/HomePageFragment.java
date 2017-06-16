@@ -6,14 +6,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
+import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.base.YbBaseFragment;
 import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.GetStatistics;
@@ -22,8 +26,10 @@ import com.zhizhen.ybb.home.contract.HomeContract;
 import com.zhizhen.ybb.home.model.HomePageModel;
 import com.zhizhen.ybb.home.presenter.HomePagePresenter;
 import com.zhizhen.ybb.lanya.MyBLEActivity;
+import com.zhizhen.ybb.loginpass.LoginActivity;
 import com.zhizhen.ybb.view.BarCharts;
 import com.zhizhen.ybb.view.MyDialChart;
+import com.zhizhen.ybb.view.SecondChart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +62,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     @BindView(R.id.view1)
     View view1;
     @BindView(R.id.SecondChart)
-    com.zhizhen.ybb.view.SecondChart secondChart;
+    SecondChart secondChart;
     @BindView(R.id.view_black)
     View viewBlack;
     @BindView(R.id.txt2)
@@ -70,11 +76,26 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     @BindView(R.id.btn_day)
     Button btnDay;
     Unbinder unbinder;
+    @BindView(R.id.first_layout)
+    LinearLayout firstLayout;
+    @BindView(R.id.spreadBarChart)
+    BarChart spreadBarChart;
+    Unbinder unbinder1;
 
     private BarChart mBarChart;
     private BarCharts mBarCharts;
 
 //    LoopRecyclerViewPager vpTop;
+
+    private static HomePageFragment fragment = null;
+
+    public static HomePageFragment getInstance() {
+        if (fragment == null) {
+            fragment = new HomePageFragment();
+        }
+        return fragment;
+    }
+
 
     @Override
     public View getTitleView() {
@@ -104,25 +125,86 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 
         mBarCharts = new BarCharts();
         mBarChart = (BarChart) view.findViewById(R.id.spreadBarChart);
-        mBarCharts.showBarChart(mBarChart, getBarData((22-8)*6,null), true);
+        mBarCharts.showBarChart(mBarChart, getBarData((22 - 8) * 6, null,0), true);
 
+    }
+
+    static boolean onlyone;
+
+    @Override
+    public void initData() {
+        super.initData();
+//        if (!onlyone) {
+//            mPresenter.static_data(YbBaseApplication.instance.getToken());
+//            onlyone = true;
+//        }
+
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            LogUtil.e("hepan", "显示封面");
+            if(mPresenter!=null) {
+                mPresenter.static_data(YbBaseApplication.instance.getToken());
+                onlyone = true;
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mPresenter!=null) {
+            mPresenter.static_data(YbBaseApplication.instance.getToken());
+            onlyone = true;
+        }
     }
 
 
     @Override
     public void showError(Throwable e) {
-
+//        onlyone = false;
     }
 
     @Override
     public void showData(BaseClassBean<GetStatistics> mPersonBean) {
+        LogUtil.e("onlyone" + onlyone);
         if (mPersonBean.getStatus().equals("0")) {
-            if(mPersonBean.getData().getDashboard()!=null){
+            if (mPersonBean.getData().getDashboard() != null && onlyone) {
+                LogUtil.e("1111111111111111111111111");
+//                onlyone = false;
+                textB.setText(""+((int)Double.parseDouble(mPersonBean.getData().getSit_info().get(0).getSit_time_percent()))+"%");
+//                firstLayout.removeAllViews();
+//                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                myDialChart = new MyDialChart(getActivity(), mPersonBean.getData().getDashboard());
+//                firstLayout.addView(myDialChart,layoutParams);
+//                firstLayout.invalidate();
+
                 myDialChart.put(mPersonBean.getData().getDashboard());
-                secondChart.put(mPersonBean.getData().getDashboard());
-                mBarChart.setData(getBarData((22-8)*6,mPersonBean.getData().getHistogram()));
+//                myDialChart.invalidate();myDialChart.forceLayout();myDialChart.requestLayout();
+//                myDialChart.invalidate();
+                        secondChart.put(mPersonBean.getData().getDashboard());
+                        mBarChart.setData(getBarData((22-8)*6,mPersonBean.getData().getHistogram(),0));
+//                        mBarChart.invalidate();
+
+
             }
 
+        } else if (onlyone) {
+//            onlyone = false;
+            if (mPersonBean.getStatus().equals("1009")) {
+                Intent intent = new Intent(this.getContext(), LoginActivity.class);
+                this.getContext().startActivity(intent);
+                this.getActivity().finish();
+            }
+            Toast.makeText(this.getContext(), mPersonBean.getStatusInfo(), Toast.LENGTH_LONG).show();
         }
 //        mBarChart.setData(getBarData((22-8)*6,null,1));
 //        mBarChart.notifyDataSetChanged();
@@ -133,16 +215,16 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
      *
      * @param count X 轴的个数
      */
-    public BarData getBarData(int count, List<Histogram> histogram) {
+    public BarData getBarData(int count, List<Histogram> histogram, int j) {
         ArrayList<String> xValues = new ArrayList<>();
         for (int i = 0; i < count; i++) {
 //            xValues.add("" + (i + 1) + "");// 设置每个柱壮图的文字描述
             String a = "";
-            if(i%6 ==0){
-                if(i/6+8<10){
-                    a = "0"+((int)i/6+8)+":00";
-                }else{
-                    a = ((int)i/6+8)+":00";
+            if (i % 6 == 0) {
+                if (i / 6 + 8 < 10) {
+                    a = "0" + ((int) i / 6 + 8) + ":00";
+                } else {
+                    a = ((int) i / 6 + 8) + ":00";
                 }
             }
             xValues.add(a);
@@ -154,19 +236,22 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             float value2 = 0;
             float value3 = 0;
 
-            if(histogram != null &&histogram.size()>i){
-                value =Float.parseFloat(histogram.get(i).getSerious_time_percent())*10;
-                value2 = Float.parseFloat(histogram.get(i).getMiddle_time_percent())*10;
-                value3 = Float.parseFloat(histogram.get(i).getMild_time_percent())*10;
+            if (histogram != null && histogram.size() > i) {
+                value = Float.parseFloat(histogram.get(i).getSerious_time()) ;
+                value2 = Float.parseFloat(histogram.get(i).getMiddle_time());
+                value3 = Float.parseFloat(histogram.get(i).getMild_time());
             }
-//            if(j!=0){
+            if(j!=0){
 //                value = (float) (Math.random() * 10/*100以内的随机数*/);
-//            }
+                value = (float) (Math.random() * 10/*100以内的随机数*/);
+            value2 = (float) (Math.random() * 10/*100以内的随机数*/);
+            value3 = (float) (Math.random() * 10/*100以内的随机数*/);
+            }
 //            value = (float) (Math.random() * 10/*100以内的随机数*/);
 //            value2 = (float) (Math.random() * 10/*100以内的随机数*/);
 //            value3 = (float) (Math.random() * 10/*100以内的随机数*/);
 
-            yValues.add(new BarEntry(new float[]{value, value2,value3}, i));
+            yValues.add(new BarEntry(new float[]{value, value2, value3}, i));
 
         }
         // y轴的数据集合
@@ -176,7 +261,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 ////            colors.add(Color.parseColor("#75bfe2"));
 //            colors.add(Color.parseColor("#41adff"));
 //        }
-        barDataSet.setColors(new int[]{Color.parseColor("#41adff"),Color.parseColor("#32CD99"),Color.parseColor("#00FFFF")});
+        barDataSet.setColors(new int[]{Color.parseColor("#41adff"), Color.parseColor("#32CD99"), Color.parseColor("#00FFFF")});
         // 设置栏阴影颜色
         barDataSet.setBarShadowColor(Color.parseColor("#01000000"));
         ArrayList<BarDataSet> barDataSets = new ArrayList<>();
@@ -189,6 +274,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         BarData barData = new BarData(xValues, barDataSets);
         return barData;
     }
+
 
 
 }

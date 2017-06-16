@@ -102,6 +102,10 @@ public abstract class WRBaseFragment<T extends WRBasePresenter, E extends WRBase
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        if(TAG!=null){
+            super.onViewCreated(view, savedInstanceState);
+            return;
+        }
         //设置状态栏透明
 //        setStatusBarColor();
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -133,7 +137,14 @@ public abstract class WRBaseFragment<T extends WRBasePresenter, E extends WRBase
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (binder != null) binder.unbind();
+        try {
+            if (binder != null) {
+                binder.unbind();
+                binder = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

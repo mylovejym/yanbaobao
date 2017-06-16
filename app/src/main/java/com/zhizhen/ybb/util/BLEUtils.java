@@ -126,6 +126,34 @@ public class BLEUtils {
         return value;
 
     }
+    public static byte[] getTimeString(Date time)  {
+        Date date = null;
+        Date date2 = null;
+//        timeFormat.setTimeZone(TimeZone.getTimeZone("Etc/GMT+0"));
+        try {
+            date = time;
+            date2 = timeFormat.parse("2000-01-01 00:00:00");
+            long t = date.getTime()-date2.getTime();
+            String aa = Utils.intToHexString((int) (t/1000),4);
+            LogUtil.e("aaaa:"+aa);
+//        LogUtil.e("aaaast:"+((int)t));
+            String str = Utils.longToHexString(t/1000,8);
+            String command = "AA0602"+Utils.intToHexString((int) (t/1000),4)+"55";
+            LogUtil.e("command:"+command);
+
+//				try {
+            //send data to service
+            byte[]  value = hexStringToBytes(command);
+
+            return value;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        return new byte[0];
+    }
 
     public static byte[] getHz(String hz){
         String command =null;

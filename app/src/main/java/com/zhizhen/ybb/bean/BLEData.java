@@ -20,6 +20,24 @@ public class BLEData {
         measure_time = new ArrayList<>();
         duration = new ArrayList<>();
     }
+
+    public void copy(BLEDataQueue data){
+        int max =0;
+        if(data.QueueLength()>800){
+            max = 800;
+        }else{
+            max = data.QueueLength();
+        }
+        for(int i=0; i<max; i++){
+            System.out.println(i);
+
+            measure_degree.add(data.deQueueMeasure_degree());
+            measure_time.add(data.deQueueMeasure_time());
+            duration.add(data.deQueueDuration());
+
+        }
+    }
+
     public void copy(BLEData data){
         lock.lock();// 得到锁
         try {

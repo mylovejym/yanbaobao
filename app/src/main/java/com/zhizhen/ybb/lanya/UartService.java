@@ -38,6 +38,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
@@ -50,9 +51,10 @@ import com.psylife.wrmvplibrary.utils.helper.RxUtil;
 import com.zhizhen.ybb.api.YbbApi;
 import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.bean.BLEData;
+import com.zhizhen.ybb.bean.BLEDataQueue;
 import com.zhizhen.ybb.util.BLEUtils;
-import com.zhizhen.ybb.util.Utils;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -101,12 +103,14 @@ public class UartService extends Service {
     public static final UUID TX_CHAR_UUID = UUID.fromString("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
 
     MyServiceConnection mServiceConnection = new MyServiceConnection();
-    private BLEData bleData = new BLEData();
+    private BLEDataQueue bleData = new BLEDataQueue();
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         UartService.this.bindService(new Intent(UartService.this,MsgAidlService.class),mServiceConnection, Context.BIND_IMPORTANT);
 //        return super.onStartCommand(intent, flags, startId);
+//        test();
+//        startTimer();
         return START_STICKY;
     }
 
@@ -118,6 +122,7 @@ public class UartService extends Service {
             timer.cancel();
         }
         writeRXCharacteristic(hexStringToBytes("AA03030155"));
+//        writeRXCharacteristic(hexStringToBytes("AA03030055"));
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
@@ -148,6 +153,32 @@ public class UartService extends Service {
 
     }
 
+    String[] testStr= new String[]{"AA0A0320D4763A0024FF0055","AA0A0320D4763C0002000055", "AA0A0320D476500014FF0055", "AA0A0320D476520002000055"};
+
+    private void test(){
+        for(String text : testStr){
+            String str = text.substring(6,14);
+            long longStr = Long.parseLong(str, 16)+946656000;
+//            int time = longStr.intValue();
+                LogUtil.e("sssssstime:"+longStr);
+            bleData.enQueueMeasure_time(""+longStr);
+            String str2 = text.substring(14,18);
+            Integer intStr = Integer.parseInt(str2, 16);
+            short duration = intStr.shortValue();
+                LogUtil.e("ssssssduration:"+duration);
+            bleData.enQueueDuration(""+duration);
+            String str3 = text.substring(18,20);
+            byte[] bs= hexStringToBytes(str3);
+            int degree = bs[0];
+                LogUtil.e("ssssssdegree:"+degree);
+            bleData.enQueueMeasure_degree(""+degree);
+
+        }
+    }
+
+
+  boolean isfirst;
+
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
@@ -156,10 +187,11 @@ public class UartService extends Service {
             String intentAction;
             
             if (newState == BluetoothProfile.STATE_CONNECTED) {
+
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
                 broadcastUpdate(intentAction);
-                startTimer();
+//                startTimer();
                 Log.i(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
                 Log.i(TAG, "Attempting to start service discovery:" +
@@ -173,12 +205,22 @@ public class UartService extends Service {
             }
         }
 
+        Handler handler = new Handler();
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
             	Log.w(TAG, "mBluetoothGatt = " + mBluetoothGatt );
             	
-                broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
+//                broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
+                enableTXNotification();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isfirst =true;
+                        writeRXCharacteristic(BLEUtils.getTimeString(Calendar.getInstance().getTime()));
+                    }
+                },1000);
+
             } else {
                 Log.w(TAG, "onServicesDiscovered received: " + status);
             }
@@ -206,6 +248,8 @@ public class UartService extends Service {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
+    boolean isfirstData;
+
     private void broadcastUpdate(final String action,
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
@@ -217,23 +261,32 @@ public class UartService extends Service {
             String text = BLEUtils.bytesToHexString(characteristic.getValue());
             LogUtil.e("RX2:"+text);
             if(text.startsWith("aa0a03")){
+                if(isfirstData){
+                    isfirstData = false;
+                    intent.putExtra(EXTRA_DATA, characteristic.getValue());
+                }
                 String str = text.substring(6,14);
-                Long longStr = Long.parseLong(str, 16);
-                int time = longStr.intValue();
+                Long longStr = Long.parseLong(str, 16)+946656000;
+//                int time = longStr.intValue();
 //                LogUtil.e("sssssstime:"+time);
-                bleData.addMeasure_time(""+time);
+                bleData.enQueueMeasure_time(""+longStr);
                 String str2 = text.substring(14,18);
                 Integer intStr = Integer.parseInt(str2, 16);
                 short duration = intStr.shortValue();
 //                LogUtil.e("ssssssduration:"+duration);
-                bleData.addDuration(""+duration);
+                bleData.enQueueDuration(""+duration);
                 String str3 = text.substring(18,20);
-                byte[] bs=Utils.hexStringToBytes(str3);
+                byte[] bs= hexStringToBytes(str3);
                 int degree = bs[0];
 //                LogUtil.e("ssssssdegree:"+degree);
-                bleData.addMeasure_degree(""+degree);
+                bleData.enQueueMeasure_degree(""+degree);
 
             }else {
+                if(isfirst&&text.equalsIgnoreCase("AA0155")){
+                    isfirst = false;
+                    isfirstData = true;
+                    startTimer();
+                }
                 intent.putExtra(EXTRA_DATA, characteristic.getValue());
             }
         } else {

@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.psylife.wrmvplibrary.base.WRBaseFragment;
 import com.psylife.wrmvplibrary.data.net.RxService;
+import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.helper.FragmentAdapter;
 import com.zhizhen.ybb.R;
@@ -135,7 +136,8 @@ public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeT
     /*初始化Fragment*/
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     private void initPage() {
-        HomePageFragment fragment1 = new HomePageFragment();
+        LogUtil.e("9999999999999999999999");
+        HomePageFragment fragment1 = HomePageFragment.getInstance();
         MineFragment fragment2 = new MineFragment();
 
         fragments.add(fragment1);
