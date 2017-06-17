@@ -92,7 +92,7 @@ public class MyDialChart extends View{
     {
         for(int i=0;i<dashboard.size();i++){
             float p = Float.valueOf(dashboard.get(i).getPercent());
-            maps.put(i*10, (int) p);
+            maps.put((i+1)*10, (int) p);
             LogUtil.e("4444444444444444");
 //            if(i == dashboard.size()){
 //                invalidate();

@@ -116,7 +116,7 @@ public class BLEUtils {
         LogUtil.e("aaaa:"+startStr);
 
 //        String endStr = Utils.intToHexString((int) (endTime/1000),4);
-        String endStr = Utils.intToHexString(endTime/1000,4);
+        String endStr = Utils.intToHexString(endTime,4);
         LogUtil.e("bbbb:"+endStr);
 
         String command = "AA0A08" + startStr + endStr + "55";
@@ -171,9 +171,9 @@ public class BLEUtils {
 
     public static byte[] getNum(String Num){
         String command =null;
-        if(Num.equals("震动3次")){
+        if(Num.equals("振动3次")){
             command = "AA03050355";
-        }else if(Num.equals("震动2次")){
+        }else if(Num.equals("振动2次")){
             command = "AA03050255";
         }else{
             command = "AA03050155";

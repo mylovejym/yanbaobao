@@ -260,6 +260,7 @@ public class SecondChart extends DemoView{
     public void put(List<Dashboard> dashboard){
 //        List<Double> dataSeries3 = new LinkedList<Double>();
         dataSeries3.clear();
+        dataSeries3.add(0d);
         for(int i=0;i<dashboard.size();i++){
             double p = Double.valueOf(dashboard.get(i).getPercent());
             dataSeries3.add( p);

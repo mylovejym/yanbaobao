@@ -254,6 +254,49 @@
                     android:layout_height="match_parent"
                     android:visibility="gone"/>
             </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:gravity="right|center_vertical">
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="10dp"
+                    android:background="#41adff"
+                    android:layout_marginRight="6dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
+                    android:text="重度俯坐"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="10dp"
+                    android:background="#32CD99"
+                    android:layout_marginRight="6dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
+                    android:text="中度俯坐"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="10dp"
+                    android:background="#00FFFF"
+                    android:layout_marginRight="6dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
+                    android:text="轻度俯坐"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+
+            </LinearLayout>
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/spreadBarChart"
                 android:layout_width="match_parent"
