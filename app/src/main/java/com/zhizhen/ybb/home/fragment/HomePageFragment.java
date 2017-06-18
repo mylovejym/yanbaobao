@@ -261,7 +261,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 ////            colors.add(Color.parseColor("#75bfe2"));
 //            colors.add(Color.parseColor("#41adff"));
 //        }
-        barDataSet.setColors(new int[]{Color.parseColor("#41adff"), Color.parseColor("#32CD99"), Color.parseColor("#00FFFF")});
+        barDataSet.setColors(new int[]{Color.parseColor("#4dcdfd"), Color.parseColor("#7ddafb"), Color.parseColor("#b5ecff")});
         // 设置栏阴影颜色
         barDataSet.setBarShadowColor(Color.parseColor("#01000000"));
         ArrayList<BarDataSet> barDataSets = new ArrayList<>();
