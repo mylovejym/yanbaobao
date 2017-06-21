@@ -237,9 +237,9 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             float value3 = 0;
 
             if (histogram != null && histogram.size() > i) {
-                value = Float.parseFloat(histogram.get(i).getSerious_time()) ;
-                value2 = Float.parseFloat(histogram.get(i).getMiddle_time());
-                value3 = Float.parseFloat(histogram.get(i).getMild_time());
+                value = Float.parseFloat(histogram.get(i).getSerious_time_percent()) ;
+                value2 = Float.parseFloat(histogram.get(i).getMiddle_time_percent());
+                value3 = Float.parseFloat(histogram.get(i).getMild_time_percent());
             }
             if(j!=0){
 //                value = (float) (Math.random() * 10/*100以内的随机数*/);
@@ -261,7 +261,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 ////            colors.add(Color.parseColor("#75bfe2"));
 //            colors.add(Color.parseColor("#41adff"));
 //        }
-        barDataSet.setColors(new int[]{Color.parseColor("#41adff"), Color.parseColor("#32CD99"), Color.parseColor("#00FFFF")});
+        barDataSet.setColors(new int[]{Color.parseColor("#4dcdfd"), Color.parseColor("#7ddafb"), Color.parseColor("#b5ecff")});
         // 设置栏阴影颜色
         barDataSet.setBarShadowColor(Color.parseColor("#01000000"));
         ArrayList<BarDataSet> barDataSets = new ArrayList<>();

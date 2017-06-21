@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -37,6 +38,8 @@ public class MyDialChart extends View{
 
     int l;
     Paint p;
+
+    Paint textPaint;
 
     Map<Integer,Integer> maps = new LinkedHashMap();
 
@@ -77,6 +80,17 @@ public class MyDialChart extends View{
         p.setStyle(Paint.Style.FILL);
         p.setAntiAlias(true);
 
+        textPaint = new Paint();
+        textPaint.setColor(0xff41adff);
+        textPaint.setTextSize(50);
+        textPaint.setAntiAlias(true);//去除锯齿
+        textPaint.setFilterBitmap(true);//对位图进行滤波处理
+        textPaint.setStyle(Paint.Style.FILL);
+        //该方法即为设置基线上那个点究竟是left,center,还是right  这里我设置为center
+        textPaint.setTextAlign(Paint.Align.CENTER);
+
+
+
 
     }
 
@@ -92,7 +106,7 @@ public class MyDialChart extends View{
     {
         for(int i=0;i<dashboard.size();i++){
             float p = Float.valueOf(dashboard.get(i).getPercent());
-            maps.put(i*10, (int) p);
+            maps.put((i+1)*10, (int) p);
             LogUtil.e("4444444444444444");
 //            if(i == dashboard.size()){
 //                invalidate();
@@ -141,6 +155,19 @@ public class MyDialChart extends View{
 ////        mPointer.setStartAngle(mStartAngle);
 ////        mPointer.setParentRadius(getRadius());
 //        mPointer.render(canvas);
+        float lift = this.getLeft()+bitmapbg.getWidth()/2-bitmapcircle.getWidth()/2;
+        float top = this.getTop()+bitmapbg.getHeight()-bitmapcircle.getHeight()/2;
+        float right = lift + bitmapcircle.getWidth();
+        float bottom = top + bitmapcircle.getHeight();
+//        Rect rect = new Rect((int)lift,(int)top,(int)right,(int)bottom);
+        Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
+        float top1 = fontMetrics.top;//为基线到字体上边框的距离,即上图中的top
+        float bottom1 = fontMetrics.bottom;//为基线到字体下边框的距离,即上图中的bottom
+
+        int baseLineY = (int) (top+bitmapcircle.getHeight()/2 - top1/2 - bottom1/2);//基线中间点的y轴计算公式
+
+        canvas.drawText("90°",lift+bitmapcircle.getWidth()/2+3,baseLineY,textPaint);
+
         super.onDraw(canvas);
     }
 

@@ -60,7 +60,7 @@
                     android:layout_toRightOf="@+id/view_circle"
                     android:text="坐姿仪表盘"
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="14sp" />
             </RelativeLayout>
 
             <!--<ImageView
@@ -102,15 +102,15 @@
                     android:layout_toRightOf="@+id/view_tday"
                     android:text="今日坐姿端正率:"
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="14sp" />
                 <TextView
                     android:id="@+id/text_b"
                     android:layout_width="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="6dp"
-                    android:text="74%"
+                    android:text="0%"
                     android:textColor="@color/blue_41adff"
-                    android:textSize="17sp"
+                    android:textSize="14sp"
                     android:layout_toRightOf="@+id/txt"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
@@ -131,7 +131,7 @@
                     android:layout_marginRight="6dp"
                     android:text="健康正常值"
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="14sp" />
                 <View
                     android:id="@+id/view2"
                     android:layout_width="20dp"
@@ -149,7 +149,7 @@
                     android:text="今日测量值"
                     android:layout_toLeftOf="@+id/view2"
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="14sp" />
 
                 <View
                     android:id="@+id/view1"
@@ -192,15 +192,15 @@
                     android:layout_toRightOf="@+id/view_black"
                     android:text="坐姿在"
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="14sp" />
                 <TextView
                     android:id="@+id/text_two"
                     android:layout_width="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="1dp"
-                    android:text="74%+10%"
+                    android:text="90°±10°"
                     android:textColor="@color/blue_41adff"
-                    android:textSize="17sp"
+                    android:textSize="14sp"
                     android:layout_toRightOf="@+id/txt2"
                     android:layout_height="wrap_content" />
                 <TextView
@@ -209,7 +209,7 @@
                     android:layout_marginLeft="1dp"
                     android:text="都算端正坐姿"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
+                    android:textSize="14sp"
                     android:layout_toRightOf="@+id/text_two"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
@@ -234,14 +234,14 @@
                     android:layout_toRightOf="@+id/view_error"
                     android:text="错误坐姿分析"
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="14sp" />
                 <Button
                     android:id="@+id/btn_week"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_width="60dp"
                     android:text="周报"
-                    android:textSize="17sp"
+                    android:textSize="14sp"
                     android:layout_height="match_parent"
                     android:visibility="gone"/>
                 <Button
@@ -250,19 +250,18 @@
                     android:layout_toLeftOf="@+id/btn_week"
                     android:layout_width="60dp"
                     android:text="日报"
-                    android:textSize="17sp"
+                    android:textSize="14sp"
                     android:layout_height="match_parent"
                     android:visibility="gone"/>
             </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="43dp"
-                android:orientation="horizontal"
                 android:gravity="right|center_vertical">
                 <View
                     android:layout_width="20dp"
                     android:layout_height="10dp"
-                    android:background="#41adff"
+                    android:background="#4dcdfd"
                     android:layout_marginRight="6dp"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -270,11 +269,11 @@
                     android:layout_marginRight="6dp"
                     android:text="重度俯坐"
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="14sp" />
                 <View
                     android:layout_width="20dp"
                     android:layout_height="10dp"
-                    android:background="#32CD99"
+                    android:background="#7ddafb"
                     android:layout_marginRight="6dp"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -282,11 +281,11 @@
                     android:layout_marginRight="6dp"
                     android:text="中度俯坐"
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="14sp" />
                 <View
                     android:layout_width="20dp"
                     android:layout_height="10dp"
-                    android:background="#00FFFF"
+                    android:background="#b5ecff"
                     android:layout_marginRight="6dp"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -294,7 +293,9 @@
                     android:layout_marginRight="6dp"
                     android:text="轻度俯坐"
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="14sp" />
+
+
             </LinearLayout>
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/spreadBarChart"
