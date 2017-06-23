@@ -104,7 +104,7 @@ public interface YbbApi {
      */
     @FormUrlEncoded
     @POST("/Api/Hardware/addHardwareData")
-    Observable<BaseBean> addHardwareData(@Field("token") String token, @Field("data") String data);
+    Observable<BaseBean> addHardwareData(@Header("total")int total,@Field("token") String token, @Field("data") String data);
 
     /**
      * 统计数据接口

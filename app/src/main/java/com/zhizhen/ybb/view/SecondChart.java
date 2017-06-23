@@ -91,6 +91,7 @@ public class SecondChart extends DemoView{
             chart.getCategoryAxis().getTickLabelPaint().setTextSize(30f);
             chart.getCategoryAxis().setTickLabelMargin(10);
 
+
             //数据轴
             chart.setDataSource(mDataset);
 

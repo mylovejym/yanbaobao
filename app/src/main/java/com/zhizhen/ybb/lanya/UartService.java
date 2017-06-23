@@ -117,6 +117,8 @@ public class UartService extends Service {
     Timer timer;
     BLEData data;
 
+    Handler handler = new Handler();
+
     private void startTimer(){
         if(timer!= null) {
             timer.cancel();
@@ -127,30 +129,46 @@ public class UartService extends Service {
             @Override
             public void run() {
 //                System.out.println("task   run:"+getCurrentTime());
-                if(data == null) {
-                    data = new BLEData();
-                    data.copy(bleData);
-                }
-                if(data.getMeasure_time()==null||data.getMeasure_time().size()==0){
-                    writeRXCharacteristic(hexStringToBytes("AA03030155"));
-                    return;
-                }
-                Gson mGson = new Gson();
-                String json = mGson.toJson(data);
-                LogUtil.e("json:"+json);
-                RxService.createApi(YbbApi.class).addHardwareData(YbBaseApplication.instance.getToken(),json).compose(RxUtil.rxSchedulerHelper()).subscribe(baseBean->{
-                    if (baseBean.getStatus().equals("0")) {
-                        LogUtil.e("cccccccccccccccccccccccccccggggggggggggggggggggggg");
-                        data =null;
-                        writeRXCharacteristic(hexStringToBytes("AA03030155"));
-                    }
-
-                },e->{});
+                rundata();
             }
         };
         timer = new Timer();
         timer.schedule(task, 60*1000,60*1000);
 
+    }
+
+    private void rundata(){
+        if(data == null) {
+            data = new BLEData();
+            data.copy(bleData);
+        }
+        if(data.getMeasure_time()==null||data.getMeasure_time().size()==0){
+            writeRXCharacteristic(hexStringToBytes("AA03030155"));
+            return;
+        }
+        Gson mGson = new Gson();
+        String json = mGson.toJson(data);
+        LogUtil.e("json:"+json);
+        RxService.createApi(YbbApi.class).addHardwareData(data.getMeasure_degree().size(),YbBaseApplication.instance.getToken(),json).compose(RxUtil.rxSchedulerHelper()).subscribe(baseBean->{
+            if (baseBean.getStatus().equals("0")) {
+                LogUtil.e("cccccccccccccccccccccccccccggggggggggggggggggggggg");
+                data =null;
+                if(bleData.QueueLength()>0){
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            rundata();
+                        }
+                    },2*1000);
+
+
+                }else {
+
+                    writeRXCharacteristic(hexStringToBytes("AA03030155"));
+                }
+            }
+
+        },e->{});
     }
 
     String[] testStr= new String[]{"AA0A0320D4763A0024FF0055","AA0A0320D4763C0002000055", "AA0A0320D476500014FF0055", "AA0A0320D476520002000055"};

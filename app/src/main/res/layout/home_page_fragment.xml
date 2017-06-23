@@ -168,7 +168,13 @@
             <com.zhizhen.ybb.view.SecondChart
                 android:id="@+id/SecondChart"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="200dp"
+                android:visibility="gone"/>
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_above="@+id/seekBar1" />
 
             <RelativeLayout
                 android:layout_width="match_parent"

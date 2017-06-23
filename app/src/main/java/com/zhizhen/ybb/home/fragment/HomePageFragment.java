@@ -11,15 +11,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.base.YbBaseFragment;
 import com.zhizhen.ybb.bean.BaseClassBean;
+import com.zhizhen.ybb.bean.Dashboard;
 import com.zhizhen.ybb.bean.GetStatistics;
 import com.zhizhen.ybb.bean.Histogram;
 import com.zhizhen.ybb.home.contract.HomeContract;
@@ -28,6 +34,7 @@ import com.zhizhen.ybb.home.presenter.HomePagePresenter;
 import com.zhizhen.ybb.lanya.MyBLEActivity;
 import com.zhizhen.ybb.loginpass.LoginActivity;
 import com.zhizhen.ybb.view.BarCharts;
+import com.zhizhen.ybb.view.LineCharts;
 import com.zhizhen.ybb.view.MyDialChart;
 import com.zhizhen.ybb.view.SecondChart;
 
@@ -85,6 +92,9 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     private BarChart mBarChart;
     private BarCharts mBarCharts;
 
+    private LineChart mLineChart;
+    private LineCharts mLineCharts;
+
 //    LoopRecyclerViewPager vpTop;
 
     private static HomePageFragment fragment = null;
@@ -126,6 +136,10 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         mBarCharts = new BarCharts();
         mBarChart = (BarChart) view.findViewById(R.id.spreadBarChart);
         mBarCharts.showBarChart(mBarChart, getBarData((22 - 8) * 6, null,0), true);
+
+        mLineCharts = new LineCharts();
+        mLineChart = (LineChart) view.findViewById(R.id.lineChart);
+        mLineCharts.showLineChart(mLineChart, getLinrData(null));
 
     }
 
@@ -190,7 +204,8 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
                 myDialChart.put(mPersonBean.getData().getDashboard());
 //                myDialChart.invalidate();myDialChart.forceLayout();myDialChart.requestLayout();
 //                myDialChart.invalidate();
-                        secondChart.put(mPersonBean.getData().getDashboard());
+                mLineCharts.showLineChart(mLineChart, getLinrData(mPersonBean.getData().getDashboard()));
+//                        secondChart.put(mPersonBean.getData().getDashboard());
                         mBarChart.setData(getBarData((22-8)*6,mPersonBean.getData().getHistogram(),0));
 //                        mBarChart.invalidate();
 
@@ -208,6 +223,48 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         }
 //        mBarChart.setData(getBarData((22-8)*6,null,1));
 //        mBarChart.notifyDataSetChanged();
+    }
+
+    public LineData getLinrData(List<Dashboard> dashboard){
+
+        LineData d = new LineData();
+
+        ArrayList<Entry> entries = new ArrayList<Entry>();
+        if(dashboard != null) {
+            entries.add(new Entry(0, 0));
+            for (int index = 0; index < 90; index++) {
+                float v = 0;
+                if (dashboard != null && dashboard.size() > index) {
+                    v = Float.parseFloat(dashboard.get(index).getPercent());
+
+                }
+                entries.add(new Entry(index + 1, v));
+            }
+        }
+
+        LineDataSet set = new LineDataSet(entries, "Line DataSet");
+        set.setColor(0xff41adff);
+        set.setLineWidth(2.5f);
+        set.setDrawCircles(false);
+        set.setCircleColor(0xff41adff);
+        set.setCircleRadius(1f);
+
+//        set.setFillColor(Color.rgb(240, 238, 70));
+        set.setFillColor(0xff41adff);
+        set.setDrawCircleHole(false);
+        set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        set.setDrawValues(false);
+        set.setValueTextSize(10f);
+        set.setValueTextColor(Color.rgb(240, 238, 70));
+
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        d.addDataSet(set);
+
+        return d;
+    }
+
+    protected float getRandom(float range, float startsfrom) {
+        return (float) (Math.random() * range) + startsfrom;
     }
 
     /**
@@ -251,7 +308,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 //            value2 = (float) (Math.random() * 10/*100以内的随机数*/);
 //            value3 = (float) (Math.random() * 10/*100以内的随机数*/);
 
-            yValues.add(new BarEntry(new float[]{value, value2, value3}, i));
+            yValues.add(new BarEntry(i,new float[]{value, value2, value3}));
 
         }
         // y轴的数据集合
@@ -264,14 +321,15 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         barDataSet.setColors(new int[]{Color.parseColor("#4dcdfd"), Color.parseColor("#7ddafb"), Color.parseColor("#b5ecff")});
         // 设置栏阴影颜色
         barDataSet.setBarShadowColor(Color.parseColor("#01000000"));
-        ArrayList<BarDataSet> barDataSets = new ArrayList<>();
-        //可增加
-        barDataSets.add(barDataSet);
+//        ArrayList<BarDataSet> barDataSets = new ArrayList<>();
+//        //可增加
+//        barDataSets.add(barDataSet);
 
         barDataSet.setValueTextColor(Color.parseColor("#ffffff"));
         // 绘制值
         barDataSet.setDrawValues(false);
-        BarData barData = new BarData(xValues, barDataSets);
+        BarData barData = new BarData(barDataSet);
+
         return barData;
     }
 

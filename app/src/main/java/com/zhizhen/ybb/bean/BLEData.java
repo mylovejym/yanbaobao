@@ -23,8 +23,8 @@ public class BLEData {
 
     public void copy(BLEDataQueue data){
         int max =0;
-        if(data.QueueLength()>800){
-            max = 800;
+        if(data.QueueLength()>500){
+            max = 500;
         }else{
             max = data.QueueLength();
         }

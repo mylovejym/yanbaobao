@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -104,9 +103,9 @@ public class MyDialChart extends View{
 
     public void putdata(List<Dashboard> dashboard)
     {
-        for(int i=0;i<dashboard.size();i++){
+        for(int i=0;i<90;i++){
             float p = Float.valueOf(dashboard.get(i).getPercent());
-            maps.put((i+1)*10, (int) p);
+            maps.put((i+1)*2, (int) p);
             LogUtil.e("4444444444444444");
 //            if(i == dashboard.size()){
 //                invalidate();

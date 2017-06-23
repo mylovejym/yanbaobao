@@ -80,6 +80,7 @@ public class HomeActivity extends YbBaseFragmentActivity<HomeTabPresenter, HomeT
     public void initView(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             loadRootFragment(R.id.pager, new HomePageFragment());
+//            loadRootFragment(R.id.pager, HomePageFragment.getInstance());
         }
 
         /*实现setOnTabChangedListener接口,目的是为监听界面切换），然后实现TabHost里面图片文字的选中状态切换*/

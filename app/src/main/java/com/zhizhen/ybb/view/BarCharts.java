@@ -5,17 +5,12 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.formatter.XAxisValueFormatter;
-import com.github.mikephil.charting.formatter.YAxisValueFormatter;
-import com.github.mikephil.charting.utils.ViewPortHandler;
-
-import java.text.DecimalFormat;
-
-import static android.R.attr.start;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 
 /**
@@ -30,8 +25,8 @@ public class BarCharts {
      * @param isSlither 用来控制是否可以滑动
      */
     public void showBarChart(BarChart barChart, BarData barData, boolean isSlither) {
-        //绘制高亮箭头
-        barChart.setDrawHighlightArrow(false);
+//        //绘制高亮箭头
+//        barChart.setDrawHighlightArrow(false);
         //设置值显示在柱状图的上边或者下边
         barChart.setDrawValueAboveBar(true);
         //设置绘制网格背景
@@ -53,13 +48,13 @@ public class BarCharts {
         // 设置启用日志
         barChart.setLogEnabled(true);
         // 设置突出功能
-        barChart.setHighlightEnabled(true);
+//        barChart.setHighlightEnabled(true);
         // 设置拖动减速功能
         barChart.setDragDecelerationEnabled(true);
         // 数据描述
-        barChart.setDescription("");
+        barChart.getDescription().setEnabled(false);
         // 如果没有数据的时候，会显示这个，类似ListView的EmptyView
-        barChart.setNoDataTextDescription("没有数据了");
+//        barChart.setNoDataTextDescription("没有数据了");
         barChart.setNoDataText("O__O …");
         // 是否显示表格颜色  
         barChart.setDrawGridBackground(false);
@@ -97,8 +92,8 @@ public class BarCharts {
         barChart.setDrawGridBackground(false);
         // 设置边框颜色
         barChart.setBorderColor(Color.parseColor("#00000000"));
-        // 说明颜色
-        barChart.setDescriptionColor(Color.parseColor("#00000000"));
+//        // 说明颜色
+//        barChart.setDescriptionColor(Color.parseColor("#00000000"));
         // 拉杆阴影
         barChart.setDrawBarShadow(false);
         // 打开或关闭绘制的图表边框。（环绕图表的线）
@@ -113,8 +108,10 @@ public class BarCharts {
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        xAxis.setSpaceBetweenLabels(2);
+//        xAxis.setSpaceBetweenLabels(2);
+//        xAxis.setGranularity(2);
         xAxis.setTextColor(0xffffffff); // 设置轴标签的颜色。
+        xAxis.setLabelCount((22 - 8) * 6);
 //        xAxis.setTextSize(18); // 设置轴标签的文字大小。
 //        xAxis.setTypeface( ) ;// 设置轴标签的 Typeface。
 //        xAxis.setGridColor( int color); /// 设置该轴的网格线颜色。
@@ -124,6 +121,20 @@ public class BarCharts {
 //        barChart.animateY(1000); // 立即执行的动画,Y轴
 
 //        xAxis.setValueFormatter(new DayAxisValueFormatter());
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                String a = "";
+                if (value% 6 == 0) {
+                    if (value/ 6 + 8 < 10) {
+                        a = "0" + ((int) value / 6 + 8) + ":00";
+                    } else {
+                        a = ((int) value/ 6 + 8) + ":00";
+                    }
+                }
+                return a;
+            }
+        });
 
         YAxis leftAxis = barChart.getAxisLeft();
         leftAxis.setStartAtZero(true);
@@ -149,33 +160,33 @@ public class BarCharts {
     }
 
 
-    public class DayAxisValueFormatter implements XAxisValueFormatter
-    {
+//    public class DayAxisValueFormatter implements XAxisValueFormatter
+//    {
+//
+//        private DecimalFormat mFormat;
+//
+//        public DayAxisValueFormatter() {
+////            mFormat = new DecimalFormat("00:00");
+//        }
+//
+//
+//
+//        @Override
+//        public String getXValue(String s, int i, ViewPortHandler viewPortHandler) {
+//            String a ="";
+//            if((start+i)%6==0){
+//                if((start+i)/6+8<10){
+//                    a = "0"+((int)(start+i)/6+8)+":00";
+//                }else{
+//                    a = ((int)(start+i)/6+8)+":00";
+//                }
+//            }
+//
+//            return ""+a;
+//        }
+//    }
 
-        private DecimalFormat mFormat;
-
-        public DayAxisValueFormatter() {
-//            mFormat = new DecimalFormat("00:00");
-        }
-
-
-
-        @Override
-        public String getXValue(String s, int i, ViewPortHandler viewPortHandler) {
-            String a ="";
-            if((start+i)%6==0){
-                if((start+i)/6+8<10){
-                    a = "0"+((int)(start+i)/6+8)+":00";
-                }else{
-                    a = ((int)(start+i)/6+8)+":00";
-                }
-            }
-
-            return ""+a;
-        }
-    }
-
-    public class MyAxisValueFormatter implements YAxisValueFormatter
+    public class MyAxisValueFormatter implements IAxisValueFormatter
     {
 
 //        private DecimalFormat mFormat;
@@ -185,9 +196,14 @@ public class BarCharts {
         }
 
 
+//        @Override
+//        public String getFormattedValue(float v, YAxis yAxis) {
+//            return v==0?"":""+((int)v);
+//        }
+
         @Override
-        public String getFormattedValue(float v, YAxis yAxis) {
-            return v==0?"":""+((int)v);
+        public String getFormattedValue(float value, AxisBase axis) {
+            return value==0?"":""+((int)value);
         }
     }
 

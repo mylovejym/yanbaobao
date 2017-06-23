@@ -69,5 +69,6 @@ dependencies {
     compile project(':wrmvplibrary')
     compile project(':xCLCharts')
     compile project(':pickerview')
-    compile files('libs/mpandroidchartlibrary-2-1-5.jar')
+//    compile files('libs/mpandroidchartlibrary-2-1-5.jar')
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
 }
