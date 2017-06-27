@@ -68,6 +68,10 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
         <activity
+            android:name=".home.HomeActivity2"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
+        <activity
             android:name=".my.ChoiceSampling"
             android:screenOrientation="portrait"/>
         <activity

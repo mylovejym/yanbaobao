@@ -58,5 +58,8 @@
     <color name="gray_2c2d3e">#2c2d3e</color>
     <color name="tab_sel_color">#37B6CA</color>
 
+    <color name="break_30">#4c000000</color>
+    <color name="text_blue">#30b1ff</color>
+
 
 </resources>

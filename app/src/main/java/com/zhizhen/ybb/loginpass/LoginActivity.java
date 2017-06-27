@@ -14,7 +14,7 @@ import com.psylife.wrmvplibrary.utils.timeutils.TextUtil;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 import com.zhizhen.ybb.bean.LoginBean;
-import com.zhizhen.ybb.home.HomeActivity;
+import com.zhizhen.ybb.home.HomeActivity2;
 import com.zhizhen.ybb.loginpass.contract.LoginContract;
 import com.zhizhen.ybb.loginpass.model.LoginModel;
 import com.zhizhen.ybb.loginpass.presenter.LoginPresenter;
@@ -99,7 +99,7 @@ public class LoginActivity extends YbBaseActivity<LoginPresenter, LoginModel> im
             SpUtils.setUser(this,bean.getData());
             SpUtils.putString(this, "phone", edit_phone.getText().toString().trim());
             SpUtils.putString(this, "date", DateUtil.getCompleteTime());
-            intent.setClass(this, HomeActivity.class);
+            intent.setClass(this, HomeActivity2.class);
             startActivity(intent);
             finish();
         }else {

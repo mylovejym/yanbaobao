@@ -116,6 +116,15 @@ public class MyDialChart extends View{
 
     }
 
+    public void clear(){
+        for(int i=0;i<90;i++){
+
+            maps.put((i+1)*2, 0);
+
+        }
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(bitmapbg,this.getLeft(),this.getTop(),null );

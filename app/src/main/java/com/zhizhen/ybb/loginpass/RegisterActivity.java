@@ -146,7 +146,7 @@ public class RegisterActivity extends YbBaseActivity<RegisterPresenter, Register
             SpUtils.setUser(this, bean.getData());
             SpUtils.putString(this, "phone", edit_phone.getText().toString().trim());
             SpUtils.putString(this, "date", DateUtil.getCompleteTime());
-            startActivity(new Intent(this, HomeActivity.class));
+            startActivity(new Intent(this, HomeActivity2.class));
             finish();
         }else{
             Toast.makeText(RegisterActivity.this, bean.getStatusInfo(), Toast.LENGTH_SHORT).show();

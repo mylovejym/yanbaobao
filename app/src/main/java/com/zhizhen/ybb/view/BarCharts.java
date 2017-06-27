@@ -108,10 +108,12 @@ public class BarCharts {
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
+//        xAxis.setDrawAxisLine(true);
 //        xAxis.setSpaceBetweenLabels(2);
 //        xAxis.setGranularity(2);
         xAxis.setTextColor(0xffffffff); // 设置轴标签的颜色。
-        xAxis.setLabelCount((22 - 8) * 6);
+        xAxis.setLabelCount((22-8)*6);
+
 //        xAxis.setTextSize(18); // 设置轴标签的文字大小。
 //        xAxis.setTypeface( ) ;// 设置轴标签的 Typeface。
 //        xAxis.setGridColor( int color); /// 设置该轴的网格线颜色。
@@ -126,10 +128,10 @@ public class BarCharts {
             public String getFormattedValue(float value, AxisBase axis) {
                 String a = "";
                 if (value% 6 == 0) {
-                    if (value/ 6 + 8 < 10) {
-                        a = "0" + ((int) value / 6 + 8) + ":00";
+                    if (value/6 + 8 < 10) {
+                        a = "0" + ((int) value/6 + 8) + ":00";
                     } else {
-                        a = ((int) value/ 6 + 8) + ":00";
+                        a = ""+((int) value/6 + 8) + ":00";
                     }
                 }
                 return a;
@@ -140,6 +142,7 @@ public class BarCharts {
         leftAxis.setStartAtZero(true);
         leftAxis.setAxisMaxValue(10f);
         leftAxis.setLabelCount(6, true);
+
         leftAxis.setValueFormatter(new MyAxisValueFormatter());
         leftAxis.setTextColor(0xffffffff);
 

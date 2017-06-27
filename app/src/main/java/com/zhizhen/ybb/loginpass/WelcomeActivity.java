@@ -8,7 +8,7 @@ import android.view.View;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
-import com.zhizhen.ybb.home.HomeActivity;
+import com.zhizhen.ybb.home.HomeActivity2;
 import com.zhizhen.ybb.util.SpUtils;
 
 public class WelcomeActivity extends YbBaseActivity {
@@ -34,7 +34,7 @@ public class WelcomeActivity extends YbBaseActivity {
             if (isFirstLogin) {
                 Intent intent = new Intent();
                 intent.setClass(WelcomeActivity.this,
-                        HomeActivity.class);
+                        HomeActivity2.class);
                 startActivity(intent);
                 finish();
             } else {

@@ -110,6 +110,8 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     @Override
     public View getTitleView() {
         return new TitleBuilder(getActivity())
+                .setTitleText("健康报告")
+                .setTitleTextColor(getActivity(),R.color.white)
                 .setRightText("蓝牙")
                 .setTitleBgRes(R.color.blue_313245)
                 .setRightOnClickListener(v -> {
@@ -218,6 +220,12 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
                 Intent intent = new Intent(this.getContext(), LoginActivity.class);
                 this.getContext().startActivity(intent);
                 this.getActivity().finish();
+            }
+            if(mPersonBean.getStatus().equals("1137")){
+                textB.setText("0%");
+                myDialChart.clear();
+                mLineCharts.showLineChart(mLineChart, getLinrData(null));
+                mBarCharts.showBarChart(mBarChart, getBarData((22 - 8) * 6, null,0), true);
             }
             Toast.makeText(this.getContext(), mPersonBean.getStatusInfo(), Toast.LENGTH_LONG).show();
         }

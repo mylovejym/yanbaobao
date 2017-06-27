@@ -27,6 +27,16 @@
             <!--android:layout_height="wrap_content" />-->
     <!--</RelativeLayout>-->
 
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/ProgressBar_Mini"
+        android:progress="0"
+        android:max="25"
+        android:background="@color/white"
+        android:visibility="gone"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:background="@color/md_grey_700"
@@ -315,6 +325,8 @@
             <!--<com.zhizhen.ybb.view.ThirdView
                 android:layout_width="match_parent"
                 android:layout_height="148dp"/>-->
+
+
 
         </LinearLayout>
 

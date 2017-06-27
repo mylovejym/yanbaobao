@@ -2,11 +2,8 @@ package com.zhizhen.ybb.home.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,10 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.zhizhen.ybb.R;
@@ -39,8 +33,6 @@ import com.zhizhen.ybb.util.DateUtil;
 import com.zhizhen.ybb.util.GlideCircleTransform;
 import com.zhizhen.ybb.util.SpUtils;
 
-import butterknife.BindView;
-
 /**
  * Created by psylife00 on 2017/5/12.
  */
@@ -49,34 +41,34 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
 
     public static final int EDIT_DATA = 10023;
 
-    @BindView(R.id.txt_name)
+//    @BindView(R.id.txt_name)
     TextView txtName;
 
-    @BindView(R.id.image_head_photo)
+//    @BindView(R.id.image_head_photo)
     ImageView imageHeadPhoto;
 
-    @BindView(R.id.image_sex)
+//    @BindView(R.id.image_sex)
     ImageView imageSex;
 
-    @BindView(R.id.txt_age)
+//    @BindView(R.id.txt_age)
     TextView txtAge;
 
-    @BindView(R.id.rl_vison)
+//    @BindView(R.id.rl_vison)
     RelativeLayout rlVison;
 
-    @BindView(R.id.rl_device)
+//    @BindView(R.id.rl_device)
     RelativeLayout rlDevice;
 
-    @BindView(R.id.rl_parameter_set)
+//    @BindView(R.id.rl_parameter_set)
     RelativeLayout rlParameterSet;
 
-    @BindView(R.id.rl_follow)
+//    @BindView(R.id.rl_follow)
     RelativeLayout rlFollow;
 
-    @BindView(R.id.lin_edit_data)
+//    @BindView(R.id.lin_edit_data)
     LinearLayout linEditData;
 
-    @BindView(R.id.bt_exit)
+//    @BindView(R.id.bt_exit)
     Button btExit;
 
     private Context context;
@@ -101,6 +93,17 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
 
     @Override
     public void initUI(View view, @Nullable Bundle savedInstanceState) {
+        txtName = (TextView) view.findViewById(R.id.txt_name);
+        imageHeadPhoto = (ImageView) view.findViewById(R.id.image_head_photo);
+        imageSex = (ImageView) view.findViewById(R.id.image_sex);
+        txtAge = (TextView) view.findViewById(R.id.txt_age);
+        rlVison = (RelativeLayout) view.findViewById(R.id.rl_vison);
+        rlDevice = (RelativeLayout) view.findViewById(R.id.rl_device);
+        rlParameterSet = (RelativeLayout) view.findViewById(R.id.rl_parameter_set);
+        rlFollow = (RelativeLayout) view.findViewById(R.id.rl_follow);
+        linEditData = (LinearLayout) view.findViewById(R.id.lin_edit_data);
+        btExit = (Button) view.findViewById(R.id.bt_exit);
+
         context = this.getContext();
         rlVison.setOnClickListener(this);
         rlFollow.setOnClickListener(this);

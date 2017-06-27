@@ -5,13 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,10 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.pickerview.TimePickerView;
-import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
@@ -30,12 +24,11 @@ import com.zhizhen.ybb.base.YbBaseActivity;
 import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.bean.BaseBean;
 import com.zhizhen.ybb.bean.PersonInfo;
-import com.zhizhen.ybb.home.HomeActivity;
+import com.zhizhen.ybb.home.HomeActivity2;
 import com.zhizhen.ybb.home.fragment.MineFragment;
 import com.zhizhen.ybb.my.contract.MyContract;
 import com.zhizhen.ybb.my.model.EditDataModelImp;
 import com.zhizhen.ybb.my.presenter.EditDataPresenterImp;
-import com.zhizhen.ybb.util.DateUtil;
 import com.zhizhen.ybb.util.DialogUtils;
 import com.zhizhen.ybb.util.GlideCircleTransform;
 import com.zhizhen.ybb.util.TakePhotosDispose;
@@ -217,7 +210,7 @@ public class EditDataActivity extends YbBaseActivity<EditDataPresenterImp, EditD
         this.stopProgressDialog();
         if (baseBean.getStatus().equals("0")) {
             Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, HomeActivity.class);
+            Intent intent = new Intent(this, HomeActivity2.class);
             this.setResult(MineFragment.EDIT_DATA, intent);
             this.finish();
         } else
