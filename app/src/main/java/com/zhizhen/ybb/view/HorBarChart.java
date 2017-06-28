@@ -154,7 +154,7 @@ public class HorBarChart {
         }
     }
 
-    private class CustomFormatter implements IValueFormatter, IAxisValueFormatter {
+    public static class CustomFormatter implements IValueFormatter, IAxisValueFormatter {
 
         private DecimalFormat mFormat;
 
