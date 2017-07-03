@@ -4,6 +4,7 @@ import com.psylife.wrmvplibrary.base.WRBaseModel;
 import com.psylife.wrmvplibrary.base.WRBaseView;
 import com.zhizhen.ybb.base.YbBasePresenter;
 import com.zhizhen.ybb.bean.BaseClassBean;
+import com.zhizhen.ybb.bean.GetStaticLateral;
 import com.zhizhen.ybb.bean.GetStatistics;
 
 import rx.Observable;
@@ -31,14 +32,17 @@ public interface HomeContract {
 
     abstract class HomePagePresenter extends YbBasePresenter<HomePageModel, HomePageView> {
         public abstract void static_data(String token);
+        public abstract void static_lateral(String token);
     }
 
     interface HomePageModel extends WRBaseModel {
         Observable<String> static_data(String token);
+        Observable<String> static_lateral(String token);
     }
 
     interface HomePageView extends WRBaseView {
         void showData(BaseClassBean<GetStatistics> mPersonBean);
+        void showDatalateral(BaseClassBean<GetStaticLateral> mPersonBean);
     }
 
 

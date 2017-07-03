@@ -246,9 +246,10 @@ public class MyBLEActivity extends YbBaseActivity {
 //                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
                             if (text.equalsIgnoreCase("AA0155")) {
                                 Toast.makeText(MyBLEActivity.this, "系统时间设置成功", Toast.LENGTH_LONG).show();
-                            }else if(text.startsWith("aa0a03")){
-                                Toast.makeText(MyBLEActivity.this, "正在获取数据", Toast.LENGTH_LONG).show();
                             }
+//                            else if(text.startsWith("aa0a03")){
+//                                Toast.makeText(MyBLEActivity.this, "正在获取数据", Toast.LENGTH_LONG).show();
+//                            }
 
                         } catch (Exception e) {
                             Log.e(TAG, e.toString());
@@ -256,6 +257,13 @@ public class MyBLEActivity extends YbBaseActivity {
                     }
                 });
 
+            }
+            if(action.equals(UartService.ACTION_DATA_AVAILABLE2)){
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(MyBLEActivity.this, "正在获取数据", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
 //            //*********************//
 //            if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)){

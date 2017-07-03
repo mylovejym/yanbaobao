@@ -11,7 +11,9 @@ public class GetStatistics {
 
     private List<Dashboard> dashboard;
     private List<Histogram> histogram;
+    private List<StaticLateral> static_lateral;
     private List<SitInfo> sit_info;
+    String max_time;
 
     public List<Dashboard> getDashboard() {
         return dashboard;
@@ -35,5 +37,21 @@ public class GetStatistics {
 
     public void setSit_info(List<SitInfo> sit_info) {
         this.sit_info = sit_info;
+    }
+
+    public List<StaticLateral> getStatic_lateral() {
+        return static_lateral;
+    }
+
+    public void setStatic_lateral(List<StaticLateral> static_lateral) {
+        this.static_lateral = static_lateral;
+    }
+
+    public String getMax_time() {
+        return max_time;
+    }
+
+    public void setMax_time(String max_time) {
+        this.max_time = max_time;
     }
 }

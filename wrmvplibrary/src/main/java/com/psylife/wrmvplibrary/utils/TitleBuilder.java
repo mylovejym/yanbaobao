@@ -26,6 +26,7 @@ public class TitleBuilder {
     private ImageView ivRight;
     private TextView tvLeft;
     private TextView tvRight;
+    private TextView subtitle;
 
     public View getRootView() {
         return rootView;
@@ -67,6 +68,7 @@ public class TitleBuilder {
         ivRight = (ImageView) rootView.findViewById(R.id.titlebar_iv_right);
         tvLeft = (TextView) rootView.findViewById(R.id.titlebar_tv_left);
         tvRight = (TextView) rootView.findViewById(R.id.titlebar_tv_right);
+        subtitle = (TextView) rootView.findViewById(R.id.subtitle);
     }
 
     /**
@@ -82,6 +84,7 @@ public class TitleBuilder {
         ivRight = (ImageView) rootView.findViewById(R.id.titlebar_iv_right);
         tvLeft = (TextView) rootView.findViewById(R.id.titlebar_tv_left);
         tvRight = (TextView) rootView.findViewById(R.id.titlebar_tv_right);
+        subtitle = (TextView) rootView.findViewById(R.id.subtitle);
     }
 
     // title
@@ -94,6 +97,12 @@ public class TitleBuilder {
         tvTitle.setVisibility(TextUtils.isEmpty(text) ? View.GONE
                 : View.VISIBLE);
         tvTitle.setText(text);
+        return this;
+    }
+    public TitleBuilder  setSubtitle(String text){
+        subtitle.setVisibility(TextUtils.isEmpty(text) ? View.GONE
+                : View.VISIBLE);
+        subtitle.setText(text);
         return this;
     }
 

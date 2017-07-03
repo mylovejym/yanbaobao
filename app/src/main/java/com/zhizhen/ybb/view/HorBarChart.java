@@ -130,11 +130,11 @@ public class HorBarChart {
             }
         });
 
-        barChart.getAxisRight().setAxisMaximum(10f);
-        barChart.getAxisRight().setAxisMinimum(-10f);
+        barChart.getAxisRight().setAxisMaximum(9f);
+        barChart.getAxisRight().setAxisMinimum(-9f);
         barChart.getAxisRight().setDrawGridLines(true);
         barChart.getAxisRight().setDrawZeroLine(false);
-        barChart.getAxisRight().setLabelCount(20, false);
+        barChart.getAxisRight().setLabelCount(18, false);
         barChart.getAxisRight().setValueFormatter(new CustomFormatter());
         barChart.getAxisRight().setTextSize(9f);
         barChart.getAxisRight().setTextColor(0xffffffff);

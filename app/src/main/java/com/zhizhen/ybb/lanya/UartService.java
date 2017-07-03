@@ -88,10 +88,15 @@ public class UartService extends Service {
             "com.nordicsemi.nrfUART.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE =
             "com.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE";
+    public final static String ACTION_DATA_AVAILABLE2 =
+            "com.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE2";
     public final static String EXTRA_DATA =
             "com.nordicsemi.nrfUART.EXTRA_DATA";
     public final static String DEVICE_DOES_NOT_SUPPORT_UART =
             "com.nordicsemi.nrfUART.DEVICE_DOES_NOT_SUPPORT_UART";
+
+    public final static String ACTION_UP_DATA =
+            "com.nordicsemi.nrfUART.ACTION_UP_DATA";
     
     public static final UUID TX_POWER_UUID = UUID.fromString("00001804-0000-1000-8000-00805f9b34fb");
     public static final UUID TX_POWER_LEVEL_UUID = UUID.fromString("00002a07-0000-1000-8000-00805f9b34fb");
@@ -123,6 +128,7 @@ public class UartService extends Service {
         if(timer!= null) {
             timer.cancel();
         }
+//        mBluetoothGatt.getConnectionState()
         writeRXCharacteristic(hexStringToBytes("AA03030155"));
 //        writeRXCharacteristic(hexStringToBytes("AA03030055"));
         TimerTask task = new TimerTask() {
@@ -152,6 +158,8 @@ public class UartService extends Service {
         RxService.createApi(YbbApi.class).addHardwareData(data.getMeasure_degree().size(),YbBaseApplication.instance.getToken(),json).compose(RxUtil.rxSchedulerHelper()).subscribe(baseBean->{
             if (baseBean.getStatus().equals("0")) {
                 LogUtil.e("cccccccccccccccccccccccccccggggggggggggggggggggggg");
+                Intent intent2 = new Intent(ACTION_UP_DATA);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent2);
                 data =null;
                 if(bleData.QueueLength()>0){
                     handler.postDelayed(new Runnable() {
@@ -281,7 +289,10 @@ public class UartService extends Service {
             if(text.startsWith("aa0a03")){
                 if(isfirstData){
                     isfirstData = false;
-                    intent.putExtra(EXTRA_DATA, characteristic.getValue());
+
+                    Intent intent2 = new Intent(ACTION_DATA_AVAILABLE2);
+                    intent2.putExtra(EXTRA_DATA, characteristic.getValue());
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent2);
                 }
                 String str = text.substring(6,14);
                 Long longStr = Long.parseLong(str, 16)+946656000;
@@ -299,18 +310,24 @@ public class UartService extends Service {
 //                LogUtil.e("ssssssdegree:"+degree);
                 bleData.enQueueMeasure_degree(""+degree);
 
+
+
             }else {
                 if(isfirst&&text.equalsIgnoreCase("AA0155")){
                     isfirst = false;
                     isfirstData = true;
                     startTimer();
                 }
-                intent.putExtra(EXTRA_DATA, characteristic.getValue());
+
+
+
             }
+            intent.putExtra(EXTRA_DATA, characteristic.getValue());
         } else {
         	
         }
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
     }
 
     public class LocalBinder extends Binder {
@@ -400,6 +417,22 @@ public class UartService extends Service {
         mBluetoothDeviceAddress = address;
         mConnectionState = STATE_CONNECTING;
         return true;
+    }
+
+    public boolean isBleConnect(){
+        if(mBluetoothDeviceAddress ==null)
+            return false;
+        final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(mBluetoothDeviceAddress);
+        if (device == null) {
+            Log.w(TAG, "Device not found.  Unable to connect.");
+            return false;
+        }
+        Log.w(TAG, "State::::"+mBluetoothManager.getConnectionState(device,BluetoothProfile.GATT));
+        if(mBluetoothManager.getConnectionState(device,BluetoothProfile.GATT)== BluetoothProfile.STATE_CONNECTED){
+
+            return  true;
+        }
+        return false;
     }
 
     /**

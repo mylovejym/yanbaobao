@@ -114,4 +114,15 @@ public interface YbbApi {
     @FormUrlEncoded
     @POST("/Api/Hardware/static_data")
     Observable<String> static_data(@Field("token") String token);
+
+    /**
+     * 统计数据接口
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/Api/Hardware/static_lateral")
+    Observable<String> static_lateral(@Field("token") String token);
+
+
 }

@@ -26,4 +26,17 @@ public class HomePagePresenter extends HomeContract.HomePagePresenter {
                 ));
 
     }
+
+    @Override
+    public void static_lateral(String token) {
+        if(mModel==null)
+            return;
+        mRxManager.add(mModel
+                .static_lateral(token)
+                .subscribe(
+                        str -> {
+                            mView.showDatalateral(DataSex.sex2(str));
+                        }, e -> mView.showError(e)
+                ));
+    }
 }

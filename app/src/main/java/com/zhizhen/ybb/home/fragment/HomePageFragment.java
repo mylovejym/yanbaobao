@@ -1,16 +1,28 @@
 package com.zhizhen.ybb.home.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -26,19 +38,25 @@ import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.base.YbBaseFragment;
 import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.Dashboard;
+import com.zhizhen.ybb.bean.GetStaticLateral;
 import com.zhizhen.ybb.bean.GetStatistics;
 import com.zhizhen.ybb.bean.Histogram;
+import com.zhizhen.ybb.bean.StaticLateral;
 import com.zhizhen.ybb.home.contract.HomeContract;
 import com.zhizhen.ybb.home.model.HomePageModel;
 import com.zhizhen.ybb.home.presenter.HomePagePresenter;
 import com.zhizhen.ybb.lanya.MyBLEActivity;
+import com.zhizhen.ybb.lanya.UartService;
 import com.zhizhen.ybb.loginpass.LoginActivity;
+import com.zhizhen.ybb.util.BLEUtils;
 import com.zhizhen.ybb.view.BarCharts;
+import com.zhizhen.ybb.view.HorBarChart;
 import com.zhizhen.ybb.view.LineCharts;
 import com.zhizhen.ybb.view.MyDialChart;
 import com.zhizhen.ybb.view.SecondChart;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,13 +70,13 @@ import butterknife.Unbinder;
 public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePageModel> implements HomeContract.HomePageView {
     @BindView(R.id.view_circle)
     View viewCircle;
-    @BindView(R.id.my_dial_chart)
+//    @BindView(R.id.my_dial_chart)
     MyDialChart myDialChart;
     @BindView(R.id.view_tday)
     View viewTday;
     @BindView(R.id.txt)
     TextView txt;
-    @BindView(R.id.text_b)
+//    @BindView(R.id.text_b)
     TextView textB;
     @BindView(R.id.txt_health)
     TextView txtHealth;
@@ -94,6 +112,13 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 
     private LineChart mLineChart;
     private LineCharts mLineCharts;
+    private ProgressBar progressbar;
+    private TextView conn_text;
+
+    private UartService mService = null;
+
+    HorizontalBarChart horbarChart;
+    HorBarChart mHorBarCharts;
 
 //    LoopRecyclerViewPager vpTop;
 
@@ -106,18 +131,20 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         return fragment;
     }
 
+    TitleBuilder titleBuilder;
+
 
     @Override
     public View getTitleView() {
-        return new TitleBuilder(getActivity())
+        titleBuilder = new TitleBuilder(getActivity())
                 .setTitleText("健康报告")
                 .setTitleTextColor(getActivity(),R.color.white)
                 .setRightText("蓝牙")
                 .setTitleBgRes(R.color.blue_313245)
                 .setRightOnClickListener(v -> {
                     startActivity(new Intent(getActivity(), MyBLEActivity.class));
-                })
-                .build();
+                });
+        return titleBuilder.build();
     }
 
     @Override
@@ -134,6 +161,10 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 
     @Override
     public void initUI(View view, @Nullable Bundle savedInstanceState) {
+        progressbar= (ProgressBar) view.findViewById(R.id.progressbar);
+        conn_text = (TextView) view.findViewById(R.id.conn_text);
+        textB = (TextView) view.findViewById(R.id.text_b);
+        myDialChart = (MyDialChart) view.findViewById(R.id.my_dial_chart);
 
         mBarCharts = new BarCharts();
         mBarChart = (BarChart) view.findViewById(R.id.spreadBarChart);
@@ -143,7 +174,126 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         mLineChart = (LineChart) view.findViewById(R.id.lineChart);
         mLineCharts.showLineChart(mLineChart, getLinrData(null));
 
+        mHorBarCharts = new HorBarChart();
+        horbarChart = (HorizontalBarChart) view.findViewById(R.id.horizontalBarChart);
+        mHorBarCharts.showBarChart(horbarChart, getHorBarData((22 - 8) * 6, null, 0), true);
+        service_init();
     }
+
+
+    private void service_init() {
+        Intent bindIntent = new Intent(getActivity(), UartService.class);
+        getActivity().bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
+    }
+
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
+        return intentFilter;
+    }
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+        public void onServiceConnected(ComponentName className, IBinder rawBinder) {
+            mService = ((UartService.LocalBinder) rawBinder).getService();
+            Log.d(TAG, "onServiceConnected mService= " + mService);
+            if(mService.isBleConnect()){
+                conn_text.setVisibility(View.GONE);
+                conn_text.setText("已连接");
+            }else{
+                conn_text.setVisibility(View.VISIBLE);
+                conn_text.setText("蓝牙未连接，请您开启蓝牙并连接坐姿检测仪");
+            }
+
+        }
+
+        public void onServiceDisconnected(ComponentName classname) {
+            ////     mService.disconnect(mDevice);
+            mService = null;
+        }
+    };
+
+    private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            final Intent mIntent = intent;
+            //*********************//
+            if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+                conn_text.setVisibility(View.GONE);
+                conn_text.setText("已连接");
+            }
+
+            //*********************//
+            if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+                conn_text.setVisibility(View.VISIBLE);
+                conn_text.setText("蓝牙未连接，请您开启蓝牙并连接坐姿检测仪");
+            }
+
+
+            //*********************//
+            if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
+
+            }
+            if(action.equals(UartService.ACTION_UP_DATA)){
+                if(mPresenter!=null) {
+                    mPresenter.static_data(YbBaseApplication.instance.getToken());
+                    mPresenter.static_lateral(YbBaseApplication.instance.getToken());
+                    onlyone = true;
+                }
+            }
+            //*********************//
+            if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
+
+                final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
+
+                        try {
+//                            String text = new String(txValue, "UTF-8");
+                            String text = BLEUtils.bytesToHexString(txValue);
+//                            String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
+                            LogUtil.e("RX:" + text);
+//                            listAdapter.add("["+currentDateTimeString+"] RX: "+text);
+//                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
+                            if (text.equalsIgnoreCase("AA0155")||text==null) {
+                                progressbar.setVisibility(View.GONE);
+                                isfirst = false;
+                            }
+                            else if(text.startsWith("aa0a03")){
+                                String str = text.substring(6,14);
+                                Long longStr = Long.parseLong(str, 16)+946656000;
+                                if(!isfirst){
+                                    firstTime = longStr;
+                                    progressbar.setVisibility(View.VISIBLE);
+                                    progressbar.setMax((int) (Calendar.getInstance().getTimeInMillis()/1000-firstTime));
+                                    isfirst = true;
+                                }
+                                progressbar.setProgress((int) (longStr-firstTime));
+                            }
+
+                        } catch (Exception e) {
+                            Log.e(TAG, e.toString());
+                        }
+
+
+            }
+            //*********************//
+            if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)) {
+//                showMessage("Device doesn't support UART. Disconnecting");
+
+            }
+
+
+        }
+    };
+    long firstTime;
+    boolean isfirst;
 
     static boolean onlyone;
 
@@ -169,6 +319,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             LogUtil.e("hepan", "显示封面");
             if(mPresenter!=null) {
                 mPresenter.static_data(YbBaseApplication.instance.getToken());
+                mPresenter.static_lateral(YbBaseApplication.instance.getToken());
                 onlyone = true;
             }
         }
@@ -179,6 +330,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         super.onResume();
         if(mPresenter!=null) {
             mPresenter.static_data(YbBaseApplication.instance.getToken());
+            mPresenter.static_lateral(YbBaseApplication.instance.getToken());
             onlyone = true;
         }
     }
@@ -189,14 +341,90 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 //        onlyone = false;
     }
 
+    /**
+     * 这个方法是初始化数据的
+     *
+     * @param count X 轴的个数
+     */
+    public BarData getHorBarData(int count, List<StaticLateral> static_lateral, int j) {
+        ArrayList<String> xValues = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            String a = "";
+            if (i % 6 == 0) {
+                if (i / 6 + 8 < 10) {
+                    a = "0" + (i / 6 + 8) + ":00";
+                } else {
+                    a = (i / 6 + 8) + ":00";
+                }
+            }
+            xValues.add(a);
+        }
+
+        ArrayList<BarEntry> yValues = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            float value = 0;
+            float value2 = 0;
+
+            if (static_lateral != null && static_lateral.size() > i) {
+                if((90-static_lateral.get(i).getAverageforFloat())<0){
+                    value = (90-static_lateral.get(i).getAverageforFloat())/10f;
+                }else{
+                    value2 = (90-static_lateral.get(i).getAverageforFloat())/10f;
+                }
+            }
+            if (j != 0) {
+                value = -(float) (Math.random() * 10/*10以内的随机数*/);
+                value2 = (float) (Math.random() * 10/*10以内的随机数*/);
+            }
+            yValues.add(new BarEntry(i, new float[]{value, value2}));
+
+        }
+        // y轴的数据集合
+        BarDataSet barDataSet = new BarDataSet(yValues, "测试图");
+
+        //设置条状图颜色
+        barDataSet.setColors(new int[]{Color.parseColor("#7ddafb"), Color.parseColor("#4dcdfd")});
+
+        // 设置栏阴影颜色
+        barDataSet.setBarShadowColor(Color.parseColor("#01000000"));
+
+        // 绘制值
+        barDataSet.setDrawValues(false);
+//        barDataSet.setValueFormatter(new CustomFormatter());
+//        barDataSet.setValueTextSize(7f);
+        barDataSet.setAxisDependency(YAxis.AxisDependency.RIGHT);
+//        barDataSet.setValueTextColor(Color.parseColor("#ffffff"));
+//        barDataSet.setDrawValues(true);
+
+        BarData barData = new BarData(barDataSet);
+
+        return barData;
+    }
+
     @Override
     public void showData(BaseClassBean<GetStatistics> mPersonBean) {
         LogUtil.e("onlyone" + onlyone);
         if (mPersonBean.getStatus().equals("0")) {
             if (mPersonBean.getData().getDashboard() != null && onlyone) {
                 LogUtil.e("1111111111111111111111111");
+//                int h= mPersonBean.getData().getHistogram().size()/6+8;
+//                int m = mPersonBean.getData().getHistogram().size()%6*10;
+//                String time= "";
+//                if (h< 10) {
+//                    time = "0" + h + ":";
+//                } else {
+//                    time = ""+ h + ":";
+//                }
+//                if(m ==0){
+//                    time += "00";
+//                }else{
+//                    time += m;
+//                }
+//
+//                titleBuilder.setSubtitle(mPersonBean.getData().getHistogram().get(0).getMeasureDate()+" "+time);
 //                onlyone = false;
                 textB.setText(""+((int)Double.parseDouble(mPersonBean.getData().getSit_info().get(0).getSit_time_percent()))+"%");
+                LogUtil.e("222222222222222222");
 //                firstLayout.removeAllViews();
 //                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 //                myDialChart = new MyDialChart(getActivity(), mPersonBean.getData().getDashboard());
@@ -204,12 +432,14 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 //                firstLayout.invalidate();
 
                 myDialChart.put(mPersonBean.getData().getDashboard());
+                LogUtil.e("333333333333333333333");
 //                myDialChart.invalidate();myDialChart.forceLayout();myDialChart.requestLayout();
 //                myDialChart.invalidate();
                 mLineCharts.showLineChart(mLineChart, getLinrData(mPersonBean.getData().getDashboard()));
 //                        secondChart.put(mPersonBean.getData().getDashboard());
                         mBarChart.setData(getBarData((22-8)*6,mPersonBean.getData().getHistogram(),0));
 //                        mBarChart.invalidate();
+//                mHorBarCharts.showBarChart(horbarChart, getHorBarData((22 - 8) * 6, mPersonBean.getData().getStatic_lateral(), 0), true);
 
 
             }
@@ -223,14 +453,27 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             }
             if(mPersonBean.getStatus().equals("1137")){
                 textB.setText("0%");
+                titleBuilder.setSubtitle("");
                 myDialChart.clear();
                 mLineCharts.showLineChart(mLineChart, getLinrData(null));
                 mBarCharts.showBarChart(mBarChart, getBarData((22 - 8) * 6, null,0), true);
+                mHorBarCharts.showBarChart(horbarChart, getHorBarData((22 - 8) * 6, null, 0), true);
             }
             Toast.makeText(this.getContext(), mPersonBean.getStatusInfo(), Toast.LENGTH_LONG).show();
         }
 //        mBarChart.setData(getBarData((22-8)*6,null,1));
 //        mBarChart.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showDatalateral(BaseClassBean<GetStaticLateral> mPersonBean) {
+        if (mPersonBean.getStatus().equals("0")) {
+
+                titleBuilder.setSubtitle(mPersonBean.getData().getMin_time()+" - "+mPersonBean.getData().getMax_time());
+                mHorBarCharts.showBarChart(horbarChart, getHorBarData((22 - 8) * 6, mPersonBean.getData().getStatic_lateral(), 0), true);
+
+
+        }
     }
 
     public LineData getLinrData(List<Dashboard> dashboard){

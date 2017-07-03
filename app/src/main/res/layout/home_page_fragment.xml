@@ -36,6 +36,13 @@
         android:max="25"
         android:background="@color/white"
         android:visibility="gone"/>
+    <TextView
+        android:id="@+id/conn_text"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:textColor="@color/white"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -325,8 +332,64 @@
             <!--<com.zhizhen.ybb.view.ThirdView
                 android:layout_width="match_parent"
                 android:layout_height="148dp"/>-->
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/gray_666666"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"></View>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginTop="5dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_weight="1">
+                    <View
+                        android:layout_width="20dp"
+                        android:layout_height="10dp"
+                        android:background="#b5ecff"
+                        android:layout_marginRight="6dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="俯坐"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="6dp"
+                        android:text="仰坐"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                    <View
+                        android:layout_width="20dp"
+                        android:layout_height="10dp"
+                        android:background="#4dcdfd"/>
+                </LinearLayout>
 
 
+            </LinearLayout>
+
+            <com.zhizhen.ybb.view.MyHorizontalBarChart
+                android:id="@+id/horizontalBarChart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="-20dp"
+                />
 
         </LinearLayout>
 

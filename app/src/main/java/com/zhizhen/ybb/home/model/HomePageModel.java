@@ -16,4 +16,9 @@ public class HomePageModel implements HomeContract.HomePageModel {
     public Observable<String> static_data(String token) {
         return RxService.createApiString(YbbApi.class).static_data(token).compose(RxUtil.rxSchedulerHelper());
     }
+
+    @Override
+    public Observable<String> static_lateral(String token) {
+        return RxService.createApiString(YbbApi.class).static_lateral(token).compose(RxUtil.rxSchedulerHelper());
+    }
 }

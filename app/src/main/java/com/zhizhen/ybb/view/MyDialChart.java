@@ -95,7 +95,7 @@ public class MyDialChart extends View{
 
     public void put(List<Dashboard> dashboard){
         putdata(dashboard);
-        LogUtil.e("3333333333333333333333333");
+//        LogUtil.e("3333333333333333333333333");
 //        postInvalidate();
         invalidate();
 
@@ -106,13 +106,13 @@ public class MyDialChart extends View{
         for(int i=0;i<90;i++){
             float p = Float.valueOf(dashboard.get(i).getPercent());
             maps.put((i+1)*2, (int) p);
-            LogUtil.e("4444444444444444");
+//            LogUtil.e("4444444444444444");
 //            if(i == dashboard.size()){
 //                invalidate();
 //                LogUtil.e("66666666666666");
 //            }
         }
-        LogUtil.e("555555555555555555");
+//        LogUtil.e("555555555555555555");
 
     }
 
@@ -142,8 +142,8 @@ public class MyDialChart extends View{
         LogUtil.w((bitmapbg.getWidth()/2)+":"+bitmapbg.getHeight());
 //        float i = 0.1f;
         for (Integer key : maps.keySet()) {
-            LogUtil.e("*****************:"+key);
-            LogUtil.e("*****************vvv:"+maps.get(key));
+//            LogUtil.e("*****************:"+key);
+//            LogUtil.e("*****************vvv:"+maps.get(key));
 //            if(key>=0&&key<=180) {
                 path.lineTo(bitmapbg.getWidth() / 2 - cos(key, maps.get(key)), bitmapbg.getHeight() - sin(key, maps.get(key)));
 //            }

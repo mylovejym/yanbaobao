@@ -27,6 +27,9 @@ public class Histogram {
 
     private String date;                    //记录日期
 
+    private String timeNum;
+    private String measureDate;
+
     public String getDegree_interval() {
         return degree_interval;
     }
@@ -99,5 +102,19 @@ public class Histogram {
         return this.date;
     }
 
+    public String getTimeNum() {
+        return timeNum;
+    }
 
+    public void setTimeNum(String timeNum) {
+        this.timeNum = timeNum;
+    }
+
+    public String getMeasureDate() {
+        return measureDate;
+    }
+
+    public void setMeasureDate(String measureDate) {
+        this.measureDate = measureDate;
+    }
 }
