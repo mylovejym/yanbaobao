@@ -369,12 +369,15 @@ public class MyBLEActivity extends YbBaseActivity {
         }
         mDevRssiMap.put(device.getAddress(), rssi);
         if(!deviceFound){
-            mDataList.add(device);
-            runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mBLEDeviceAdapter.notifyDataSetChanged();
-            }});
+            if(device.getName().startsWith("YZJ")) {
+                mDataList.add(device);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mBLEDeviceAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
         }
     }
 

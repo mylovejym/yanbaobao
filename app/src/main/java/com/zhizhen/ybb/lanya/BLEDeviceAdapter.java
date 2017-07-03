@@ -69,7 +69,7 @@ public class BLEDeviceAdapter extends BaseAdapter {
 
         @Override
         public void refreshView(BluetoothDevice data) {
-            mNameText.setText(data.getName());
+            mNameText.setText(data.getName().startsWith("YZJ")?"眼保宝姿态测量仪":data.getName());
             mAddressText.setText(data.getAddress());
         }
     }
