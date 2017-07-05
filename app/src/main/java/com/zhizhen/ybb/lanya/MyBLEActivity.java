@@ -369,7 +369,7 @@ public class MyBLEActivity extends YbBaseActivity {
         }
         mDevRssiMap.put(device.getAddress(), rssi);
         if(!deviceFound){
-            if(device.getName().startsWith("YZJ")) {
+            if(device.getName()!=null&&device.getName().startsWith("YZJ")) {
                 mDataList.add(device);
                 runOnUiThread(new Runnable() {
                     @Override

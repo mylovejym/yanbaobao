@@ -57,7 +57,6 @@ import com.zhizhen.ybb.util.BLEUtils;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 import static com.zhizhen.ybb.util.Utils.hexStringToBytes;
@@ -124,22 +123,34 @@ public class UartService extends Service {
 
     Handler handler = new Handler();
 
+    boolean isstart = false;
+
     private void startTimer(){
-        if(timer!= null) {
-            timer.cancel();
-        }
+//        if(timer!= null) {
+//            timer.cancel();
+//        }
 //        mBluetoothGatt.getConnectionState()
+        if(isstart){
+            return;
+        }
+        isstart = true;
         writeRXCharacteristic(hexStringToBytes("AA03030155"));
-//        writeRXCharacteristic(hexStringToBytes("AA03030055"));
-        TimerTask task = new TimerTask() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-//                System.out.println("task   run:"+getCurrentTime());
                 rundata();
             }
-        };
-        timer = new Timer();
-        timer.schedule(task, 60*1000,60*1000);
+        },60*1000);
+//        writeRXCharacteristic(hexStringToBytes("AA03030055"));
+//        TimerTask task = new TimerTask() {
+//            @Override
+//            public void run() {
+////                System.out.println("task   run:"+getCurrentTime());
+//                rundata();
+//            }
+//        };
+//        timer = new Timer();
+//        timer.schedule(task, 60*1000,60*1000);
 
     }
 
@@ -171,12 +182,28 @@ public class UartService extends Service {
 
 
                 }else {
-
-                    writeRXCharacteristic(hexStringToBytes("AA03030155"));
+                    if(isstart) {
+                        writeRXCharacteristic(hexStringToBytes("AA03030155"));
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                rundata();
+                            }
+                        }, 60 * 1000);
+                    }
                 }
             }
 
-        },e->{});
+        },e->{
+            if(isstart) {
+                writeRXCharacteristic(hexStringToBytes("AA03030155"));
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        rundata();
+                    }
+                }, 60 * 1000);
+        }});
     }
 
     String[] testStr= new String[]{"AA0A0320D4763A0024FF0055","AA0A0320D4763C0002000055", "AA0A0320D476500014FF0055", "AA0A0320D476520002000055"};

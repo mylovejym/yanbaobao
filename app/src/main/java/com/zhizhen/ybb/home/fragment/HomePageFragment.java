@@ -366,10 +366,10 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             float value2 = 0;
 
             if (static_lateral != null && static_lateral.size() > i) {
-                if((90-static_lateral.get(i).getAverageforFloat())<0){
-                    value = (90-static_lateral.get(i).getAverageforFloat())/10f;
+                if((90-static_lateral.get(i).getAverageforFloat())>0){
+                    value = -(90-static_lateral.get(i).getAverageforFloat())/10f;
                 }else{
-                    value2 = (90-static_lateral.get(i).getAverageforFloat())/10f;
+                    value2 = -(90-static_lateral.get(i).getAverageforFloat())/10f;
                 }
             }
             if (j != 0) {
