@@ -169,8 +169,9 @@ public class UartService extends Service {
         RxService.createApi(YbbApi.class).addHardwareData(data.getMeasure_degree().size(),YbBaseApplication.instance.getToken(),json).compose(RxUtil.rxSchedulerHelper()).subscribe(baseBean->{
             if (baseBean.getStatus().equals("0")) {
                 LogUtil.e("cccccccccccccccccccccccccccggggggggggggggggggggggg");
-                Intent intent2 = new Intent(ACTION_UP_DATA);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(intent2);
+//                Intent intent2 = new Intent(ACTION_UP_DATA);
+//                LocalBroadcastManager.getInstance(this).sendBroadcast(intent2);
+                broadcastUpdate(ACTION_UP_DATA);
                 data =null;
                 if(bleData.QueueLength()>0){
                     handler.postDelayed(new Runnable() {
@@ -183,13 +184,16 @@ public class UartService extends Service {
 
                 }else {
                     if(isstart) {
-                        writeRXCharacteristic(hexStringToBytes("AA03030155"));
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                rundata();
-                            }
-                        }, 60 * 1000);
+
+                          writeRXCharacteristic(hexStringToBytes("AA03030155"));
+                          handler.postDelayed(new Runnable() {
+                               @Override
+                               public void run() {
+                                   rundata();
+                                }
+                          }, 60 * 1000);
+
+
                     }
                 }
             }

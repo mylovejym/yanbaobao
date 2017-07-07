@@ -195,6 +195,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
         intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
         intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
+        intentFilter.addAction(UartService.ACTION_UP_DATA);
         return intentFilter;
     }
     private ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -224,6 +225,8 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
+            LogUtil.e("actionactionactionactionaction:" +action);
+
             final Intent mIntent = intent;
             //*********************//
             if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
@@ -243,7 +246,9 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 
             }
             if(action.equals(UartService.ACTION_UP_DATA)){
+                LogUtil.e("ACTION_UP_DATA0:" + UartService.ACTION_UP_DATA);
                 if(mPresenter!=null) {
+                    LogUtil.e("ACTION_UP_DATA1:" + UartService.ACTION_UP_DATA);
                     mPresenter.static_data(YbBaseApplication.instance.getToken());
                     mPresenter.static_lateral(YbBaseApplication.instance.getToken());
                     onlyone = true;
