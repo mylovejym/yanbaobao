@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.bean.DeviceInfo;
+import com.zhizhen.ybb.bean.MyBLEDevice;
 import com.zhizhen.ybb.my.interFace.BindingDeviceOnClickListener;
 
 import java.util.ArrayList;
@@ -19,15 +20,15 @@ import java.util.List;
 public class DeviceAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private List<DeviceInfo> mItemBeans = new ArrayList<>();
+    private List<MyBLEDevice> mItemBeans = new ArrayList<>();
     private BindingDeviceOnClickListener bindingDeviceOnClickListener;
 
-    public DeviceAdapter(Context context, List<DeviceInfo> mItemBeans) {
+    public DeviceAdapter(Context context, List<MyBLEDevice> mItemBeans) {
         mInflater = LayoutInflater.from(context);
         this.mItemBeans = mItemBeans;
     }
 
-    public void refresh(List<DeviceInfo> mItemBeans) {
+    public void refresh(List<MyBLEDevice> mItemBeans) {
         this.mItemBeans = mItemBeans;
         this.notifyDataSetChanged();
     }
@@ -64,13 +65,13 @@ public class DeviceAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.item_tv_name.setText(mItemBeans.get(position).getDeviceName());
-        holder.item_tv_state.setText(mItemBeans.get(position).getDeviceState().equals("1") ? "已绑定" : "未绑定");
-        holder.item_bt.setText(mItemBeans.get(position).getDeviceState().equals("1") ? "解除绑定" : "绑定设备");
+        holder.item_tv_name.setText(mItemBeans.get(position).getName());
+//        holder.item_tv_state.setText(mItemBeans.get(position).getDeviceState().equals("1") ? "已绑定" : "未绑定");
+//        holder.item_bt.setText(mItemBeans.get(position).getDeviceState().equals("1") ? "解除绑定" : "绑定设备");
         holder.item_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bindingDeviceOnClickListener.onBindingOnClickListener(v, position, mItemBeans.get(position).getDeviceState());
+//                bindingDeviceOnClickListener.onBindingOnClickListener(v, position, mItemBeans.get(position).getDeviceState());
             }
         });
         return convertView;

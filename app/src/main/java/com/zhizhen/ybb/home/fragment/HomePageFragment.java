@@ -49,6 +49,7 @@ import com.zhizhen.ybb.lanya.MyBLEActivity;
 import com.zhizhen.ybb.lanya.UartService;
 import com.zhizhen.ybb.loginpass.LoginActivity;
 import com.zhizhen.ybb.util.BLEUtils;
+import com.zhizhen.ybb.util.SpUtils;
 import com.zhizhen.ybb.view.BarCharts;
 import com.zhizhen.ybb.view.HorBarChart;
 import com.zhizhen.ybb.view.LineCharts;
@@ -204,12 +205,16 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         public void onServiceConnected(ComponentName className, IBinder rawBinder) {
             mService = ((UartService.LocalBinder) rawBinder).getService();
             Log.d(TAG, "onServiceConnected mService= " + mService);
+
             if(mService.isBleConnect()){
                 conn_text.setVisibility(View.GONE);
                 conn_text.setText("已连接");
             }else{
                 conn_text.setVisibility(View.VISIBLE);
                 conn_text.setText("蓝牙未连接，请您开启蓝牙并连接坐姿检测仪");
+                if(SpUtils.getBindBLEDevice(getActivity())!=null){
+                    mService.connect(SpUtils.getBindBLEDevice(getActivity()).getAddress());
+                }
             }
 
         }

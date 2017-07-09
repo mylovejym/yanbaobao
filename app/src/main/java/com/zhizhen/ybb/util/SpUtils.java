@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.zhizhen.ybb.bean.MyBLEDevice;
+import com.zhizhen.ybb.bean.MyBLEDeviceMap;
 import com.zhizhen.ybb.bean.PersonInfo;
 import com.zhizhen.ybb.bean.UserBean;
 
@@ -42,6 +44,69 @@ public class SpUtils {
         }
         return user;
     }
+
+    public synchronized static void setMyBLEDeviceMap(Context ctx, MyBLEDeviceMap myBLEDeviceMap) {
+        if (mSharedPreferences == null) {
+            mSharedPreferences = ctx.getSharedPreferences(spFileName,
+                    Context.MODE_PRIVATE);
+        }
+        Gson gson = new Gson();
+        String json = gson.toJson(myBLEDeviceMap);
+        mSharedPreferences.edit().putString("myBLEDeviceMap", json).commit();
+    }
+
+    public static MyBLEDeviceMap getMyBLEDeviceMap(Context ctx) {
+        if (mSharedPreferences == null) {
+            mSharedPreferences = ctx.getSharedPreferences(spFileName,
+                    Context.MODE_PRIVATE);
+        }
+        MyBLEDeviceMap myBLEDeviceMap = null;
+        String json = mSharedPreferences.getString("myBLEDeviceMap", null);
+        try {
+            Gson gson = new Gson();
+            myBLEDeviceMap = gson.fromJson(json, MyBLEDeviceMap.class);
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+
+        }
+        if(myBLEDeviceMap==null){
+            myBLEDeviceMap = new MyBLEDeviceMap();
+        }
+        return myBLEDeviceMap;
+    }
+    public static void setBindBLEDevice(Context ctx, MyBLEDevice myBLEDevice){
+        if (mSharedPreferences == null) {
+            mSharedPreferences = ctx.getSharedPreferences(spFileName,
+                    Context.MODE_PRIVATE);
+        }
+        if(myBLEDevice == null){
+            mSharedPreferences.edit().putString("BindBLEDevice", "").commit();
+        }
+        Gson gson = new Gson();
+        String json = gson.toJson(myBLEDevice);
+        mSharedPreferences.edit().putString("BindBLEDevice", json).commit();
+    }
+
+    public static MyBLEDevice getBindBLEDevice(Context ctx) {
+        if (mSharedPreferences == null) {
+            mSharedPreferences = ctx.getSharedPreferences(spFileName,
+                    Context.MODE_PRIVATE);
+        }
+        MyBLEDevice myBLEDevice = null;
+        String json = mSharedPreferences.getString("BindBLEDevice", null);
+        if(json.equals("")){
+            json =null;
+        }
+        try {
+            Gson gson = new Gson();
+            myBLEDevice = gson.fromJson(json, MyBLEDevice.class);
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+
+        }
+        return myBLEDevice;
+    }
+
 
     public synchronized static void setPersonInfo(Context ctx, PersonInfo personInfo) {
         if (mSharedPreferences == null) {

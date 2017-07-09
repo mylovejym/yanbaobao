@@ -13,6 +13,7 @@ import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
 import com.zhizhen.ybb.bean.DeviceInfo;
+import com.zhizhen.ybb.bean.MyBLEDeviceMap;
 import com.zhizhen.ybb.my.adapter.DeviceAdapter;
 import com.zhizhen.ybb.my.interFace.BindingDeviceOnClickListener;
 import com.zhizhen.ybb.util.SpUtils;
@@ -91,25 +92,27 @@ public class MyDeivceActivity extends YbBaseActivity implements View.OnClickList
 
     @Override
     public void initdata() {
-        List<DeviceInfo> list = new ArrayList<>();
-        DeviceInfo deviceInfo;
-        for (int i = 0; i < 5; i++) {
-            if (i == 3)
-                deviceInfo = new DeviceInfo("TRWOMOPD-EYE-1" + i, "1");
-            else
-                deviceInfo = new DeviceInfo("TRWOMOPD-EYE-1" + i, "2");
-            list.add(deviceInfo);
-        }
-        deviceAdapter = new DeviceAdapter(this, list);
+//        List<DeviceInfo> list = new ArrayList<>();
+//        DeviceInfo deviceInfo;
+//        for (int i = 0; i < 5; i++) {
+//            if (i == 3)
+//                deviceInfo = new DeviceInfo("TRWOMOPD-EYE-1" + i, "1");
+//            else
+//                deviceInfo = new DeviceInfo("TRWOMOPD-EYE-1" + i, "2");
+//            list.add(deviceInfo);
+//        }
+        MyBLEDeviceMap map =SpUtils.getMyBLEDeviceMap(this);
+
+        deviceAdapter = new DeviceAdapter(this, map.getMyDeviceList());
         deviceAdapter.setBindingDeviceOnClickListener(new BindingDeviceOnClickListener() {
             @Override
             public void onBindingOnClickListener(View view, int pos, String bindingState) {
-                if (bindingState.equals("1")) {
-                    list.get(pos).setDeviceState("2");
-                } else {
-                    list.get(pos).setDeviceState("1");
-                }
-                deviceAdapter.refresh(list);
+//                if (bindingState.equals("1")) {
+//                    list.get(pos).setDeviceState("2");
+//                } else {
+//                    list.get(pos).setDeviceState("1");
+//                }
+//                deviceAdapter.refresh(list);
             }
         });
         listDevice.setAdapter(deviceAdapter);

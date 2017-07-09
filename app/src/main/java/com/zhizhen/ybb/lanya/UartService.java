@@ -160,7 +160,17 @@ public class UartService extends Service {
             data.copy(bleData);
         }
         if(data.getMeasure_time()==null||data.getMeasure_time().size()==0){
-            writeRXCharacteristic(hexStringToBytes("AA03030155"));
+            if(isBleConnect()) {
+                writeRXCharacteristic(hexStringToBytes("AA03030155"));
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        rundata();
+                    }
+                }, 60 * 1000);
+            }else{
+                isstart =false;
+            }
             return;
         }
         Gson mGson = new Gson();
@@ -184,14 +194,17 @@ public class UartService extends Service {
 
                 }else {
                     if(isstart) {
-
-                          writeRXCharacteristic(hexStringToBytes("AA03030155"));
-                          handler.postDelayed(new Runnable() {
-                               @Override
-                               public void run() {
-                                   rundata();
+                        if(isBleConnect()) {
+                            writeRXCharacteristic(hexStringToBytes("AA03030155"));
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    rundata();
                                 }
-                          }, 60 * 1000);
+                            }, 60 * 1000);
+                        }else{
+                            isstart =false;
+                        }
 
 
                     }
@@ -200,6 +213,7 @@ public class UartService extends Service {
 
         },e->{
             if(isstart) {
+                if(isBleConnect()) {
                 writeRXCharacteristic(hexStringToBytes("AA03030155"));
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -207,6 +221,9 @@ public class UartService extends Service {
                         rundata();
                     }
                 }, 60 * 1000);
+                }else{
+                    isstart =false;
+                }
         }});
     }
 

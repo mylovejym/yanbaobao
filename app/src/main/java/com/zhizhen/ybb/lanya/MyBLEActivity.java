@@ -30,7 +30,9 @@ import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
+import com.zhizhen.ybb.bean.MyBLEDeviceMap;
 import com.zhizhen.ybb.util.BLEUtils;
+import com.zhizhen.ybb.util.SpUtils;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -142,6 +144,10 @@ public class MyBLEActivity extends YbBaseActivity {
                 Log.d(TAG, "... onActivityResultdevice.address==" + mDevice + "mserviceValue" + mService);
 
                 mService.connect(deviceAddress);
+                MyBLEDeviceMap map = SpUtils.getMyBLEDeviceMap(MyBLEActivity.this);
+                map.addDevice(device);
+                SpUtils.setMyBLEDeviceMap(MyBLEActivity.this, map);
+                SpUtils.setBindBLEDevice(MyBLEActivity.this,map.getBLEMap().get(device.getAddress()));
 
 //                Intent intent = new Intent(MyBLEActivity.this, NormalDeviceActivity.class);
 //                intent.putExtra(BluetoothDevice.EXTRA_DEVICE, device.getAddress());
