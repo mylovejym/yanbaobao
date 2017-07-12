@@ -15,12 +15,17 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blog.www.guideview.Component;
+import com.blog.www.guideview.Guide;
+import com.blog.www.guideview.GuideBuilder;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -42,6 +47,7 @@ import com.zhizhen.ybb.bean.GetStaticLateral;
 import com.zhizhen.ybb.bean.GetStatistics;
 import com.zhizhen.ybb.bean.Histogram;
 import com.zhizhen.ybb.bean.StaticLateral;
+import com.zhizhen.ybb.component.SimpleComponent;
 import com.zhizhen.ybb.home.contract.HomeContract;
 import com.zhizhen.ybb.home.model.HomePageModel;
 import com.zhizhen.ybb.home.presenter.HomePagePresenter;
@@ -71,13 +77,13 @@ import butterknife.Unbinder;
 public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePageModel> implements HomeContract.HomePageView {
     @BindView(R.id.view_circle)
     View viewCircle;
-//    @BindView(R.id.my_dial_chart)
+    //    @BindView(R.id.my_dial_chart)
     MyDialChart myDialChart;
     @BindView(R.id.view_tday)
     View viewTday;
     @BindView(R.id.txt)
     TextView txt;
-//    @BindView(R.id.text_b)
+    //    @BindView(R.id.text_b)
     TextView textB;
     @BindView(R.id.txt_health)
     TextView txtHealth;
@@ -106,6 +112,8 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     LinearLayout firstLayout;
     @BindView(R.id.spreadBarChart)
     BarChart spreadBarChart;
+    @BindView(R.id.rl_guide_01)
+    RelativeLayout rlGuide_01;
     Unbinder unbinder1;
 
     private BarChart mBarChart;
@@ -123,6 +131,9 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 
 //    LoopRecyclerViewPager vpTop;
 
+    //功能引导
+    private Guide guide;
+
     private static HomePageFragment fragment = null;
 
     public static HomePageFragment getInstance() {
@@ -139,7 +150,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     public View getTitleView() {
         titleBuilder = new TitleBuilder(getActivity())
                 .setTitleText("健康报告")
-                .setTitleTextColor(getActivity(),R.color.white)
+                .setTitleTextColor(getActivity(), R.color.white)
                 .setRightText("蓝牙")
                 .setTitleBgRes(R.color.blue_313245)
                 .setRightOnClickListener(v -> {
@@ -162,14 +173,33 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 
     @Override
     public void initUI(View view, @Nullable Bundle savedInstanceState) {
-        progressbar= (ProgressBar) view.findViewById(R.id.progressbar);
+        getActivity().getWindow()
+                .getDecorView()
+                .getViewTreeObserver()
+                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override public void onGlobalLayout() {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            getActivity().getWindow()
+                                    .getDecorView()
+                                    .getViewTreeObserver()
+                                    .removeOnGlobalLayoutListener(this);
+                        } else {
+                            getActivity().getWindow()
+                                    .getDecorView()
+                                    .getViewTreeObserver()
+                                    .removeGlobalOnLayoutListener(this);
+                        }
+                        showGuideView();
+                    }
+                });
+        progressbar = (ProgressBar) view.findViewById(R.id.progressbar);
         conn_text = (TextView) view.findViewById(R.id.conn_text);
         textB = (TextView) view.findViewById(R.id.text_b);
         myDialChart = (MyDialChart) view.findViewById(R.id.my_dial_chart);
 
         mBarCharts = new BarCharts();
         mBarChart = (BarChart) view.findViewById(R.id.spreadBarChart);
-        mBarCharts.showBarChart(mBarChart, getBarData((22 - 8) * 6, null,0), true);
+        mBarCharts.showBarChart(mBarChart, getBarData((22 - 8) * 6, null, 0), true);
 
         mLineCharts = new LineCharts();
         mLineChart = (LineChart) view.findViewById(R.id.lineChart);
@@ -199,6 +229,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         intentFilter.addAction(UartService.ACTION_UP_DATA);
         return intentFilter;
     }
+
     private ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -207,15 +238,15 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             Log.d(TAG, "onServiceConnected mService= " + mService);
             mService.initialize();
 
-            if(mService.isBleConnect()){
+            if (mService.isBleConnect()) {
                 conn_text.setVisibility(View.GONE);
                 conn_text.setText("已连接");
-            }else{
+            } else {
                 conn_text.setVisibility(View.VISIBLE);
                 conn_text.setText("蓝牙未连接，请您开启蓝牙并连接坐姿检测仪");
-                LogUtil.e("aaaaaaa:" );
-                if(SpUtils.getBindBLEDevice(getActivity())!=null&&  SpUtils.getBoolean(getContext(), "isbinded",false)){
-                    LogUtil.e("aaaaaaa:连接" );
+                LogUtil.e("aaaaaaa:");
+                if (SpUtils.getBindBLEDevice(getActivity()) != null && SpUtils.getBoolean(getContext(), "isbinded", false)) {
+                    LogUtil.e("aaaaaaa:连接");
                     mService.connect(SpUtils.getBindBLEDevice(getActivity()).getAddress());
                 }
             }
@@ -233,7 +264,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
-            LogUtil.e("actionactionactionactionaction:" +action);
+            LogUtil.e("actionactionactionactionaction:" + action);
 
             final Intent mIntent = intent;
             //*********************//
@@ -253,9 +284,9 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
 
             }
-            if(action.equals(UartService.ACTION_UP_DATA)){
+            if (action.equals(UartService.ACTION_UP_DATA)) {
                 LogUtil.e("ACTION_UP_DATA0:" + UartService.ACTION_UP_DATA);
-                if(mPresenter!=null) {
+                if (mPresenter != null) {
                     LogUtil.e("ACTION_UP_DATA1:" + UartService.ACTION_UP_DATA);
                     mPresenter.static_data(YbBaseApplication.instance.getToken());
                     mPresenter.static_lateral(YbBaseApplication.instance.getToken());
@@ -267,32 +298,31 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 
                 final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
 
-                        try {
+                try {
 //                            String text = new String(txValue, "UTF-8");
-                            String text = BLEUtils.bytesToHexString(txValue);
+                    String text = BLEUtils.bytesToHexString(txValue);
 //                            String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
-                            LogUtil.e("RX:" + text);
+                    LogUtil.e("RX:" + text);
 //                            listAdapter.add("["+currentDateTimeString+"] RX: "+text);
 //                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
-                            if (text.equalsIgnoreCase("AA0155")||text==null) {
-                                progressbar.setVisibility(View.GONE);
-                                isfirst = false;
-                            }
-                            else if(text.startsWith("aa0a03")){
-                                String str = text.substring(6,14);
-                                Long longStr = Long.parseLong(str, 16)+946656000;
-                                if(!isfirst){
-                                    firstTime = longStr;
-                                    progressbar.setVisibility(View.VISIBLE);
-                                    progressbar.setMax((int) (Calendar.getInstance().getTimeInMillis()/1000-firstTime));
-                                    isfirst = true;
-                                }
-                                progressbar.setProgress((int) (longStr-firstTime));
-                            }
-
-                        } catch (Exception e) {
-                            Log.e(TAG, e.toString());
+                    if (text.equalsIgnoreCase("AA0155") || text == null) {
+                        progressbar.setVisibility(View.GONE);
+                        isfirst = false;
+                    } else if (text.startsWith("aa0a03")) {
+                        String str = text.substring(6, 14);
+                        Long longStr = Long.parseLong(str, 16) + 946656000;
+                        if (!isfirst) {
+                            firstTime = longStr;
+                            progressbar.setVisibility(View.VISIBLE);
+                            progressbar.setMax((int) (Calendar.getInstance().getTimeInMillis() / 1000 - firstTime));
+                            isfirst = true;
                         }
+                        progressbar.setProgress((int) (longStr - firstTime));
+                    }
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
 
 
             }
@@ -330,7 +360,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             LogUtil.e("hepan", "显示封面");
-            if(mPresenter!=null) {
+            if (mPresenter != null) {
                 mPresenter.static_data(YbBaseApplication.instance.getToken());
                 mPresenter.static_lateral(YbBaseApplication.instance.getToken());
                 onlyone = true;
@@ -342,12 +372,12 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     @Override
     public void onResume() {
         super.onResume();
-        if(mPresenter!=null) {
+        if (mPresenter != null) {
             mPresenter.static_data(YbBaseApplication.instance.getToken());
             mPresenter.static_lateral(YbBaseApplication.instance.getToken());
             onlyone = true;
         }
-        if(mService!=null&&!mService.isBleConnect()&&SpUtils.getBindBLEDevice(getActivity())!=null&&  SpUtils.getBoolean(getContext(), "isbinded",false)){
+        if (mService != null && !mService.isBleConnect() && SpUtils.getBindBLEDevice(getActivity()) != null && SpUtils.getBoolean(getContext(), "isbinded", false)) {
             mService.connect(SpUtils.getBindBLEDevice(getActivity()).getAddress());
         }
     }
@@ -383,10 +413,10 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             float value2 = 0;
 
             if (static_lateral != null && static_lateral.size() > i) {
-                if((90-static_lateral.get(i).getAverageforFloat())>0){
-                    value = -(90-static_lateral.get(i).getAverageforFloat())/10f;
-                }else{
-                    value2 = -(90-static_lateral.get(i).getAverageforFloat())/10f;
+                if ((90 - static_lateral.get(i).getAverageforFloat()) > 0) {
+                    value = -(90 - static_lateral.get(i).getAverageforFloat()) / 10f;
+                } else {
+                    value2 = -(90 - static_lateral.get(i).getAverageforFloat()) / 10f;
                 }
             }
             if (j != 0) {
@@ -440,7 +470,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 //
 //                titleBuilder.setSubtitle(mPersonBean.getData().getHistogram().get(0).getMeasureDate()+" "+time);
 //                onlyone = false;
-                textB.setText(""+((int)Double.parseDouble(mPersonBean.getData().getSit_info().get(0).getSit_time_percent()))+"%");
+                textB.setText("" + ((int) Double.parseDouble(mPersonBean.getData().getSit_info().get(0).getSit_time_percent())) + "%");
                 LogUtil.e("222222222222222222");
 //                firstLayout.removeAllViews();
 //                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -454,7 +484,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 //                myDialChart.invalidate();
                 mLineCharts.showLineChart(mLineChart, getLinrData(mPersonBean.getData().getDashboard()));
 //                        secondChart.put(mPersonBean.getData().getDashboard());
-                        mBarChart.setData(getBarData((22-8)*6,mPersonBean.getData().getHistogram(),0));
+                mBarChart.setData(getBarData((22 - 8) * 6, mPersonBean.getData().getHistogram(), 0));
 //                        mBarChart.invalidate();
 //                mHorBarCharts.showBarChart(horbarChart, getHorBarData((22 - 8) * 6, mPersonBean.getData().getStatic_lateral(), 0), true);
 
@@ -468,12 +498,12 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
                 this.getContext().startActivity(intent);
                 this.getActivity().finish();
             }
-            if(mPersonBean.getStatus().equals("1137")){
+            if (mPersonBean.getStatus().equals("1137")) {
                 textB.setText("0%");
                 titleBuilder.setSubtitle("");
                 myDialChart.clear();
                 mLineCharts.showLineChart(mLineChart, getLinrData(null));
-                mBarCharts.showBarChart(mBarChart, getBarData((22 - 8) * 6, null,0), true);
+                mBarCharts.showBarChart(mBarChart, getBarData((22 - 8) * 6, null, 0), true);
                 mHorBarCharts.showBarChart(horbarChart, getHorBarData((22 - 8) * 6, null, 0), true);
             }
             Toast.makeText(this.getContext(), mPersonBean.getStatusInfo(), Toast.LENGTH_LONG).show();
@@ -486,19 +516,19 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     public void showDatalateral(BaseClassBean<GetStaticLateral> mPersonBean) {
         if (mPersonBean.getStatus().equals("0")) {
 
-                titleBuilder.setSubtitle(mPersonBean.getData().getMin_time()+" - "+mPersonBean.getData().getMax_time());
-                mHorBarCharts.showBarChart(horbarChart, getHorBarData((22 - 8) * 6, mPersonBean.getData().getStatic_lateral(), 0), true);
+            titleBuilder.setSubtitle(mPersonBean.getData().getMin_time() + " - " + mPersonBean.getData().getMax_time());
+            mHorBarCharts.showBarChart(horbarChart, getHorBarData((22 - 8) * 6, mPersonBean.getData().getStatic_lateral(), 0), true);
 
 
         }
     }
 
-    public LineData getLinrData(List<Dashboard> dashboard){
+    public LineData getLinrData(List<Dashboard> dashboard) {
 
         LineData d = new LineData();
 
         ArrayList<Entry> entries = new ArrayList<Entry>();
-        if(dashboard != null) {
+        if (dashboard != null) {
             entries.add(new Entry(0, 0));
             for (int index = 0; index < 90; index++) {
                 float v = 0;
@@ -562,21 +592,21 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             float value3 = 0;
 
             if (histogram != null && histogram.size() > i) {
-                value = Float.parseFloat(histogram.get(i).getSerious_time_percent()) ;
+                value = Float.parseFloat(histogram.get(i).getSerious_time_percent());
                 value2 = Float.parseFloat(histogram.get(i).getMiddle_time_percent());
                 value3 = Float.parseFloat(histogram.get(i).getMild_time_percent());
             }
-            if(j!=0){
+            if (j != 0) {
 //                value = (float) (Math.random() * 10/*100以内的随机数*/);
                 value = (float) (Math.random() * 10/*100以内的随机数*/);
-            value2 = (float) (Math.random() * 10/*100以内的随机数*/);
-            value3 = (float) (Math.random() * 10/*100以内的随机数*/);
+                value2 = (float) (Math.random() * 10/*100以内的随机数*/);
+                value3 = (float) (Math.random() * 10/*100以内的随机数*/);
             }
 //            value = (float) (Math.random() * 10/*100以内的随机数*/);
 //            value2 = (float) (Math.random() * 10/*100以内的随机数*/);
 //            value3 = (float) (Math.random() * 10/*100以内的随机数*/);
 
-            yValues.add(new BarEntry(i,new float[]{value, value2, value3}));
+            yValues.add(new BarEntry(i, new float[]{value, value2, value3}));
 
         }
         // y轴的数据集合
@@ -601,6 +631,54 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         return barData;
     }
 
+    public void showGuideView() {
+        GuideBuilder builder = new GuideBuilder();
+        builder.setTargetView(rlGuide_01)
+                .setAlpha(150)
+//                .setHighTargetCorner(20)
+//                .setHighTargetPadding(10)
+                .setOverlayTarget(true)
+                .setOutsideTouchable(false);
+        builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+            @Override
+            public void onShown() {
+            }
+
+            @Override
+            public void onDismiss() {
+                showGuideView2();
+            }
+        });
+
+        builder.addComponent(new SimpleComponent(R.layout.guide_view_01));
+        guide = builder.createGuide();
+        guide.setShouldCheckLocInWindow(false);
+        guide.show(this.getActivity());
+    }
+
+    public void showGuideView2() {
+        final GuideBuilder builder1 = new GuideBuilder();
+        builder1.setTargetView(firstLayout)
+                .setAlpha(150)
+                .setHighTargetGraphStyle(Component.CIRCLE)
+                .setOverlayTarget(false)
+                .setExitAnimationId(android.R.anim.fade_out)
+                .setOutsideTouchable(false);
+        builder1.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+            @Override
+            public void onShown() {
+            }
+
+            @Override
+            public void onDismiss() {
+            }
+        });
+
+        builder1.addComponent(new SimpleComponent(R.layout.guide_view_02));
+        Guide guide = builder1.createGuide();
+        guide.setShouldCheckLocInWindow(false);
+        guide.show(this.getActivity());
+    }
 
 
 }

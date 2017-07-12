@@ -61,14 +61,13 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-
-    compile'com.github.hotchemi:permissionsdispatcher:2.4.0'
+    compile 'com.github.hotchemi:permissionsdispatcher:2.4.0'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
-
     testCompile 'junit:junit:4.12'
     compile project(':wrmvplibrary')
     compile project(':xCLCharts')
     compile project(':pickerview')
-//    compile files('libs/mpandroidchartlibrary-2-1-5.jar')
+    //    compile files('libs/mpandroidchartlibrary-2-1-5.jar')
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
+    compile project(':guideview')
 }

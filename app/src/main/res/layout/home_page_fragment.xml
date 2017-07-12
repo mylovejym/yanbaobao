@@ -57,6 +57,7 @@
             android:background="@color/blue_303048">
 
             <RelativeLayout
+                android:id="@+id/rl_guide_01"
                 android:layout_width="match_parent"
                 android:layout_height="43dp"
                 android:background="@color/blue_313245">
@@ -78,6 +79,7 @@
                     android:text="坐姿仪表盘"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
+
             </RelativeLayout>
 
             <!--<ImageView
