@@ -14,5 +14,5 @@ public interface BindingDeviceOnClickListener {
      * @param pos          设备列表中位置
      * @param bindingState 此设备绑定状态 1:已绑定 2：未绑定
      */
-    void onBindingOnClickListener(View view, int pos, String bindingState);
+    void onBindingOnClickListener(View view, int pos,boolean bindingState );
 }

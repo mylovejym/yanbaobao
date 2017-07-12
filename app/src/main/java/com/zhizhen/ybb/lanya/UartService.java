@@ -32,9 +32,11 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.Build;
@@ -53,6 +55,7 @@ import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.bean.BLEData;
 import com.zhizhen.ybb.bean.BLEDataQueue;
 import com.zhizhen.ybb.util.BLEUtils;
+import com.zhizhen.ybb.util.SpUtils;
 
 import java.util.Calendar;
 import java.util.List;
@@ -115,25 +118,70 @@ public class UartService extends Service {
 //        return super.onStartCommand(intent, flags, startId);
 //        test();
 //        startTimer();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        this.registerReceiver(bluetoothStatusChangeReceiver, filter);
+
+
         return START_STICKY;
     }
+
+    private final BroadcastReceiver bluetoothStatusChangeReceiver
+            = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            LogUtil.e(TAG, "onReceive---------");
+            switch(intent.getAction()){
+                case BluetoothAdapter.ACTION_STATE_CHANGED:
+                    int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
+                    switch(blueState){
+                        case BluetoothAdapter.STATE_TURNING_ON:
+                            LogUtil.e("onReceive---------STATE_TURNING_ON");
+                            if(SpUtils.getBindBLEDevice(UartService.this)!=null&&  SpUtils.getBoolean(UartService.this, "isbinded",false)){
+                                LogUtil.e("aaaaaaa:连接" );
+                                connect(SpUtils.getBindBLEDevice(UartService.this).getAddress());
+                            }
+                            break;
+                        case BluetoothAdapter.STATE_ON:
+                            LogUtil.e("onReceive---------STATE_ON");
+                            if(SpUtils.getBindBLEDevice(UartService.this)!=null&&  SpUtils.getBoolean(UartService.this, "isbinded",false)){
+                                LogUtil.e("aaaaaaa:连接" );
+                                connect(SpUtils.getBindBLEDevice(UartService.this).getAddress());
+                            }
+                            break;
+                        case BluetoothAdapter.STATE_TURNING_OFF:
+                            LogUtil.e("onReceive---------STATE_TURNING_OFF");
+                            mBluetoothGatt = null;
+                            break;
+                        case BluetoothAdapter.STATE_OFF:
+                            LogUtil.e("onReceive---------STATE_OFF");
+                            mBluetoothGatt = null;
+                            break;
+                    }
+                    break;
+            }
+
+        }
+    };
 
     Timer timer;
     BLEData data;
 
     Handler handler = new Handler();
 
-    boolean isstart = false;
+//    boolean isstart = false;
 
     private void startTimer(){
 //        if(timer!= null) {
 //            timer.cancel();
 //        }
 //        mBluetoothGatt.getConnectionState()
-        if(isstart){
-            return;
-        }
-        isstart = true;
+//        if(isstart){
+//            return;
+//        }
+//        isstart = true;
+        handler.removeCallbacksAndMessages(null);
         writeRXCharacteristic(hexStringToBytes("AA03030155"));
         handler.postDelayed(new Runnable() {
             @Override
@@ -168,8 +216,6 @@ public class UartService extends Service {
                         rundata();
                     }
                 }, 60 * 1000);
-            }else{
-                isstart =false;
             }
             return;
         }
@@ -184,6 +230,7 @@ public class UartService extends Service {
                 broadcastUpdate(ACTION_UP_DATA);
                 data =null;
                 if(bleData.QueueLength()>0){
+                    handler.removeCallbacksAndMessages(null);
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -193,38 +240,36 @@ public class UartService extends Service {
 
 
                 }else {
-                    if(isstart) {
+
                         if(isBleConnect()) {
                             writeRXCharacteristic(hexStringToBytes("AA03030155"));
+                            handler.removeCallbacksAndMessages(null);
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
                                     rundata();
                                 }
                             }, 60 * 1000);
-                        }else{
-                            isstart =false;
                         }
 
 
-                    }
+
                 }
             }
 
         },e->{
-            if(isstart) {
+
                 if(isBleConnect()) {
                 writeRXCharacteristic(hexStringToBytes("AA03030155"));
+                    handler.removeCallbacksAndMessages(null);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         rundata();
                     }
                 }, 60 * 1000);
-                }else{
-                    isstart =false;
                 }
-        }});
+        });
     }
 
     String[] testStr= new String[]{"AA0A0320D4763A0024FF0055","AA0A0320D4763C0002000055", "AA0A0320D476500014FF0055", "AA0A0320D476520002000055"};
@@ -467,6 +512,8 @@ public class UartService extends Service {
         return true;
     }
 
+
+
     public boolean isBleConnect(){
         if(mBluetoothDeviceAddress ==null)
             return false;
@@ -624,5 +671,11 @@ public class UartService extends Service {
             UartService.this.bindService(new Intent(UartService.this,MsgAidlService.class),mServiceConnection, Context.BIND_IMPORTANT);
 
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(bluetoothStatusChangeReceiver);
     }
 }

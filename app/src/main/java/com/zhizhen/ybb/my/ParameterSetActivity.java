@@ -13,6 +13,8 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import com.psylife.wrmvplibrary.utils.StatusBarUtil;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
+import com.zhizhen.ybb.bean.MyBLEDevice;
 import com.zhizhen.ybb.lanya.UartService;
 import com.zhizhen.ybb.util.BLEUtils;
 import com.zhizhen.ybb.util.SpUtils;
@@ -30,6 +33,8 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import butterknife.BindView;
+
+import static com.zhizhen.ybb.util.Utils.hexStringToBytes;
 
 /**
  * 参数配置
@@ -85,6 +90,16 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
 
     @BindView(R.id.txt_shaking_delayed)
     TextView txtShakingTime;        //振动延时
+    @BindView(R.id.txt_device_name)
+    TextView txtDeviceName;
+    @BindView(R.id.txt_device_address)
+    TextView txtDeviceAddress;
+    @BindView(R.id.bt_device)
+    Button btDevice;
+    @BindView(R.id.txt_delayed)
+    ImageView txtDelayed;
+    @BindView(R.id.my_set_layout)
+    LinearLayout setLayout;
 
     private String time = "", acTime = "", sampling = "", posture = "", shakingNum = "", shakingTime = "";
 
@@ -97,11 +112,12 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
 
     public void setStatusBarColor() {
         StatusBarUtil.setColor(this, this.getResources().getColor(R.color.blue_313245));
+
     }
 
     @Override
     public View getTitleView() {
-        return new TitleBuilder(this).setLeftText(getString(R.string.parameter_set))
+        return new TitleBuilder(this).setLeftText(getString(R.string.my_device))
                 .setLeftImage(R.mipmap.tab_back)
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
@@ -127,16 +143,40 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
         shakingNum = SpUtils.getString(this, "shakingNum");
         shakingTime = SpUtils.getString(this, "shakingTime");
 
+
         txtTime.setText(time.equals("") ? "去设置" : time);
         txtAcTime.setText(acTime.equals("-") ? "未设置" : acTime);
         txtSampling.setText(sampling.equals("") ? "未设置" : sampling);
         txtPosture.setText(posture.equals("") ? "未设置" : posture);
         txtShakingNum.setText(shakingNum.equals("") ? "未设置" : shakingNum);
         txtShakingTime.setText(shakingTime.equals("") ? "未设置" : shakingTime);
-
+        btDevice.setOnClickListener(this);
         service_init();
     }
+    MyBLEDevice bindDecive;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bindDecive = SpUtils.getBindBLEDevice(this);
+        if(bindDecive!=null){
+            txtDeviceName.setVisibility(View.VISIBLE);
+            btDevice.setVisibility(View.VISIBLE);
+            txtDeviceName.setText((bindDecive.getName()!=null&&bindDecive.getName().startsWith("YZJ"))?"眼保宝姿态测量仪":bindDecive.getName());
+            if(SpUtils.getBoolean(this,"isbinded",false)){
+                btDevice.setText("解除绑定");
+            }else{
+                btDevice.setText("绑定设备");
+            }
+            if(mService!=null&&mService.isBleConnect()){
+                mService.writeRXCharacteristic(hexStringToBytes("AA03060055"));
+                setLayout.setVisibility(View.VISIBLE);
+            }
+        }else{
+            txtDeviceName.setVisibility(View.GONE);
+            btDevice.setVisibility(View.GONE);
+        }
+    }
 
     private void service_init() {
         Intent bindIntent = new Intent(this, UartService.class);
@@ -212,6 +252,12 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
                             if (text.equalsIgnoreCase("AA0155")) {
                                 Toast.makeText(ParameterSetActivity.this, "设置成功", Toast.LENGTH_LONG).show();
                             }
+                            if(text.startsWith("aa0306")){
+                                String str = text.substring(6,8);
+                                LogUtil.e("str:" + str);
+                                int d =Integer.parseInt(str, 16);
+                                txtDeviceAddress.setText("电量"+d+"%");
+                            }
 
                         } catch (Exception e) {
                             Log.e(TAG, e.toString());
@@ -238,6 +284,11 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
             if (!mService.initialize()) {
                 Log.e(TAG, "Unable to initialize Bluetooth");
                 finish();
+            }
+            if(mService.isBleConnect()){
+                mService.writeRXCharacteristic(hexStringToBytes("AA03060055"));
+            }else{
+                setLayout.setVisibility(View.GONE);
             }
 
         }
@@ -285,6 +336,22 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
             Intent intent = new Intent(this, SetShakingTimeActivity.class);
             intent.putExtra("shakingTime", shakingTime);
             this.startActivityForResult(intent, SET_SHAKING_DELAYED);
+        }else if(v == btDevice){
+            if(btDevice.getText().toString().equals("解除绑定")){
+                SpUtils.putBoolean(this, "isbinded",false);
+                mService.disconnect();
+                Intent intent = new Intent(this, MyDeivceActivity.class);
+                intent.putExtra("address", bindDecive.getAddress());
+                startActivity(intent);
+
+            }else if(btDevice.getText().toString().equals("绑定设备")){
+                SpUtils.putBoolean(this, "isbinded",true);
+//                    mService.connect(bindDecive.getAddress());
+                Intent intent = new Intent(this, BindingActivity.class);
+                intent.putExtra("address", bindDecive.getAddress());
+                startActivity(intent);
+
+            }
         }
     }
 
@@ -305,7 +372,7 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
             int startm = data.getIntExtra("startm", 0);
             int endH = data.getIntExtra("endH", 0);
             int endm = data.getIntExtra("endm", 0);
-            mService.writeRXCharacteristic(BLEUtils.getACTime(startH,startm,endH,endm));
+            mService.writeRXCharacteristic(BLEUtils.getACTime(startH, startm, endH, endm));
 
         } else if (resultCode == SET_SAMPLING) {
             //设置采集频率
@@ -343,4 +410,5 @@ public class ParameterSetActivity extends YbBaseActivity implements View.OnClick
         unbindService(mServiceConnection);
 
     }
+
 }

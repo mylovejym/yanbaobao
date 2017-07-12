@@ -1,7 +1,14 @@
 package com.zhizhen.ybb.my;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -12,15 +19,13 @@ import com.psylife.wrmvplibrary.utils.StringUtils;
 import com.psylife.wrmvplibrary.utils.TitleBuilder;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
-import com.zhizhen.ybb.bean.DeviceInfo;
+import com.zhizhen.ybb.bean.MyBLEDevice;
 import com.zhizhen.ybb.bean.MyBLEDeviceMap;
+import com.zhizhen.ybb.lanya.UartService;
 import com.zhizhen.ybb.my.adapter.DeviceAdapter;
 import com.zhizhen.ybb.my.interFace.BindingDeviceOnClickListener;
 import com.zhizhen.ybb.util.SpUtils;
 import com.zhizhen.ybb.view.SwitchView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -47,6 +52,10 @@ public class MyDeivceActivity extends YbBaseActivity implements View.OnClickList
     SwitchView switchView;
 
     private DeviceAdapter deviceAdapter;
+    MyBLEDeviceMap map;
+    MyBLEDevice bindDecive;
+
+    private UartService mService = null;
 
     @Override
     public int getLayoutId() {
@@ -59,7 +68,7 @@ public class MyDeivceActivity extends YbBaseActivity implements View.OnClickList
 
     @Override
     public View getTitleView() {
-        return new TitleBuilder(this).setLeftText(getString(R.string.my_device))
+        return new TitleBuilder(this).setLeftText("设备选择")
                 .setLeftImage(R.mipmap.tab_back)
                 .setTitleBgRes(R.color.blue_313245)
                 .setLeftOnClickListener(v -> finish())
@@ -88,7 +97,34 @@ public class MyDeivceActivity extends YbBaseActivity implements View.OnClickList
                 view.toggleSwitch(false); // or true
             }
         });
+        service_init();
     }
+
+    private void service_init() {
+        Intent bindIntent = new Intent(this, UartService.class);
+        bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+
+    }
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+        public void onServiceConnected(ComponentName className, IBinder rawBinder) {
+            mService = ((UartService.LocalBinder) rawBinder).getService();
+            Log.d(TAG, "onServiceConnected mService= " + mService);
+            if (!mService.initialize()) {
+                Log.e(TAG, "Unable to initialize Bluetooth");
+                finish();
+            }
+
+        }
+
+        public void onServiceDisconnected(ComponentName classname) {
+            ////     mService.disconnect(mDevice);
+            mService = null;
+        }
+    };
+
 
     @Override
     public void initdata() {
@@ -101,12 +137,34 @@ public class MyDeivceActivity extends YbBaseActivity implements View.OnClickList
 //                deviceInfo = new DeviceInfo("TRWOMOPD-EYE-1" + i, "2");
 //            list.add(deviceInfo);
 //        }
-        MyBLEDeviceMap map =SpUtils.getMyBLEDeviceMap(this);
+        map =SpUtils.getMyBLEDeviceMap(this);
+        bindDecive = SpUtils.getBindBLEDevice(this);
 
-        deviceAdapter = new DeviceAdapter(this, map.getMyDeviceList());
+
+        deviceAdapter = new DeviceAdapter(this, map.getMyDeviceList(), bindDecive,SpUtils.getBoolean(this,"isbinded",false));
         deviceAdapter.setBindingDeviceOnClickListener(new BindingDeviceOnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
             @Override
-            public void onBindingOnClickListener(View view, int pos, String bindingState) {
+            public void onBindingOnClickListener(View view, int pos, boolean bindingState) {
+                if(bindingState){
+//                    SpUtils.setBindBLEDevice(MyDeivceActivity.this,null);
+//                    bindDecive = null;
+//                    deviceAdapter.setBindDecive(bindDecive);
+                    SpUtils.putBoolean(MyDeivceActivity.this, "isbinded",false);
+                    deviceAdapter.setIsbinded(false);
+                    mService.disconnect();
+                }else{
+                    MyBLEDevice device = (MyBLEDevice) view.getTag();
+                    SpUtils.setBindBLEDevice(MyDeivceActivity.this,device);
+                    bindDecive = device;
+                    deviceAdapter.setBindDecive(bindDecive);
+                    SpUtils.putBoolean(MyDeivceActivity.this, "isbinded",true);
+                    deviceAdapter.setIsbinded(true);
+//                    mService.connect(bindDecive.getAddress());
+                    Intent intent = new Intent(MyDeivceActivity.this, BindingActivity.class);
+                    intent.putExtra("address", bindDecive.getAddress());
+                    startActivity(intent);
+                }
 //                if (bindingState.equals("1")) {
 //                    list.get(pos).setDeviceState("2");
 //                } else {
@@ -116,6 +174,15 @@ public class MyDeivceActivity extends YbBaseActivity implements View.OnClickList
             }
         });
         listDevice.setAdapter(deviceAdapter);
+//        listDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                if(bindDecive!=null&&deviceAdapter.getItem(position).getAddress().equals(bindDecive.getAddress())){
+//                    Intent intent = new Intent(MyDeivceActivity.this, ParameterSetActivity.class);
+//                    MyDeivceActivity.this.startActivity(intent);
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -137,5 +204,15 @@ public class MyDeivceActivity extends YbBaseActivity implements View.OnClickList
             SpUtils.putString(this, "sampling", data.getStringExtra("sampling"));
             txtSampling.setText(data.getStringExtra("sampling") + "s");
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");
+
+
+        unbindService(mServiceConnection);
+
     }
 }

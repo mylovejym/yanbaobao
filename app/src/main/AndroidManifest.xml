@@ -29,7 +29,7 @@
         android:roundIcon="@mipmap/launch_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:hardwareAccelerated="true">
+        android:hardwareAccelerated="false">
         <!--android:name=".loginpWelcomeActivityvity"-->
         <activity
             android:name=".loginpass.WelcomeActivity"
@@ -111,6 +111,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".lanya.BLEDeviceLiatActivity"/>
         <activity android:name=".lanya.MyBLEActivity"/>
+        <activity android:name=".my.BindingActivity"/>
 
         <service android:name=".lanya.UartService"/>
         <activity android:name=".my.SetPosTureActivity2"/>

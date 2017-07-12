@@ -139,7 +139,7 @@
         android:layout_marginTop="0.5dp"
         android:background="@color/blue_303048"
         android:orientation="horizontal"
-        android:visibility="gone">
+        >
 
         <ImageView
             android:layout_width="14dp"
@@ -173,7 +173,8 @@
         android:layout_height="43dp"
         android:layout_marginTop="0.5dp"
         android:background="@color/blue_303048"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="14dp"

@@ -23,7 +23,6 @@ import com.zhizhen.ybb.bean.PersonInfo;
 import com.zhizhen.ybb.loginpass.LoginActivity;
 import com.zhizhen.ybb.my.EditDataActivity;
 import com.zhizhen.ybb.my.FollowActivity;
-import com.zhizhen.ybb.my.MyDeivceActivity;
 import com.zhizhen.ybb.my.MyVisonActivity;
 import com.zhizhen.ybb.my.ParameterSetActivity;
 import com.zhizhen.ybb.my.contract.MyContract;
@@ -143,7 +142,9 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
             this.getContext().startActivity(intent);
         } else if (v == rlDevice) {
             //我的设备
-            Intent intent = new Intent(this.getContext(), MyDeivceActivity.class);
+//            Intent intent = new Intent(this.getContext(), MyDeivceActivity.class);
+//            this.getContext().startActivity(intent);
+            Intent intent = new Intent(this.getContext(), ParameterSetActivity.class);
             this.getContext().startActivity(intent);
         } else if (v == rlParameterSet) {
             //参数设置

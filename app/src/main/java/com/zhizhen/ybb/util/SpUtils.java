@@ -94,9 +94,9 @@ public class SpUtils {
         }
         MyBLEDevice myBLEDevice = null;
         String json = mSharedPreferences.getString("BindBLEDevice", null);
-        if(json.equals("")){
-            json =null;
-        }
+//        if(json.equals("")){
+//            json =null;
+//        }
         try {
             Gson gson = new Gson();
             myBLEDevice = gson.fromJson(json, MyBLEDevice.class);

@@ -205,6 +205,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         public void onServiceConnected(ComponentName className, IBinder rawBinder) {
             mService = ((UartService.LocalBinder) rawBinder).getService();
             Log.d(TAG, "onServiceConnected mService= " + mService);
+            mService.initialize();
 
             if(mService.isBleConnect()){
                 conn_text.setVisibility(View.GONE);
@@ -212,7 +213,9 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             }else{
                 conn_text.setVisibility(View.VISIBLE);
                 conn_text.setText("蓝牙未连接，请您开启蓝牙并连接坐姿检测仪");
-                if(SpUtils.getBindBLEDevice(getActivity())!=null){
+                LogUtil.e("aaaaaaa:" );
+                if(SpUtils.getBindBLEDevice(getActivity())!=null&&  SpUtils.getBoolean(getContext(), "isbinded",false)){
+                    LogUtil.e("aaaaaaa:连接" );
                     mService.connect(SpUtils.getBindBLEDevice(getActivity()).getAddress());
                 }
             }
@@ -335,6 +338,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onResume() {
         super.onResume();
@@ -342,6 +346,9 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             mPresenter.static_data(YbBaseApplication.instance.getToken());
             mPresenter.static_lateral(YbBaseApplication.instance.getToken());
             onlyone = true;
+        }
+        if(mService!=null&&!mService.isBleConnect()&&SpUtils.getBindBLEDevice(getActivity())!=null&&  SpUtils.getBoolean(getContext(), "isbinded",false)){
+            mService.connect(SpUtils.getBindBLEDevice(getActivity()).getAddress());
         }
     }
 

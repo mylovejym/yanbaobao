@@ -148,6 +148,7 @@ public class MyBLEActivity extends YbBaseActivity {
                 map.addDevice(device);
                 SpUtils.setMyBLEDeviceMap(MyBLEActivity.this, map);
                 SpUtils.setBindBLEDevice(MyBLEActivity.this,map.getBLEMap().get(device.getAddress()));
+                SpUtils.putBoolean(MyBLEActivity.this, "isbinded",true);
 
 //                Intent intent = new Intent(MyBLEActivity.this, NormalDeviceActivity.class);
 //                intent.putExtra(BluetoothDevice.EXTRA_DEVICE, device.getAddress());
