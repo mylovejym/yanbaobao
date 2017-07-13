@@ -1,2 +1,3 @@
 include ':app', ':wrmvplibrary', ':pickerview'
 include ':xCLCharts'
+include ':guideview'

@@ -120,7 +120,7 @@ public class WelcomeActivity extends YbBaseActivity<UpdatePresenter, UpdateModel
      * @param updateInfo
      */
     public void showDialog(UpdateInfo updateInfo) {
-        dialogs = new AlertDialog.Builder(this).setTitle("软件更新").setMessage(updateInfo.getUpdatelog())
+        dialogs = new AlertDialog.Builder(this).setCancelable(false).setTitle("软件更新").setMessage(updateInfo.getUpdatelog())
                 // 设置内容
                 .setPositiveButton("更新",// 设置确定按钮
                         (dialog, which) -> {

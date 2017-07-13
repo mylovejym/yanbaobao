@@ -22,7 +22,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.blog.www.guideview.Component;
 import com.blog.www.guideview.Guide;
@@ -494,7 +493,8 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 //                myDialChart.invalidate();
                 mLineCharts.showLineChart(mLineChart, getLinrData(mPersonBean.getData().getDashboard()));
 //                        secondChart.put(mPersonBean.getData().getDashboard());
-                mBarChart.setData(getBarData((22 - 8) * 6, mPersonBean.getData().getHistogram(), 0));
+//                mBarChart.setData(getBarData((22 - 8) * 6, mPersonBean.getData().getHistogram(), 0));
+                mBarCharts.showBarChart(mBarChart, getBarData((22 - 8) * 6, mPersonBean.getData().getHistogram(), 0), true);
 //                        mBarChart.invalidate();
 //                mHorBarCharts.showBarChart(horbarChart, getHorBarData((22 - 8) * 6, mPersonBean.getData().getStatic_lateral(), 0), true);
 
@@ -516,7 +516,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
                 mBarCharts.showBarChart(mBarChart, getBarData((22 - 8) * 6, null, 0), true);
                 mHorBarCharts.showBarChart(horbarChart, getHorBarData((22 - 8) * 6, null, 0), true);
             }
-            Toast.makeText(this.getContext(), mPersonBean.getStatusInfo(), Toast.LENGTH_LONG).show();
+//            Toast.makeText(this.getContext(), mPersonBean.getStatusInfo(), Toast.LENGTH_LONG).show();
         }
 //        mBarChart.setData(getBarData((22-8)*6,null,1));
 //        mBarChart.notifyDataSetChanged();
