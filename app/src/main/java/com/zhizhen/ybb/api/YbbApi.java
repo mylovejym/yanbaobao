@@ -19,6 +19,15 @@ public interface YbbApi {
      * @return
      */
     @FormUrlEncoded
+    @POST("/Api/Hardware/checkNewestVersion")
+    Observable<BaseClassBean<UpdateInfo>> checkNewestVersion(@Field("version") String version, @Field("channel") String channel);
+
+    /**
+     * 发送验证码
+     *
+     * @return
+     */
+    @FormUrlEncoded
     @POST("/Api/Hardware/getPhoneCode")
     Observable<LoginBean> getPhoneCode(@Field("phone") String phone);
 

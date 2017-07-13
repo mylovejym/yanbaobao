@@ -12,7 +12,6 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.bean.Histogram;
-import com.zhizhen.ybb.view.HorBarChart.CustomFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,11 +79,11 @@ public class HorBarTestActivity extends Activity {
         barDataSet.setBarShadowColor(Color.parseColor("#01000000"));
 
         // 绘制值
-        barDataSet.setValueFormatter(new CustomFormatter());
-        barDataSet.setValueTextSize(7f);
+//        barDataSet.setValueFormatter(new CustomFormatter());
+//        barDataSet.setValueTextSize(7f);
         barDataSet.setAxisDependency(YAxis.AxisDependency.RIGHT);
-        barDataSet.setValueTextColor(Color.parseColor("#ffffff"));
-        barDataSet.setDrawValues(true);
+//        barDataSet.setValueTextColor(Color.parseColor("#ffffff"));
+//        barDataSet.setDrawValues(true);
 
         BarData barData = new BarData(barDataSet);
 

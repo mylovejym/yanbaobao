@@ -11,7 +11,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -262,8 +261,8 @@ class MaskView extends ViewGroup {
           mEraserCanvas.drawRoundRect(mTargetRect, mCorner, mCorner, mEraser);
           break;
       }
-      canvas.drawBitmap(mEraserBitmap, 0, 0, null);
     }
+    canvas.drawBitmap(mEraserBitmap, 0, 0, null);
   }
 
   public void setTargetRect(Rect rect) {

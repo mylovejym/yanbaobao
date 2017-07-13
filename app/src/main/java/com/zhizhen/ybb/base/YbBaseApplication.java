@@ -35,6 +35,7 @@ public class YbBaseApplication extends WRCoreApp {
     @Override
     public String setBaseUrl() {
 //        return "http://optometry.zonetime.net";
+
         return "http://ybb.yanzhuanjia.cn";
     }
     public String getToken(){

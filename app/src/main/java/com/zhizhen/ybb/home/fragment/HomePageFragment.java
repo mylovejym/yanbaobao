@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -114,6 +115,11 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     BarChart spreadBarChart;
     @BindView(R.id.rl_guide_01)
     RelativeLayout rlGuide_01;
+    @BindView(R.id.scroll)
+    ScrollView scrollView;
+    @BindView(R.id.scroll_lin)
+    LinearLayout linearLayout;
+
     Unbinder unbinder1;
 
     private BarChart mBarChart;
@@ -173,25 +179,29 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 
     @Override
     public void initUI(View view, @Nullable Bundle savedInstanceState) {
-        getActivity().getWindow()
-                .getDecorView()
-                .getViewTreeObserver()
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override public void onGlobalLayout() {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            getActivity().getWindow()
-                                    .getDecorView()
-                                    .getViewTreeObserver()
-                                    .removeOnGlobalLayoutListener(this);
-                        } else {
-                            getActivity().getWindow()
-                                    .getDecorView()
-                                    .getViewTreeObserver()
-                                    .removeGlobalOnLayoutListener(this);
+//        SpUtils.putBoolean(HomePageFragment.this.getContext(), "isShowGuide", false);
+        if (null == SpUtils.getBoolean(this.getContext(), "isShowGuide") || !SpUtils.getBoolean(this.getContext(), "isShowGuide")) {
+            getActivity().getWindow()
+                    .getDecorView()
+                    .getViewTreeObserver()
+                    .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                getActivity().getWindow()
+                                        .getDecorView()
+                                        .getViewTreeObserver()
+                                        .removeOnGlobalLayoutListener(this);
+                            } else {
+                                getActivity().getWindow()
+                                        .getDecorView()
+                                        .getViewTreeObserver()
+                                        .removeGlobalOnLayoutListener(this);
+                            }
+                            showGuideView();
                         }
-                        showGuideView();
-                    }
-                });
+                    });
+        }
         progressbar = (ProgressBar) view.findViewById(R.id.progressbar);
         conn_text = (TextView) view.findViewById(R.id.conn_text);
         textB = (TextView) view.findViewById(R.id.text_b);
@@ -239,10 +249,10 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             mService.initialize();
 
             if (mService.isBleConnect()) {
-                conn_text.setVisibility(View.GONE);
+//                conn_text.setVisibility(View.GONE);
                 conn_text.setText("已连接");
             } else {
-                conn_text.setVisibility(View.VISIBLE);
+//                conn_text.setVisibility(View.VISIBLE);
                 conn_text.setText("蓝牙未连接，请您开启蓝牙并连接坐姿检测仪");
                 LogUtil.e("aaaaaaa:");
                 if (SpUtils.getBindBLEDevice(getActivity()) != null && SpUtils.getBoolean(getContext(), "isbinded", false)) {
@@ -269,13 +279,13 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             final Intent mIntent = intent;
             //*********************//
             if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
-                conn_text.setVisibility(View.GONE);
+//                conn_text.setVisibility(View.GONE);
                 conn_text.setText("已连接");
             }
 
             //*********************//
             if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
-                conn_text.setVisibility(View.VISIBLE);
+//                conn_text.setVisibility(View.VISIBLE);
                 conn_text.setText("蓝牙未连接，请您开启蓝牙并连接坐姿检测仪");
             }
 
@@ -635,8 +645,6 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         GuideBuilder builder = new GuideBuilder();
         builder.setTargetView(rlGuide_01)
                 .setAlpha(150)
-//                .setHighTargetCorner(20)
-//                .setHighTargetPadding(10)
                 .setOverlayTarget(true)
                 .setOutsideTouchable(false);
         builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
@@ -649,8 +657,13 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
                 showGuideView2();
             }
         });
-
-        builder.addComponent(new SimpleComponent(R.layout.guide_view_01));
+        SimpleComponent simpleComponent = new SimpleComponent()
+                .setLayout(R.layout.guide_view_01)
+                .setAnchor(Component.ANCHOR_OVER)
+                .setFitPosition(Component.FIT_END)
+                .setXOffset(71)
+                .setYOffset(50);
+        builder.addComponent(simpleComponent);
         guide = builder.createGuide();
         guide.setShouldCheckLocInWindow(false);
         guide.show(this.getActivity());
@@ -660,8 +673,95 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         final GuideBuilder builder1 = new GuideBuilder();
         builder1.setTargetView(firstLayout)
                 .setAlpha(150)
-                .setHighTargetGraphStyle(Component.CIRCLE)
-                .setOverlayTarget(false)
+                .setOverlayTarget(true)
+                .setOutsideTouchable(false);
+        builder1.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+            @Override
+            public void onShown() {
+            }
+
+            @Override
+            public void onDismiss() {
+                showGuideView3();
+            }
+        });
+        SimpleComponent simpleComponent = new SimpleComponent()
+                .setLayout(R.layout.guide_view_02)
+                .setAnchor(Component.ANCHOR_OVER)
+                .setFitPosition(Component.FIT_END)
+                .setXOffset(20)
+                .setYOffset(50);
+        builder1.addComponent(simpleComponent);
+        guide = builder1.createGuide();
+        guide.setShouldCheckLocInWindow(false);
+        guide.show(this.getActivity());
+    }
+
+    public void showGuideView3() {
+        final GuideBuilder builder1 = new GuideBuilder();
+        builder1.setTargetView(mLineChart)
+                .setAlpha(150)
+                .setOverlayTarget(true)
+                .setOutsideTouchable(false);
+        builder1.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+            @Override
+            public void onShown() {
+            }
+
+            @Override
+            public void onDismiss() {
+                System.out.println("Y :" + linearLayout.getMeasuredHeight());
+                System.out.println("Y :" + mLineChart.getMeasuredHeight());
+                scrollView.scrollTo(0, linearLayout.getMeasuredHeight() - mLineChart.getMeasuredHeight());
+                showGuideView4();
+            }
+        });
+        SimpleComponent simpleComponent = new SimpleComponent()
+                .setLayout(R.layout.guide_view_03)
+                .setAnchor(Component.ANCHOR_OVER)
+                .setFitPosition(Component.FIT_END)
+                .setXOffset(20)
+                .setYOffset(-30);
+        builder1.addComponent(simpleComponent);
+        guide = builder1.createGuide();
+        guide.setShouldCheckLocInWindow(false);
+        guide.show(this.getActivity());
+    }
+
+    public void showGuideView4() {
+        final GuideBuilder builder1 = new GuideBuilder();
+        builder1.setTargetView(spreadBarChart)
+                .setAlpha(150)
+                .setOverlayTarget(true)
+                .setOutsideTouchable(false);
+        builder1.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+            @Override
+            public void onShown() {
+            }
+
+            @Override
+            public void onDismiss() {
+                showGuideView5();
+
+            }
+        });
+        SimpleComponent simpleComponent = new SimpleComponent()
+                .setLayout(R.layout.guide_view_04)
+                .setAnchor(Component.ANCHOR_OVER)
+                .setFitPosition(Component.FIT_END)
+                .setXOffset(20)
+                .setYOffset(10);
+        builder1.addComponent(simpleComponent);
+        guide = builder1.createGuide();
+        guide.setShouldCheckLocInWindow(false);
+        guide.show(this.getActivity());
+    }
+
+    public void showGuideView5() {
+        final GuideBuilder builder1 = new GuideBuilder();
+        builder1.setTargetView(horbarChart)
+                .setAlpha(150)
+                .setOverlayTarget(true)
                 .setExitAnimationId(android.R.anim.fade_out)
                 .setOutsideTouchable(false);
         builder1.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
@@ -671,14 +771,20 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 
             @Override
             public void onDismiss() {
+//                scrollView.scrollTo(0, 0);
+                SpUtils.putBoolean(HomePageFragment.this.getContext(), "isShowGuide", true);
             }
         });
-
-        builder1.addComponent(new SimpleComponent(R.layout.guide_view_02));
-        Guide guide = builder1.createGuide();
+        SimpleComponent simpleComponent = new SimpleComponent()
+                .setLayout(R.layout.guide_view_05)
+                .setAnchor(Component.ANCHOR_OVER)
+                .setFitPosition(Component.FIT_END)
+                .setXOffset(20)
+                .setYOffset(10);
+        builder1.addComponent(simpleComponent);
+        guide = builder1.createGuide();
         guide.setShouldCheckLocInWindow(false);
         guide.show(this.getActivity());
     }
-
 
 }
