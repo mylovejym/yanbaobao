@@ -1,5 +1,6 @@
 package com.zhizhen.ybb.home.fragment;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
@@ -133,6 +135,8 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
 
     HorizontalBarChart horbarChart;
     HorBarChart mHorBarCharts;
+    private LinearLayout blue_layout;
+    private Button set_blue_bt;
 
 //    LoopRecyclerViewPager vpTop;
 
@@ -205,6 +209,9 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         conn_text = (TextView) view.findViewById(R.id.conn_text);
         textB = (TextView) view.findViewById(R.id.text_b);
         myDialChart = (MyDialChart) view.findViewById(R.id.my_dial_chart);
+        blue_layout = (LinearLayout) view.findViewById(R.id.blue_layout);
+        set_blue_bt = (Button) view.findViewById(R.id.set_blue_bt);
+
 
         mBarCharts = new BarCharts();
         mBarChart = (BarChart) view.findViewById(R.id.spreadBarChart);
@@ -218,7 +225,50 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         horbarChart = (HorizontalBarChart) view.findViewById(R.id.horizontalBarChart);
         mHorBarCharts.showBarChart(horbarChart, getHorBarData((22 - 8) * 6, null, 0), true);
         service_init();
+        set_blue_bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent =  new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                startActivity(intent);
+            }
+        });
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        getActivity().registerReceiver(bluetoothStatusChangeReceiver, filter);
     }
+
+    private final BroadcastReceiver bluetoothStatusChangeReceiver
+            = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            LogUtil.e(TAG, "onReceive---------");
+            switch(intent.getAction()){
+                case BluetoothAdapter.ACTION_STATE_CHANGED:
+                    int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
+                    switch(blueState){
+                        case BluetoothAdapter.STATE_TURNING_ON:
+                            LogUtil.e("onReceive---------STATE_TURNING_ON");
+                            blue_layout.setVisibility(View.GONE);
+                            break;
+                        case BluetoothAdapter.STATE_ON:
+                            LogUtil.e("onReceive---------STATE_ON");
+                            blue_layout.setVisibility(View.GONE);
+                            break;
+                        case BluetoothAdapter.STATE_TURNING_OFF:
+                            LogUtil.e("onReceive---------STATE_TURNING_OFF");
+                            blue_layout.setVisibility(View.VISIBLE);
+                            break;
+                        case BluetoothAdapter.STATE_OFF:
+                            LogUtil.e("onReceive---------STATE_OFF");
+                            blue_layout.setVisibility(View.VISIBLE);
+                            break;
+                    }
+                    break;
+            }
+
+        }
+    };
 
 
     private void service_init() {
@@ -258,6 +308,12 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
                     LogUtil.e("aaaaaaa:连接");
                     mService.connect(SpUtils.getBindBLEDevice(getActivity()).getAddress());
                 }
+            }
+
+            if(mService.isBlueOpen()){
+                blue_layout.setVisibility(View.GONE);
+            }else{
+                blue_layout.setVisibility(View.VISIBLE);
             }
 
         }
@@ -787,4 +843,9 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         guide.show(this.getActivity());
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(bluetoothStatusChangeReceiver);
+    }
 }

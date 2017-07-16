@@ -513,6 +513,15 @@ public class UartService extends Service {
     }
 
 
+    public boolean isBlueOpen(){
+        if (mBluetoothAdapter == null ||!mBluetoothAdapter.isEnabled()) {
+            Log.w(TAG, "BluetoothAdapter not initialized.");
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 
     public boolean isBleConnect(){
         if(mBluetoothDeviceAddress ==null)
