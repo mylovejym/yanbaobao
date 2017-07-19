@@ -27,22 +27,34 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:id="@+id/blue_layout"
-        android:visibility="gone">
-        <TextView
+        android:visibility="gone"
+        android:background="@color/blue_303048">
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:src="@drawable/icon_exc"
+            android:layout_marginLeft="15dp"/>
+        <TextView
+            android:id="@+id/hint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="1"
             android:text="未打开蓝牙"
             android:textColor="@color/white"/>
-        <Button
+        <TextView
             android:id="@+id/set_blue_bt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="去设置"
-            android:layout_marginRight="15dp"/>
+            android:layout_marginRight="15dp"
+            android:textColor="@color/white"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_go"/>
     </LinearLayout>
 
     <ScrollView

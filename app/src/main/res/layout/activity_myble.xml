@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:id="@+id/rl_main"
     android:layout_height="match_parent"
@@ -6,10 +6,45 @@
     android:background="@color/background_color"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:id="@+id/blue_layout"
+        android:visibility="gone"
+        android:background="@color/blue_303048">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_exc"
+            android:layout_marginLeft="15dp"/>
+        <TextView
+            android:id="@+id/hint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="1"
+            android:text="未打开蓝牙"
+            android:textColor="@color/white"/>
+        <TextView
+            android:id="@+id/set_blue_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="去设置"
+            android:layout_marginRight="15dp"
+            android:textColor="@color/white"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_go"/>
+    </LinearLayout>
+
     <ListView
         android:id="@+id/lv_device"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="#dcdcdc"
         android:dividerHeight="1px"/>
-</RelativeLayout>
+</LinearLayout>

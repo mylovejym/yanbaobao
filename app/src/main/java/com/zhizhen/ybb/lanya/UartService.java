@@ -99,6 +99,8 @@ public class UartService extends Service {
 
     public final static String ACTION_UP_DATA =
             "com.nordicsemi.nrfUART.ACTION_UP_DATA";
+    public final static String ACTION_GATT_CONNECTING =
+            "com.nordicsemi.nrfUART.ACTION_GATT_CONNECTING";
     
     public static final UUID TX_POWER_UUID = UUID.fromString("00001804-0000-1000-8000-00805f9b34fb");
     public static final UUID TX_POWER_LEVEL_UUID = UUID.fromString("00002a07-0000-1000-8000-00805f9b34fb");
@@ -111,6 +113,8 @@ public class UartService extends Service {
 
     MyServiceConnection mServiceConnection = new MyServiceConnection();
     private BLEDataQueue bleData = new BLEDataQueue();
+
+    private int state = 0;//0失败，1连接中，2连接
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -306,7 +310,7 @@ public class UartService extends Service {
             String intentAction;
             
             if (newState == BluetoothProfile.STATE_CONNECTED) {
-
+                state = 2;
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
                 broadcastUpdate(intentAction);
@@ -317,6 +321,7 @@ public class UartService extends Service {
                         mBluetoothGatt.discoverServices());
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                state = 0;
                 intentAction = ACTION_GATT_DISCONNECTED;
                 mConnectionState = STATE_DISCONNECTED;
                 Log.i(TAG, "Disconnected from GATT server.");
@@ -470,6 +475,14 @@ public class UartService extends Service {
         return true;
     }
 
+    public int getState() {
+        return state;
+    }
+
+    public int getmConnectionState() {
+        return mConnectionState;
+    }
+
     /**
      * Connects to the GATT server hosted on the Bluetooth LE device.
      *
@@ -481,8 +494,11 @@ public class UartService extends Service {
      *         callback.
      */
     public boolean connect(final String address) {
+
+        state = 1;
         if (mBluetoothAdapter == null || address == null) {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
+            state = 0;
             return false;
         }
 
@@ -491,9 +507,11 @@ public class UartService extends Service {
                 && mBluetoothGatt != null) {
             Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect()) {
+                broadcastUpdate(ACTION_GATT_CONNECTING);
                 mConnectionState = STATE_CONNECTING;
                 return true;
             } else {
+                state = 0;
                 return false;
             }
         }
@@ -501,6 +519,7 @@ public class UartService extends Service {
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null) {
             Log.w(TAG, "Device not found.  Unable to connect.");
+            state = 0;
             return false;
         }
         // We want to directly connect to the device, so we are setting the autoConnect
@@ -508,6 +527,7 @@ public class UartService extends Service {
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
         Log.d(TAG, "Trying to create a new connection.");
         mBluetoothDeviceAddress = address;
+        broadcastUpdate(ACTION_GATT_CONNECTING);
         mConnectionState = STATE_CONNECTING;
         return true;
     }

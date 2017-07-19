@@ -1,9 +1,19 @@
 package com.zhizhen.ybb.home.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +30,7 @@ import com.zhizhen.ybb.base.YbBaseApplication;
 import com.zhizhen.ybb.base.YbBaseFragment;
 import com.zhizhen.ybb.bean.BaseClassBean;
 import com.zhizhen.ybb.bean.PersonInfo;
+import com.zhizhen.ybb.lanya.UartService;
 import com.zhizhen.ybb.loginpass.LoginActivity;
 import com.zhizhen.ybb.my.EditDataActivity;
 import com.zhizhen.ybb.my.FollowActivity;
@@ -28,9 +39,12 @@ import com.zhizhen.ybb.my.ParameterSetActivity;
 import com.zhizhen.ybb.my.contract.MyContract;
 import com.zhizhen.ybb.my.model.MyModelImp;
 import com.zhizhen.ybb.my.presenter.MyPresenterImp;
+import com.zhizhen.ybb.util.BLEUtils;
 import com.zhizhen.ybb.util.DateUtil;
 import com.zhizhen.ybb.util.GlideCircleTransform;
 import com.zhizhen.ybb.util.SpUtils;
+
+import static com.zhizhen.ybb.util.Utils.hexStringToBytes;
 
 /**
  * Created by psylife00 on 2017/5/12.
@@ -70,11 +84,15 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
 //    @BindView(R.id.bt_exit)
     Button btExit;
 
+    TextView state_tv;
+
     private Context context;
 
     private PersonInfo mPersonInfo;
 
     private boolean isLoad = true;// 是否网络加载
+
+    private UartService mService = null;
 
     @Override
     public View getTitleView() {
@@ -102,6 +120,7 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
         rlFollow = (RelativeLayout) view.findViewById(R.id.rl_follow);
         linEditData = (LinearLayout) view.findViewById(R.id.lin_edit_data);
         btExit = (Button) view.findViewById(R.id.bt_exit);
+        state_tv = (TextView) view.findViewById(R.id.state_tv);
 
         context = this.getContext();
         rlVison.setOnClickListener(this);
@@ -110,6 +129,7 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
         rlParameterSet.setOnClickListener(this);
         linEditData.setOnClickListener(this);
         btExit.setOnClickListener(this);
+        service_init();
     }
 
     @Override
@@ -144,6 +164,10 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
             //我的设备
 //            Intent intent = new Intent(this.getContext(), MyDeivceActivity.class);
 //            this.getContext().startActivity(intent);
+            if(SpUtils.getBindBLEDevice(getActivity()) == null){
+                Toast.makeText(getActivity(),"请先绑定设备",Toast.LENGTH_SHORT).show();
+                return;
+            }
             Intent intent = new Intent(this.getContext(), ParameterSetActivity.class);
             this.getContext().startActivity(intent);
         } else if (v == rlParameterSet) {
@@ -248,6 +272,150 @@ public class MineFragment extends YbBaseFragment<MyPresenterImp, MyModelImp> imp
         if (resultCode == EDIT_DATA) {
             isLoad = true;
             loadData();
+        }
+    }
+
+
+    private void service_init() {
+        Intent bindIntent = new Intent(getActivity(), UartService.class);
+        getActivity().bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
+    }
+
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
+        intentFilter.addAction(UartService.ACTION_GATT_CONNECTING);
+        return intentFilter;
+    }
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+        public void onServiceConnected(ComponentName className, IBinder rawBinder) {
+            mService = ((UartService.LocalBinder) rawBinder).getService();
+            Log.d(TAG, "onServiceConnected mService= " + mService);
+            mService.initialize();
+
+
+            if (mService.isBleConnect()) {
+                mService.writeRXCharacteristic(hexStringToBytes("AA03060055"));
+
+            }
+            if(mService.getmConnectionState()==0){
+                state_tv.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
+                state_tv.setText("连接失败");
+            }else if(mService.getmConnectionState()==1){
+                state_tv.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
+                state_tv.setText("正在连接");
+            }
+
+
+
+            if(SpUtils.getBindBLEDevice(getActivity()) == null||!SpUtils.getBoolean(getContext(), "isbinded", false)){
+                state_tv.setText("未绑定");
+
+            }
+
+
+        }
+
+        public void onServiceDisconnected(ComponentName classname) {
+            ////     mService.disconnect(mDevice);
+            mService = null;
+        }
+    };
+
+
+
+    private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
+
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            LogUtil.e("actionactionactionactionaction:" + action);
+
+            final Intent mIntent = intent;
+            //*********************//
+            if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+//                conn_text.setVisibility(View.GONE);
+//                conn_text.setText("已连接");
+                mService.writeRXCharacteristic(hexStringToBytes("AA03060055"));
+            }
+
+            //*********************//
+            if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+//                conn_text.setVisibility(View.VISIBLE);
+                state_tv.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
+                state_tv.setText("连接失败");
+
+
+            }
+
+
+            //*********************//
+            if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
+
+            }
+            if (action.equals(UartService.ACTION_GATT_CONNECTING)) {
+                state_tv.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
+                state_tv.setText("正在连接");
+            }
+            //*********************//
+            if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
+
+                final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
+
+                try {
+//                            String text = new String(txValue, "UTF-8");
+                    String text = BLEUtils.bytesToHexString(txValue);
+//                            String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
+                    LogUtil.e("RX:" + text);
+//                            listAdapter.add("["+currentDateTimeString+"] RX: "+text);
+//                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
+                    if(text.startsWith("aa0306")){
+                        String str = text.substring(6,8);
+                        LogUtil.e("str:" + str);
+                        int d =Integer.parseInt(str, 16);
+                        if(getActivity()!=null)
+                        state_tv.setTextColor(ContextCompat.getColor(getActivity(), R.color.blue_00aded));
+                        state_tv.setText("电量"+d+"%");
+                    }
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+
+
+            }
+            //*********************//
+            if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)) {
+//                showMessage("Device doesn't support UART. Disconnecting");
+
+            }
+
+
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(UARTStatusChangeReceiver);
+        } catch (Exception ignore) {
+            Log.e(TAG, ignore.toString());
+        }
+        try {
+            getActivity().unbindService(mServiceConnection);
+        } catch (Exception ignore) {
+            Log.e(TAG, ignore.toString());
         }
     }
 }

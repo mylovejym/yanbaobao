@@ -16,13 +16,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.psylife.wrmvplibrary.utils.LogUtil;
@@ -72,6 +75,9 @@ public class MyBLEActivity extends YbBaseActivity {
 
     private BluetoothDevice mDevice = null;
 
+    private LinearLayout blue_layout;
+    private TextView set_blue_bt;
+
     public void setStatusBarColor() {
         StatusBarUtil.setColor(this, this.getResources().getColor(R.color.blue_313245));
     }
@@ -99,6 +105,15 @@ public class MyBLEActivity extends YbBaseActivity {
 
 
         mMainLayout = (ViewGroup) findViewById(R.id.rl_main).getParent();
+        blue_layout = (LinearLayout) findViewById(R.id.blue_layout);
+        set_blue_bt  = (TextView) findViewById(R.id.set_blue_bt);
+        set_blue_bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                startActivity(intent);
+            }
+        });
 
 
         mHandler = new Handler();
@@ -159,9 +174,52 @@ public class MyBLEActivity extends YbBaseActivity {
 
         service_init();
 
+        if(!mBluetoothAdapter.isEnabled()){
+            blue_layout.setVisibility(View.VISIBLE);
+        }
 
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        this.registerReceiver(bluetoothStatusChangeReceiver, filter);
 
     }
+
+    private final BroadcastReceiver bluetoothStatusChangeReceiver
+            = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            LogUtil.e(TAG, "onReceive---------");
+            switch(intent.getAction()){
+                case BluetoothAdapter.ACTION_STATE_CHANGED:
+                    int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
+                    switch(blueState){
+                        case BluetoothAdapter.STATE_TURNING_ON:
+                            LogUtil.e("onReceive---------STATE_TURNING_ON");
+                            blue_layout.setVisibility(View.GONE);
+                            scanOtherBLEDevice(!mIsScanning);
+                            break;
+                        case BluetoothAdapter.STATE_ON:
+                            LogUtil.e("onReceive---------STATE_ON");
+                            blue_layout.setVisibility(View.GONE);
+                            scanOtherBLEDevice(!mIsScanning);
+                            break;
+                        case BluetoothAdapter.STATE_TURNING_OFF:
+                            LogUtil.e("onReceive---------STATE_TURNING_OFF");
+                            blue_layout.setVisibility(View.VISIBLE);
+
+                            break;
+                        case BluetoothAdapter.STATE_OFF:
+                            LogUtil.e("onReceive---------STATE_OFF");
+                            blue_layout.setVisibility(View.VISIBLE);
+
+                            break;
+                    }
+                    break;
+            }
+
+        }
+    };
 
     private void service_init() {
         Intent bindIntent = new Intent(this, UartService.class);

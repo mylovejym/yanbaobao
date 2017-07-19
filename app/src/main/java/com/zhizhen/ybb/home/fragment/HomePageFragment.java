@@ -136,7 +136,8 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     HorizontalBarChart horbarChart;
     HorBarChart mHorBarCharts;
     private LinearLayout blue_layout;
-    private Button set_blue_bt;
+    private TextView set_blue_bt;
+    private TextView hint_tv;
 
 //    LoopRecyclerViewPager vpTop;
 
@@ -160,11 +161,11 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         titleBuilder = new TitleBuilder(getActivity())
                 .setTitleText("健康报告")
                 .setTitleTextColor(getActivity(), R.color.white)
-                .setRightText("蓝牙")
-                .setTitleBgRes(R.color.blue_313245)
-                .setRightOnClickListener(v -> {
-                    startActivity(new Intent(getActivity(), MyBLEActivity.class));
-                });
+//                .setRightText("蓝牙")
+                .setTitleBgRes(R.color.blue_313245);
+//                .setRightOnClickListener(v -> {
+//                    startActivity(new Intent(getActivity(), MyBLEActivity.class));
+//                });
         return titleBuilder.build();
     }
 
@@ -210,7 +211,8 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         textB = (TextView) view.findViewById(R.id.text_b);
         myDialChart = (MyDialChart) view.findViewById(R.id.my_dial_chart);
         blue_layout = (LinearLayout) view.findViewById(R.id.blue_layout);
-        set_blue_bt = (Button) view.findViewById(R.id.set_blue_bt);
+        set_blue_bt = (TextView) view.findViewById(R.id.set_blue_bt);
+        hint_tv = (TextView) view.findViewById(R.id.hint_tv);
 
 
         mBarCharts = new BarCharts();
@@ -225,13 +227,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         horbarChart = (HorizontalBarChart) view.findViewById(R.id.horizontalBarChart);
         mHorBarCharts.showBarChart(horbarChart, getHorBarData((22 - 8) * 6, null, 0), true);
         service_init();
-        set_blue_bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent =  new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
-                startActivity(intent);
-            }
-        });
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         getActivity().registerReceiver(bluetoothStatusChangeReceiver, filter);
@@ -240,29 +236,68 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     private final BroadcastReceiver bluetoothStatusChangeReceiver
             = new BroadcastReceiver() {
 
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             LogUtil.e(TAG, "onReceive---------");
             switch(intent.getAction()){
                 case BluetoothAdapter.ACTION_STATE_CHANGED:
-                    int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
-                    switch(blueState){
-                        case BluetoothAdapter.STATE_TURNING_ON:
-                            LogUtil.e("onReceive---------STATE_TURNING_ON");
-                            blue_layout.setVisibility(View.GONE);
-                            break;
-                        case BluetoothAdapter.STATE_ON:
-                            LogUtil.e("onReceive---------STATE_ON");
-                            blue_layout.setVisibility(View.GONE);
-                            break;
-                        case BluetoothAdapter.STATE_TURNING_OFF:
-                            LogUtil.e("onReceive---------STATE_TURNING_OFF");
-                            blue_layout.setVisibility(View.VISIBLE);
-                            break;
-                        case BluetoothAdapter.STATE_OFF:
-                            LogUtil.e("onReceive---------STATE_OFF");
-                            blue_layout.setVisibility(View.VISIBLE);
-                            break;
+                    if(getActivity() ==null){
+                        return;
+                    }
+                    if(SpUtils.getBindBLEDevice(getActivity()) == null||!SpUtils.getBoolean(getContext(), "isbinded", false)){
+                        blue_layout.setVisibility(View.VISIBLE);
+                        hint_tv.setText("未绑定设备");
+                        set_blue_bt.setText("去绑定");
+                        set_blue_bt.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                startActivity(new Intent(getActivity(), MyBLEActivity.class));
+                            }
+                        });
+
+                    }else{
+                        int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
+                        switch(blueState){
+                            case BluetoothAdapter.STATE_TURNING_ON:
+                                LogUtil.e("onReceive---------STATE_TURNING_ON");
+                                blue_layout.setVisibility(View.GONE);
+                                break;
+                            case BluetoothAdapter.STATE_ON:
+                                LogUtil.e("onReceive---------STATE_ON");
+                                blue_layout.setVisibility(View.GONE);
+                                break;
+                            case BluetoothAdapter.STATE_TURNING_OFF:
+                                LogUtil.e("onReceive---------STATE_TURNING_OFF");
+                                blue_layout.setVisibility(View.VISIBLE);
+                                blue_layout.setVisibility(View.VISIBLE);
+                                hint_tv.setText("蓝牙未开启");
+                                set_blue_bt.setText("去开启");
+                                set_blue_bt.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Intent intent =  new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                                        startActivity(intent);
+                                    }
+                                });
+                                break;
+                            case BluetoothAdapter.STATE_OFF:
+                                LogUtil.e("onReceive---------STATE_OFF");
+                                blue_layout.setVisibility(View.VISIBLE);
+                                blue_layout.setVisibility(View.VISIBLE);
+                                hint_tv.setText("蓝牙未开启");
+                                set_blue_bt.setText("去开启");
+                                set_blue_bt.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Intent intent =  new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                                        startActivity(intent);
+                                    }
+                                });
+                                break;
+                        }
+
+
                     }
                     break;
             }
@@ -297,6 +332,7 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             Log.d(TAG, "onServiceConnected mService= " + mService);
             mService.initialize();
 
+
             if (mService.isBleConnect()) {
 //                conn_text.setVisibility(View.GONE);
                 conn_text.setText("已连接");
@@ -310,11 +346,37 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
                 }
             }
 
-            if(mService.isBlueOpen()){
-                blue_layout.setVisibility(View.GONE);
-            }else{
+
+
+            if(SpUtils.getBindBLEDevice(getActivity()) == null||!SpUtils.getBoolean(getContext(), "isbinded", false)){
                 blue_layout.setVisibility(View.VISIBLE);
+                hint_tv.setText("未绑定设备");
+                set_blue_bt.setText("去绑定");
+                set_blue_bt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(getActivity(), MyBLEActivity.class));
+                    }
+                });
+
+            }else{
+                if(mService.isBlueOpen()){
+                    blue_layout.setVisibility(View.GONE);
+                }else{
+                    blue_layout.setVisibility(View.VISIBLE);
+                    hint_tv.setText("蓝牙未开启");
+                    set_blue_bt.setText("去开启");
+                    set_blue_bt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent =  new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                            startActivity(intent);
+                        }
+                    });
+                }
+
             }
+
 
         }
 
@@ -324,8 +386,44 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private void setHint(){
+        if(getActivity() ==null){
+            return;
+        }
+        if(SpUtils.getBindBLEDevice(getActivity()) == null||!SpUtils.getBoolean(getContext(), "isbinded", false)){
+            blue_layout.setVisibility(View.VISIBLE);
+            hint_tv.setText("未绑定设备");
+            set_blue_bt.setText("去绑定");
+            set_blue_bt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getActivity(), MyBLEActivity.class));
+                }
+            });
+
+        }else{
+            if(mService.isBlueOpen()){
+                blue_layout.setVisibility(View.GONE);
+            }else{
+                blue_layout.setVisibility(View.VISIBLE);
+                hint_tv.setText("蓝牙未开启");
+                set_blue_bt.setText("去开启");
+                set_blue_bt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent =  new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
+            }
+
+        }
+    }
+
     private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
 
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
@@ -335,13 +433,16 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
             //*********************//
             if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 //                conn_text.setVisibility(View.GONE);
-                conn_text.setText("已连接");
+//                conn_text.setText("已连接");
+                blue_layout.setVisibility(View.GONE);
             }
 
             //*********************//
             if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 //                conn_text.setVisibility(View.VISIBLE);
                 conn_text.setText("蓝牙未连接，请您开启蓝牙并连接坐姿检测仪");
+                setHint();
+
             }
 
 
@@ -847,5 +948,15 @@ public class HomePageFragment extends YbBaseFragment<HomePagePresenter, HomePage
     public void onDestroy() {
         super.onDestroy();
         getActivity().unregisterReceiver(bluetoothStatusChangeReceiver);
+        try {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(UARTStatusChangeReceiver);
+        } catch (Exception ignore) {
+            Log.e(TAG, ignore.toString());
+        }
+        try {
+        getActivity().unbindService(mServiceConnection);
+        } catch (Exception ignore) {
+            Log.e(TAG, ignore.toString());
+        }
     }
 }
